@@ -17,58 +17,20 @@
 	<!--<link rel="stylesheet" href="vendor/jquery-ui.css">-->
 	<link rel="stylesheet" href="vendor/jquery-ui.min.css">
 	
+	<!-- jQuery Cookie -->
+	<script type="text/javascript" src="vendor/jquery.cookie.js"></script>
+		
 	<!--Пользовательские скрипты --->
 	<script type="text/javascript" src="scripts/main.js"></script>
 	<script type="text/javascript" src="scripts/jqonly.js"></script>
 	<!--Пользовательская таблица стилей -->
 	<link rel="stylesheet" href="style/style.css">
 
-		<!-- Убрать в соответствующий файл -->
+	<!-- Убрать в соответствующий файл -->
 	<script>
-	$( function() {
 	
-		/*выбор объектов связи*/
-		$( "#panel-select" ).accordion({
-		  collapsible: true,
-		  heightStyle: "content"
-		});
-		
-		/* выбор РТС */
-		$( "#panel-select input" ).checkboxradio({
-		  icon: false
-		});
-		
-		/* вкладки */
-		$( "#panel-tabs" ).tabs({
-			collapsible: true
-		});
-		
-		/* журнал */
-		$( "#panel-log" ).accordion({
-		  collapsible: true
-		});
-		
-		/* диалоговое окно */
-		$( "#dialog" ).dialog({});
-		$( "#dialog" ).dialog("close");
-		
-		/* диалоговое окно внутри карты */
-		$( "#dialog-map" ).dialog({
-			
-			 position: { my: "center", at: "center", of: "#wrapper-map"}
-		
-		});
-		
-			
-		/* меню объекта связи*/
-		$( "#menu" ).menu({
-			position: { my: "left top", at: "right-5 top+5" }
-		});
-		
-		/* прогресс бар	*/
-		$( "#progressbar" ).progressbar({
-			value: false
-			});
+	$( function() {
+	/* для отладки*/
 	  
 		
 		
@@ -203,7 +165,7 @@
   <ul>
     <li><a href="#panel-tabs-monitoring">Мониторинг</a></li>
     <li><a href="#panel-tabs-sunoutage">Интерференция</a></li>
-    <li><a href="#panel-tabs-additional-3">Дополнительно</a></li>
+    <li><a href="#panel-tabs-additional">Дополнительно</a></li>
   </ul>
   <div id="panel-tabs-monitoring">
     Мониторинг сигналов ASI<br>
@@ -212,7 +174,7 @@
   <div id="panel-tabs-sunoutage">
     Переход на 53 и 40 градус раздельно по мультиплексам
   </div>
-  <div id="panel-tabs-additional-3">
+  <div id="panel-tabs-additional">
    Включение выключение замены PLP
   </div>
 </div>
