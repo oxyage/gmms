@@ -29,7 +29,13 @@
 	
 		/*выбор объектов связи*/
 		$( "#panel-select" ).accordion({
-		  collapsible: true
+		  collapsible: true,
+		  heightStyle: "content"
+		});
+		
+		/* выбор РТС */
+		$( "#panel-select input" ).checkboxradio({
+		  icon: false
 		});
 		
 		/* вкладки */
@@ -44,6 +50,13 @@
 		
 		/* диалоговое окно */
 		$( "#dialog" ).dialog();
+		
+			
+		/* меню объекта связи*/
+		$( "#menu" ).menu({
+		
+		position: { my: "left top", at: "right-5 top+5" }
+		});
 
 	});
 	</script>
@@ -67,6 +80,47 @@
   <h3>Выбрать объекты связи</h3>
   <div>
 Поместить список РТПС разделенный на ОЧС   
+
+<fieldset>
+<legend>
+<label for="checkbox-nested-sfn-10.32.1.2">Одночастотная зона Брянск
+  <input type="checkbox" name="checkbox-nested-sfn-10.32.1.2" id="checkbox-nested-sfn-10.32.1.2">
+</label>
+</legend>
+<label for="checkbox-nested-1">Байкова
+  <input type="checkbox" name="checkbox-nested-1" id="checkbox-nested-1">
+</label>
+<label for="checkbox-nested-2">Красное
+  <input type="checkbox" name="checkbox-nested-2" id="checkbox-nested-2">
+</label>
+<label for="checkbox-nested-3">Речица
+  <input type="checkbox" name="checkbox-nested-3" id="checkbox-nested-3">
+</label>
+<label for="checkbox-nested-4">Сельцо
+  <input type="checkbox" name="checkbox-nested-4" id="checkbox-nested-4">
+</label>
+</fieldset>
+<br>
+<fieldset>
+<legend>
+<label for="checkbox-nested-sfn-10.32.22.2">Одночастотная зона Почеп
+  <input type="checkbox" name="checkbox-nested-sfn-10.32.1.2" id="checkbox-nested-sfn-10.32.22.2">
+</label>
+</legend>
+<label for="checkbox-nested-11">Почеп
+  <input type="checkbox" name="checkbox-nested-11" id="checkbox-nested-11">
+</label>
+<label for="checkbox-nested-12">Вормино
+  <input type="checkbox" name="checkbox-nested-12" id="checkbox-nested-12">
+</label>
+<label for="checkbox-nested-13">Клетня
+  <input type="checkbox" name="checkbox-nested-13" id="checkbox-nested-13">
+</label>
+<label for="checkbox-nested-14">Жуковка
+  <input type="checkbox" name="checkbox-nested-14" id="checkbox-nested-14">
+</label>
+</fieldset>
+
   </div>
 </div>
 
@@ -105,6 +159,37 @@
 <div id="dialog" title="Диалоговое окно">
   <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 </div>
+
+<!-- Меню объекта связи -->
+<ul id="menu" style="width:180px">
+  <li>
+    <div><span class="ui-icon ui-icon-disk"></span>Авторизация</div>
+  </li>
+  <li>
+    <div><span class="ui-icon ui-icon-zoomin"></span>Перейти в СДК</div>
+  </li>
+  <li class="ui-state-disabled">
+    <div><span class="ui-icon ui-icon-print"></span>Print...</div>
+  </li>
+  <li>
+    <div>Мониторинг</div>
+    <ul style="width:300px">
+      <li>
+        <div><span class="ui-icon ui-icon-seek-start"></span>На каком спутнике 1 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-stop"></span>На каком спутнике 2 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-play"></span>Наличие входов ASI на 1 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-seek-end"></span>Наличие входов ASI на 2 MUX</div>
+      </li>
+    </ul>
+  </li>
+  
+</ul>
 
 </body>
 </head>
