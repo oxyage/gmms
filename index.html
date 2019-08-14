@@ -49,13 +49,20 @@
 		});
 		
 		/* диалоговое окно */
-		$( "#dialog" ).dialog();
+		$( "#dialog" ).dialog({});
+		$( "#dialog" ).dialog("close");
+		
+		/* диалоговое окно внутри карты */
+		$( "#dialog-map" ).dialog({
+			
+			 position: { my: "center", at: "center", of: "#wrapper-map"}
+		
+		});
 		
 			
 		/* меню объекта связи*/
 		$( "#menu" ).menu({
-		
-		position: { my: "left top", at: "right-5 top+5" }
+			position: { my: "left top", at: "right-5 top+5" }
 		});
 		
 		/* прогресс бар	*/
@@ -77,10 +84,69 @@
 <!-- Строим на таблице для удобства масштабирования-->
 <table border="1" width="100%" style="min-height:1010px; min-width:1600px; max-width:2000px;">
 <tr>
+
 <!--карта-->
-<td style="background:url('style/images/maps.png') no-repeat; width:1130px"></td>
+<td id="wrapper-map" style="background:url('style/images/maps.png') no-repeat; width:1130px; vertical-align:top;">
+
+<!-- Диалоговое окно внутри карты -->
+<div id="dialog-map" style="" title="Диалоговое окно внутри карты">
+	<p>Диалоговое окно только внутри карты</p>
+</div>
+
+
+<!-- Меню объекта связи -->
+<ul id="menu" style="width:180px">
+  <li class="ui-widget-header" >
+    <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СДК</div>
+  </li>
+  <li>
+    <div><span class="ui-icon ui-icon-key"></span>Авторизация</div>
+  </li>
+  <li class="ui-state-disabled">
+    <div><span class="ui-icon ui-icon-print"></span>Print...</div>
+  </li>
+  <li>
+    <div>Мониторинг</div>
+    <ul style="width:300px">
+      <li>
+        <div><span class="ui-icon ui-icon-seek-start"></span>На каком спутнике 1 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-stop"></span>На каком спутнике 2 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-play"></span>Наличие входов ASI на 1 MUX</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-seek-end"></span>Наличие входов ASI на 2 MUX</div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+<!-- Прогрессбар -->
+<div id="progressbar" style="width:50px; height:10px"></div>
+
+
+
+
+
+
+
+
+</td>
 <!--панель управления-->
 <td style="vertical-align:top">
+
+<div >
+<button style="width: 100%;" class="ui-button ui-widget ui-corner-all">
+    <span class="ui-icon ui-icon-gear"></span> GMMS
+  </button>
+</div>
+
+
+<hr>
 
 <!-- Выбор объектов связи -->
 <div id="panel-select">
@@ -131,6 +197,7 @@
   </div>
 </div>
 
+<hr>
 
 <div id="panel-tabs">
   <ul>
@@ -150,6 +217,8 @@
   </div>
 </div>
 
+<hr>
+
 <div id="panel-log">
   <h2>Журнал выполнения команд</h2>
   <div>
@@ -161,46 +230,14 @@
 </tr>
 </table>
 
-<!-- Прогрессбар -->
-<div id="progressbar" style="width:50px; height:10px">
-	
-</div>
+
 
 <!-- Диалоговое окно -->
 <div id="dialog" title="Диалоговое окно">
   <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
 </div>
 
-<!-- Меню объекта связи -->
-<ul id="menu" style="width:180px">
-  <li>
-    <div><span class="ui-icon ui-icon-disk"></span>Авторизация</div>
-  </li>
-  <li>
-    <div><span class="ui-icon ui-icon-zoomin"></span>Перейти в СДК</div>
-  </li>
-  <li class="ui-state-disabled">
-    <div><span class="ui-icon ui-icon-print"></span>Print...</div>
-  </li>
-  <li>
-    <div>Мониторинг</div>
-    <ul style="width:300px">
-      <li>
-        <div><span class="ui-icon ui-icon-seek-start"></span>На каком спутнике 1 MUX</div>
-      </li>
-      <li>
-        <div><span class="ui-icon ui-icon-stop"></span>На каком спутнике 2 MUX</div>
-      </li>
-      <li>
-        <div><span class="ui-icon ui-icon-play"></span>Наличие входов ASI на 1 MUX</div>
-      </li>
-      <li>
-        <div><span class="ui-icon ui-icon-seek-end"></span>Наличие входов ASI на 2 MUX</div>
-      </li>
-    </ul>
-  </li>
-  
-</ul>
+
 
 </body>
 </head>
