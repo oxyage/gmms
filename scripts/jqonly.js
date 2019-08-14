@@ -14,6 +14,23 @@ $( function() {
 	  icon: false
 	});
 	
+	/* выбор одночастотной зоны*/
+	$('#panel-select input.sfn').click(function(){
+		
+		let sfn = $(this).attr("name");
+		
+		/*if ($(this).is(':checked')){
+			$('fieldset#sfn-'+sfn+' input:checkbox').prop('checked', true);
+		} else {
+			$('fieldset#sfn-'+sfn+' input:checkbox').prop('checked', false);
+		}
+		*/
+	});
+	
+		
+	
+	
+	
 	/* вкладки */
 	$( "#panel-tabs" ).tabs({
 		collapsible: true,
