@@ -4,29 +4,107 @@
 	<title>Система группового управления</title>
 	<!-- Мета-теги -->
 	<meta charset="utf-8">
-	<link rel="shortcut icon" href="style/images/favicon.png" type="image/x-icon">
+	<link rel="shortcut icon" href="style/images/favicon.ico" type="image/x-icon">
 	
 	<!--Файлы поставщиков /vendor -->
 	<!-- jQuery -->
-	<!--<script type="text/javascript" src="/vendor/jquery-3.3.1.js"></script>-->
-	<script type="text/javascript" src="/vendor/jquery-3.3.1.min.js"></script>
+	<!--<script type="text/javascript" src="/vendor/jquery-3.4.1.js"></script>-->
+	<script type="text/javascript" src="vendor/jquery-3.4.1.min.js"></script>
 	
 	<!-- jQuery UI-->
-	<!--<script type="text/javascript" src="/vendor/jquery-ui.js"></script>-->
-	<script type="text/javascript" src="/vendor/jquery-ui.min.js"></script>
-	<!--<link rel="stylesheet" href="/vendor/jquery-ui.css">-->
-	<link rel="stylesheet" href="/vendor/jquery-ui.min.css">
+	<!--<script type="text/javascript" src="vendor/jquery-ui.js"></script>-->
+	<script type="text/javascript" src="vendor/jquery-ui.min.js"></script>
+	<!--<link rel="stylesheet" href="vendor/jquery-ui.css">-->
+	<link rel="stylesheet" href="vendor/jquery-ui.min.css">
 	
 	<!--Пользовательские скрипты --->
-	<script type="text/javascript" src="/scripts/main.js"></script>
-	<script type="text/javascript" src="/scripts/jqonly.js"></script>
+	<script type="text/javascript" src="scripts/main.js"></script>
+	<script type="text/javascript" src="scripts/jqonly.js"></script>
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="/style/style.css">
-	
+	<link rel="stylesheet" href="style/style.css">
 
-
+		<!-- Убрать в соответствующий файл -->
+	<script>
+	$( function() {
 	
+		/*выбор объектов связи*/
+		$( "#panel-select" ).accordion({
+		  collapsible: true
+		});
+		
+		/* вкладки */
+		$( "#panel-tabs" ).tabs({
+			collapsible: true
+		});
+		
+		/* журнал */
+		$( "#panel-log" ).accordion({
+		  collapsible: true
+		});
+		
+		/* диалоговое окно */
+		$( "#dialog" ).dialog();
+
+	});
+	</script>
+
 </head>
 <body>
+
+
+
+
+<!-- Строим на таблице для удобства масштабирования-->
+<table border="1" width="100%" style="min-height:1010px; min-width:1600px; max-width:2000px;">
+<tr>
+<!--карта-->
+<td style="background:url('style/images/maps.png') no-repeat; width:1130px"></td>
+<!--панель управления-->
+<td style="vertical-align:top">
+
+<!-- Выбор объектов связи -->
+<div id="panel-select">
+  <h3>Выбрать объекты связи</h3>
+  <div>
+Поместить список РТПС разделенный на ОЧС   
+  </div>
+</div>
+
+
+<div id="panel-tabs">
+  <ul>
+    <li><a href="#panel-tabs-monitoring">Мониторинг</a></li>
+    <li><a href="#panel-tabs-sunoutage">Интерференция</a></li>
+    <li><a href="#panel-tabs-additional-3">Дополнительно</a></li>
+  </ul>
+  <div id="panel-tabs-monitoring">
+    Мониторинг сигналов ASI<br>
+	Активный вход спутниковый
+  </div>
+  <div id="panel-tabs-sunoutage">
+    Переход на 53 и 40 градус раздельно по мультиплексам
+  </div>
+  <div id="panel-tabs-additional-3">
+   Включение выключение замены PLP
+  </div>
+</div>
+
+<div id="panel-log">
+  <h2>Журнал выполнения команд</h2>
+  <div>
+   Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate
+  </div>
+</div>
+
+</td>
+</tr>
+</table>
+
+
+<!-- Диалоговое окно -->
+<div id="dialog" title="Диалоговое окно">
+  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>
+
 </body>
 </head>
