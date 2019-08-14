@@ -57,7 +57,14 @@
 		
 		position: { my: "left top", at: "right-5 top+5" }
 		});
-
+		
+		/* прогресс бар	*/
+		$( "#progressbar" ).progressbar({
+			value: false
+			});
+	  
+		
+		
 	});
 	</script>
 
@@ -154,6 +161,10 @@
 </tr>
 </table>
 
+<!-- Прогрессбар -->
+<div id="progressbar" style="width:50px; height:10px">
+	
+</div>
 
 <!-- Диалоговое окно -->
 <div id="dialog" title="Диалоговое окно">
