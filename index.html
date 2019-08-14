@@ -32,15 +32,15 @@
 	$( function() {
 	/* для отладки*/
 	  
-		
+		$( "input#test" ).checkboxradio({
+		  icon: false
+		});
 		
 	});
 	</script>
 
 </head>
 <body>
-
-
 
 
 <!-- Строим на таблице для удобства масштабирования-->
@@ -54,6 +54,8 @@
 <div id="dialog-map" style="" title="Диалоговое окно внутри карты">
 	<p>Диалоговое окно только внутри карты</p>
 </div>
+
+
 
 
 <!-- Меню объекта связи -->
@@ -95,8 +97,6 @@
 
 
 
-
-
 </td>
 <!--панель управления-->
 <td style="vertical-align:top">
@@ -111,53 +111,68 @@
 <hr>
 
 <!-- Выбор объектов связи -->
-<div id="panel-select">
-  <h3>Выбрать объекты связи</h3>
-  <div>
-Поместить список РТПС разделенный на ОЧС   
+<div id="panel-select"><h3>Выбрать объекты связи</h3>
+	<div>
 
-<fieldset id="sfn-br">
+<fieldset id="field-select-all">
+
 <legend>
-<label for="checkbox-nested-sfn-10.32.1.2" >Одночастотная зона Брянск
-  <input type="checkbox" name="br" id="checkbox-nested-sfn-10.32.1.2" class="sfn">
-</label>
+<label for="checkbox-select-all">Выбрать все</label>
+<input type="checkbox" name="checkbox-select-all" id="checkbox-select-all">
 </legend>
-<label for="checkbox-nested-1">Байкова
-  <input type="checkbox" name="checkbox-nested-1" id="checkbox-nested-1">
+
+<hr>
+
+<fieldset id="field-sfn-Bryansk">
+
+<legend>
+<label for="checkbox-sfn-Bryansk" >Одночастотная зона Брянск</label>
+<input type="checkbox" name="sfn-Bryansk" id="checkbox-sfn-Bryansk" class="sfn">
+</legend>
+<div>
+<label for="checkbox-host-10.32.3.2">Байкова</label>
+<input type="checkbox" name="host-10.32.3.2" id="checkbox-host-10.32.3.2">
+
+<label for="checkbox-host-10.32.1.2">Брянск</label>
+<input type="checkbox" name="host-10.32.1.2" id="checkbox-host-10.32.1.2">
+
+<label for="checkbox-host-10.32.10.2">Дятьково
+  <input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
 </label>
-<label for="checkbox-nested-2">Красное
-  <input type="checkbox" name="checkbox-nested-2" id="checkbox-nested-2">
-</label>
-<label for="checkbox-nested-3">Речица
-  <input type="checkbox" name="checkbox-nested-3" id="checkbox-nested-3">
-</label>
-<label for="checkbox-nested-4">Сельцо
-  <input type="checkbox" name="checkbox-nested-4" id="checkbox-nested-4">
-</label>
-</fieldset>
+
+<label for="checkbox-host-10.32.18.2">Красное</label>
+<input type="checkbox" name="host-10.32.18.2" id="checkbox-host-10.32.18.2">
+
+<label for="checkbox-host-10.32.24.2">Речица</label>
+<input type="checkbox" name="host-10.32.24.2" id="checkbox-host-10.32.24.2">
+
+<label for="checkbox-host-10.32.25.2">Сельцо</label>
+<input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
+</div>
+</fieldset><!--fieldset sfn 10.32.1.2-->
+
 <br>
-<fieldset id="sfn-poch">
+
+<fieldset id="field-sfn-Pochep">
 <legend>
-<label for="checkbox-nested-sfn-10.32.22.2">Одночастотная зона Почеп
-  <input type="checkbox" name="poch" id="checkbox-nested-sfn-10.32.22.2" class="sfn">
-</label>
+<label for="checkbox-sfn-Pochep">Одночастотная зона Почеп</label>
+<input type="checkbox" name="sfn-Pochep" id="checkbox-sfn-Pochep">
 </legend>
-<label for="checkbox-nested-11">Почеп
-  <input type="checkbox" name="checkbox-nested-11" id="checkbox-nested-11">
-</label>
-<label for="checkbox-nested-12">Вормино
-  <input type="checkbox" name="checkbox-nested-12" id="checkbox-nested-12">
-</label>
-<label for="checkbox-nested-13">Клетня
-  <input type="checkbox" name="checkbox-nested-13" id="checkbox-nested-13">
-</label>
-<label for="checkbox-nested-14">Жуковка
-  <input type="checkbox" name="checkbox-nested-14" id="checkbox-nested-14">
-</label>
+<div>
+<label for="checkbox-host-10.32.23.2">Почеп</label>
+<input type="checkbox" name="host-10.32.23.2" id="checkbox-host-10.32.23.2">
+
+<label for="checkbox-host-10.32.27.2">Снопоть</label>
+<input type="checkbox" name="host-10.32.27.2" id="checkbox-host-10.32.27.2">
+</div>
 </fieldset>
+
+
+</fieldset>
+
 
   </div>
-</div>
+</div><!-- end panel-select-->
 
 <hr>
 

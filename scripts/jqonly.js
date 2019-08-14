@@ -15,16 +15,25 @@ $( function() {
 	});
 	
 	/* выбор одночастотной зоны*/
-	$('#panel-select input.sfn').click(function(){
+	$('#panel-select legend input').click(function(){
 		
 		let sfn = $(this).attr("name");
+
+		//console.log(sfn);
+		//console.log($("#field-"+sfn+" input"));
 		
-		/*if ($(this).is(':checked')){
-			$('fieldset#sfn-'+sfn+' input:checkbox').prop('checked', true);
+		
+		if ($(this).is(':checked')){
+			$("#field-"+sfn+" div").hide();
+			//$("#field-"+sfn+" input[name^=host]").checkboxradio('option', 'disabled', true);
+			//$("#field-"+sfn+" input").prop('checked',true).checkboxradio("refresh");
 		} else {
-			$('fieldset#sfn-'+sfn+' input:checkbox').prop('checked', false);
+			$("#field-"+sfn+" div").show();
+			//$("#field-"+sfn+" input[name^=host]").checkboxradio('option', 'disabled', false);
+			//$("#field-"+sfn+" input").prop('checked',false).checkboxradio("refresh");
 		}
-		*/
+	
+		
 	});
 	
 		
@@ -36,8 +45,8 @@ $( function() {
 		collapsible: true,
 		
 		//допустить false
-		active:  (typeof $.cookie("panel-tabs") === "undefined") || 0, //исправить здесь
-		activate: function(event, ui) {
+		active:  (typeof $.cookie("panel-tabs") !== "undefined" && $.cookie("panel-tabs")) || 2, //активная закладка
+		activate: function() {
 			
 			let tab = $( "#panel-tabs" ).tabs("option", "active");
 			$.cookie("panel-tabs", tab);
