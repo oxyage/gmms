@@ -1,7 +1,54 @@
 $( function() {
 
+	GMMS.journal = [], //журнал
+	GMMS.log = function(message){
+		let date = new Date($.now());
+		date = date.toTimeString().split(" ");
+		$( "#panel-log div" ).prepend(date[0]+" "+message+"<br>");
+		GMMS.journal.push(date[0]+" "+message);
+	};
+
 	console.log("jquery first");
 	
+	/* загружаем объекты связи */
+	
+	$( "#dialog-wait" ).dialog();//открываем окно
+	$.get("api.php?route=db/select/rcu")
+	.done(function(d){
+		
+		/*
+		
+		добавить запись в журнал
+		
+		*/
+		
+		//код ошибки = 0
+		if(!d.error)
+		{
+			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
+			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
+			GMMS.log("Объекты связи успешно загружены ("+d.response.length+")"); //логгируем	
+			console.log(d);
+		}
+		else//если есть ошибка в ответе
+		{
+			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+d.error+")<br><i>"+d.response.message+"</i>");
+			console.error(d);
+		}
+	
+	})
+	.fail(function(e){//если не удался запрос к файлу
+		$( "#dialog-wait p" ).html("Загрузка объектов связи не удалась<br>Смотри лог");
+		console.error(e);
+	});
+	
+	//$( "#dialog-wait" ).dialog({});
+	
+	
+	
+	/* диалоговое окно */
+	
+	//$( "#dialog" ).dialog("close");
 
 	/*выбор объектов связи */
 	$( "#panel-select" ).accordion({
@@ -57,7 +104,8 @@ $( function() {
 	/* журнал */
 	$( "#panel-log" ).accordion({
 	  collapsible: true,
-	  active: false,
+	  //active: false,
+	  heightStyle: "content",
 	  icons: {
 		  header: "ui-icon-note",
 		activeHeader: "ui-icon-note"
@@ -73,6 +121,7 @@ $( function() {
 		 position: { my: "center", at: "center", of: "#wrapper-map"}
 	
 	});
+	$( "#dialog-map" ).dialog("close");
 	
 		
 	/* меню объекта связи*/
@@ -91,6 +140,9 @@ $( function() {
 	
 
 
+}),
+$(function(){
+	
 }),
 $(document).ready(function(){
 	

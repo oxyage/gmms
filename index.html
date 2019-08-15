@@ -32,15 +32,20 @@
 	$( function() {
 	/* для отладки*/
 	  
-		$( "input#test" ).checkboxradio({
-		  icon: false
-		});
+	
 		
 	});
 	</script>
 
 </head>
 <body>
+
+<!-- Диалоговое окно ожидания-->
+<div id="dialog-wait" title="Пожалуйста, подождите" style="text-align:center;">
+  <p>Загрузка объектов связи<br><img src="style/images/loader_opta.gif"></p>
+  
+</div>
+
 
 
 <!-- Строим на таблице для удобства масштабирования-->
@@ -112,7 +117,7 @@
 
 <!-- Выбор объектов связи -->
 <div id="panel-select"><!-- start panel select-->
-<h3>Выбрать объекты связи</h3>
+<h3> Выбрать объекты связи</h3>
 	<div><!-- start container panel select-->
 
 <fieldset id="field-select-all">
@@ -197,10 +202,8 @@
 <hr>
 
 <div id="panel-log">
-  <h2>Журнал выполнения команд</h2>
-  <div>
-   Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate
-  </div>
+  <h2> Журнал выполнения команд</h2>
+  <div style="max-height:300px;"></div>
 </div>
 
 </td>
@@ -211,7 +214,7 @@
 
 <!-- Диалоговое окно -->
 <div id="dialog" title="Диалоговое окно">
-  <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+  <p>Диалог</p>
 </div>
 
 
