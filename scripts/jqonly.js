@@ -3,34 +3,32 @@ $( function() {
 	console.log("jquery first");
 	
 
-	/*выбор объектов связи*/
+	/*выбор объектов связи */
 	$( "#panel-select" ).accordion({
 	  collapsible: true,
-	  heightStyle: "content"
+	  active: false,
+	  heightStyle: "content",
+		icons:{
+			 header: "ui-icon-radio-on",
+		activeHeader: "ui-icon-radio-off"
+		}
 	});
 	
-	/* выбор РТС */
+	/* кнопки выбор РТС */
 	$( "#panel-select input" ).checkboxradio({
 	  icon: false
 	});
 	
-	/* выбор одночастотной зоны*/
+	/* действия кнопок выбор одночастотной зоны или всех*/
 	$('#panel-select legend input').click(function(){
 		
-		let sfn = $(this).attr("name");
-
-		//console.log(sfn);
-		//console.log($("#field-"+sfn+" input"));
-		
+		let target = $(this).attr("name");
+		console.log(target, $(this).is(':checked'));
 		
 		if ($(this).is(':checked')){
-			$("#field-"+sfn+" div").hide();
-			//$("#field-"+sfn+" input[name^=host]").checkboxradio('option', 'disabled', true);
-			//$("#field-"+sfn+" input").prop('checked',true).checkboxradio("refresh");
+			$("#field-"+target+" div").hide();
 		} else {
-			$("#field-"+sfn+" div").show();
-			//$("#field-"+sfn+" input[name^=host]").checkboxradio('option', 'disabled', false);
-			//$("#field-"+sfn+" input").prop('checked',false).checkboxradio("refresh");
+			$("#field-"+target+" div").show();
 		}
 	
 		
@@ -51,14 +49,19 @@ $( function() {
 			let tab = $( "#panel-tabs" ).tabs("option", "active");
 			$.cookie("panel-tabs", tab);
 			
-			console.log(tab);
+			console.log("tab #",tab);
 			
 			}
 	});
 	
 	/* журнал */
 	$( "#panel-log" ).accordion({
-	  collapsible: true
+	  collapsible: true,
+	  active: false,
+	  icons: {
+		  header: "ui-icon-note",
+		activeHeader: "ui-icon-note"
+		  }
 	});
 	
 	/* диалоговое окно */
@@ -67,7 +70,6 @@ $( function() {
 	
 	/* диалоговое окно внутри карты */
 	$( "#dialog-map" ).dialog({
-		
 		 position: { my: "center", at: "center", of: "#wrapper-map"}
 	
 	});

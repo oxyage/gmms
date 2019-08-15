@@ -111,34 +111,34 @@
 <hr>
 
 <!-- Выбор объектов связи -->
-<div id="panel-select"><h3>Выбрать объекты связи</h3>
-	<div>
+<div id="panel-select"><!-- start panel select-->
+<h3>Выбрать объекты связи</h3>
+	<div><!-- start container panel select-->
 
 <fieldset id="field-select-all">
 
 <legend>
 <label for="checkbox-select-all">Выбрать все</label>
-<input type="checkbox" name="checkbox-select-all" id="checkbox-select-all">
+<input type="checkbox" name="select-all" id="checkbox-select-all">
 </legend>
 
 <hr>
-
+<div><!--Контейнер для Выбрать все start-->
 <fieldset id="field-sfn-Bryansk">
 
 <legend>
 <label for="checkbox-sfn-Bryansk" >Одночастотная зона Брянск</label>
 <input type="checkbox" name="sfn-Bryansk" id="checkbox-sfn-Bryansk" class="sfn">
 </legend>
-<div>
+<div><!---Контейнер для ОЧС start-->
 <label for="checkbox-host-10.32.3.2">Байкова</label>
 <input type="checkbox" name="host-10.32.3.2" id="checkbox-host-10.32.3.2">
 
 <label for="checkbox-host-10.32.1.2">Брянск</label>
 <input type="checkbox" name="host-10.32.1.2" id="checkbox-host-10.32.1.2">
 
-<label for="checkbox-host-10.32.10.2">Дятьково
-  <input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
-</label>
+<label for="checkbox-host-10.32.10.2">Дятьково</label>
+<input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
 
 <label for="checkbox-host-10.32.18.2">Красное</label>
 <input type="checkbox" name="host-10.32.18.2" id="checkbox-host-10.32.18.2">
@@ -148,7 +148,7 @@
 
 <label for="checkbox-host-10.32.25.2">Сельцо</label>
 <input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
-</div>
+</div><!--Контейнер для ОЧС end-->
 </fieldset><!--fieldset sfn 10.32.1.2-->
 
 <br>
@@ -158,29 +158,29 @@
 <label for="checkbox-sfn-Pochep">Одночастотная зона Почеп</label>
 <input type="checkbox" name="sfn-Pochep" id="checkbox-sfn-Pochep">
 </legend>
-<div>
+<div><!--Контейнер для ОЧС start-->
 <label for="checkbox-host-10.32.23.2">Почеп</label>
 <input type="checkbox" name="host-10.32.23.2" id="checkbox-host-10.32.23.2">
 
 <label for="checkbox-host-10.32.27.2">Снопоть</label>
 <input type="checkbox" name="host-10.32.27.2" id="checkbox-host-10.32.27.2">
-</div>
+</div><!--Контейнер для ОЧС end-->
 </fieldset>
 
+</div><!-- Контейнер для Выбрать все end-->
+</fieldset><!--- end field-select-all-->
 
-</fieldset>
 
-
-  </div>
+  </div><!-- end container panel-select-->
 </div><!-- end panel-select-->
 
 <hr>
 
 <div id="panel-tabs">
   <ul>
-    <li><a href="#panel-tabs-monitoring">Мониторинг</a></li>
-    <li><a href="#panel-tabs-sunoutage">Интерференция</a></li>
-    <li><a href="#panel-tabs-additional">Дополнительно</a></li>
+    <li><a href="#panel-tabs-monitoring"><span class="ui-icon ui-icon-lightbulb"></span> Мониторинг</a></li>
+    <li><a href="#panel-tabs-sunoutage"><span class="ui-icon ui-icon-calendar"></span> Интерференция</a></li>
+    <li><a href="#panel-tabs-additional"><span class="ui-icon ui-icon-wrench"></span> Дополнительно</a></li>
   </ul>
   <div id="panel-tabs-monitoring">
     Мониторинг сигналов ASI<br>
