@@ -4,7 +4,6 @@ ini_set('display_errors', 1);//выводить ошибки
 ini_set('display_startup_errors', 1);//выводить ошибки startup
 ini_set('error_reporting', E_ALL);//выводить ошибки
 ini_set('default_charset', "UTF-8");//нормальная кодировка
-error_reporting(E_ALL);//выводить все ошибки
 
 define("classes_dir", "classes");
 
