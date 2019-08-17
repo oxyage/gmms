@@ -134,49 +134,37 @@
 </legend>
 
 <hr>
+
 <div><!--Контейнер для Выбрать все start-->
-<fieldset id="field-sfn-Bryansk">
+	<fieldset id="field-sfn-Bryansk">
+		<legend>
+			<label for="checkbox-sfn-Bryansk" >Одночастотная зона Брянск</label>
+			<input type="checkbox" name="sfn-Bryansk" id="checkbox-sfn-Bryansk" class="sfn">
+		</legend>
 
-<legend>
-<label for="checkbox-sfn-Bryansk" >Одночастотная зона Брянск</label>
-<input type="checkbox" name="sfn-Bryansk" id="checkbox-sfn-Bryansk" class="sfn">
-</legend>
-<div><!---Контейнер для ОЧС start-->
-<label for="checkbox-host-10.32.3.2">Байкова</label>
-<input type="checkbox" name="host-10.32.3.2" id="checkbox-host-10.32.3.2">
+		<div><!---Контейнер для ОЧС start-->
+			<label for="checkbox-host-10.32.3.2">Байкова</label>
+			<input type="checkbox" name="host-10.32.3.2" id="checkbox-host-10.32.3.2">
 
-<label for="checkbox-host-10.32.1.2">Брянск</label>
-<input type="checkbox" name="host-10.32.1.2" id="checkbox-host-10.32.1.2">
+			<label for="checkbox-host-10.32.1.2">Брянск</label>
+			<input type="checkbox" name="host-10.32.1.2" id="checkbox-host-10.32.1.2">
 
-<label for="checkbox-host-10.32.10.2">Дятьково</label>
-<input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
+			<label for="checkbox-host-10.32.10.2">Дятьково</label>
+			<input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
 
-<label for="checkbox-host-10.32.18.2">Красное</label>
-<input type="checkbox" name="host-10.32.18.2" id="checkbox-host-10.32.18.2">
+			<label for="checkbox-host-10.32.18.2">Красное</label>
+			<input type="checkbox" name="host-10.32.18.2" id="checkbox-host-10.32.18.2">
 
-<label for="checkbox-host-10.32.24.2">Речица</label>
-<input type="checkbox" name="host-10.32.24.2" id="checkbox-host-10.32.24.2">
+			<label for="checkbox-host-10.32.24.2">Речица</label>
+			<input type="checkbox" name="host-10.32.24.2" id="checkbox-host-10.32.24.2">
 
-<label for="checkbox-host-10.32.25.2">Сельцо</label>
-<input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
-</div><!--Контейнер для ОЧС end-->
-</fieldset><!--fieldset sfn 10.32.1.2-->
+			<label for="checkbox-host-10.32.25.2">Сельцо</label>
+			<input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
+		</div><!--Контейнер для ОЧС end-->
+	</fieldset><!--fieldset sfn 10.32.1.2-->
+	<br>
 
-<br>
 
-<fieldset id="field-sfn-Pochep">
-<legend>
-<label for="checkbox-sfn-Pochep">Одночастотная зона Почеп</label>
-<input type="checkbox" name="sfn-Pochep" id="checkbox-sfn-Pochep">
-</legend>
-<div><!--Контейнер для ОЧС start-->
-<label for="checkbox-host-10.32.23.2">Почеп</label>
-<input type="checkbox" name="host-10.32.23.2" id="checkbox-host-10.32.23.2">
-
-<label for="checkbox-host-10.32.27.2">Снопоть</label>
-<input type="checkbox" name="host-10.32.27.2" id="checkbox-host-10.32.27.2">
-</div><!--Контейнер для ОЧС end-->
-</fieldset>
 
 </div><!-- Контейнер для Выбрать все end-->
 </fieldset><!--- end field-select-all-->
@@ -201,7 +189,9 @@
     Переход на 53 и 40 градус раздельно по мультиплексам
   </div>
   <div id="panel-tabs-additional">
-   Включение выключение замены PLP
+   Включение выключение замены PLP<br>
+<label for="show-rts-names">Имена объектов связи</label>
+<input type="checkbox" name="" id="show-rts-names"> 
   </div>
 </div>
 

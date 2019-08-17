@@ -159,12 +159,20 @@ switch($Route[0])
 						*/
 						//то, что загрузили из БД, создать объекты класса rcu для каждой
 						$result = array();
+						$list = array();
+						$host = array();
+						$sfn = array();
 						
+						//для каждой строки декодим json
 						foreach($get_rcu as $i => $row)
 						{
-							$result[$i] = $row;
-							$result[$i]["coord"] = json_decode($result[$i]["coord"],true);
-							$result[$i]["auth"] = json_decode($result[$i]["auth"],true);
+							$row["coord"] = json_decode($row["coord"],true);
+							$row["auth"] = json_decode($row["auth"],true);
+							
+							$result["list"][] = $row;
+							$result["host"][$row["host"]] = $row;
+							$result["sfnbyhost"][$row["sfn"]][$row["host"]] = $row;
+							$result["sfnbylist"][$row["sfn"]][] = $row;
 						}
 ######## Вынести в класс #########						
 						

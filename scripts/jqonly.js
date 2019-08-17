@@ -6,6 +6,18 @@ $( function() {/* предустановленные переменные*/
 		date = date.toTimeString().split(" ");
 		$( "#panel-log div" ).prepend(date[0]+" "+message+"<br>");
 		GMMS.journal.push(date[0]+" "+message);
+	},
+	GMMS.sfn = [], //одночастотные сети
+	GMMS.func = {
+		/*getSFNbyList: function(list){
+			
+			for(let RTS of list)
+			{
+				if(typeof GMMS.sfn[RTS.sfn] === "undefined") GMMS.sfn[RTS.sfn] = [];
+				//GMMS.sfn[RTS.sfn] = RTS;
+				GMMS.sfn[RTS.sfn].push(RTS);
+			}
+		}*/
 	}
 	
 }),
@@ -25,7 +37,7 @@ $( function() { /* события на странице*/
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
-			GMMS.log("Объекты связи успешно загружены ("+d.response.length+")"); //логгируем	
+			GMMS.log("Объекты связи успешно загружены ("+d.response.list.length+")"); //логгируем	
 			console.log("Загруженные объекты связи",d);
 		}
 		else//если есть ошибка в ответе
@@ -47,9 +59,10 @@ $( function() { /* события на странице*/
 		/* вывод на страницу */
 		LoadingState
 		.done(function(){
-			console.log("Начинаем вывод на страницу", this);
+			
+			console.log("this:",this);
 				
-			for(let RTS of this)
+			for(let RTS of this.list)
 			{
 				//console.log(RTS);
 				$("<div/>", {
@@ -61,19 +74,31 @@ $( function() { /* события на странице*/
 				})
 				.css({
 					"top": (100-RTS.coord.y)+"%",
-					"left": RTS.coord.x+"%"/*,
-					"font-weight": "bold",
-					"min-width": "150px",
-					"max-height": "25px",
-					"max-width": "150px",
-					"white-space": "nowrap",
-					"z-index": 1,
-					"position": "absolute"*/
+					"left": RTS.coord.x+"%"
 				})
 				.appendTo("#container-map");
+				
+				/*
+				<label for="checkbox-host-10.32.25.2">Сельцо
+					<input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
+				</label>
+				*/
 			}				
 
+			for(let SFN of Object.keys(this.sfnbylist) )
+			{
+				$("<fieldset>", {
+					"id": "field-sfn-"+SFN
+				})
+				.append('<legend><label for="checkbox-sfn-'+SFN+'" >Одночастотная зона '+SFN+'</label><input type="checkbox" name="sfn-'+SFN+'" id="checkbox-sfn-'+SFN+'" class="sfn"></legend>')
+				//.html('<input type="checkbox" name="host-'+RTS.host+'" id="checkbox-host-'+RTS.host+'">')
+				
+				/* добавить элемент  */
+				.appendTo("#field-select-all div");
+			}
 			
+			
+			//GMMS.func.getSFNbyList(this);
 			
 			//$("div", {class:"rts" }).appendTo("#wrapper-map div");
 			
@@ -129,14 +154,9 @@ $( function() { /* события на странице*/
 		} else {
 			$("#field-"+target+" div").show();
 		}
-	
-		
 	});
 	
-		
-	
-	
-	
+
 	/* вкладки */
 	$( "#panel-tabs" ).tabs({
 		collapsible: true,
@@ -152,6 +172,26 @@ $( function() { /* события на странице*/
 			
 			}
 	});
+	
+	
+	/* кнопки показать имена РТС */
+	$( "#show-rts-names" ).checkboxradio({
+	  icon: false
+	});
+	
+	$('#show-rts-names').click(function(){
+		
+		if ($(this).is(':checked')){
+			$.cookie("rts-names", 0);
+			$("div.rts .name").hide();
+		} else {
+			$.cookie("rts-names", 1);
+			$("div.rts .name").show();
+		}
+	
+	});
+		
+	
 	
 	/* журнал */
 	$( "#panel-log" ).accordion({
