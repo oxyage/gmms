@@ -152,7 +152,23 @@ switch($Route[0])
 					case "rcu":
 					{
 						$get_rcu = $db->query("SELECT * FROM `rcu`");
-						$API($db->fetch_assoc($get_rcu));
+						$get_rcu = $db->fetch_assoc($get_rcu);
+						
+						/*
+#######Warn!######### 		вынести в файл class.rcu.php
+						*/
+						//то, что загрузили из БД, создать объекты класса rcu для каждой
+						$result = array();
+						
+						foreach($get_rcu as $i => $row)
+						{
+							$result[$i] = $row;
+							$result[$i]["coord"] = json_decode($result[$i]["coord"],true);
+							$result[$i]["auth"] = json_decode($result[$i]["auth"],true);
+						}
+######## Вынести в класс #########						
+						
+						$API($result);
 						
 						break;
 					}

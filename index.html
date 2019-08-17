@@ -52,8 +52,16 @@
 <table border="1" width="100%" style="min-height:1010px; min-width:1600px; max-width:2000px;">
 <tr>
 
-<!--карта-->
-<td id="wrapper-map" style="background:url('style/images/maps.png') no-repeat; width:1130px; vertical-align:top;">
+<!---------- КАРТА ------------->
+<td id="wrapper-map" style="background:url('style/images/maps.png') no-repeat; width:1130px; vertical-align:top; position: relative;">
+<div id="container-map" style="height: 100%; width: 100%; ">
+
+</div>
+<!---@ end КАРТА-->
+
+
+
+
 
 <!-- Диалоговое окно внутри карты -->
 <div id="dialog-map" style="" title="Диалоговое окно внутри карты">
@@ -64,7 +72,7 @@
 
 
 <!-- Меню объекта связи -->
-<ul id="menu" style="width:180px">
+<ul id="menu" style="width:180px; display:none;" class="">
   <li class="ui-widget-header" >
     <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СДК</div>
   </li>
@@ -95,7 +103,7 @@
 
 
 <!-- Прогрессбар -->
-<div id="progressbar" style="width:50px; height:10px"></div>
+<div id="progressbar" style="width:50px; height:10px; display:none;"></div>
 
 
 
@@ -106,10 +114,8 @@
 <!--панель управления-->
 <td style="vertical-align:top">
 
-<div >
-<button style="width: 100%;" class="ui-button ui-widget ui-corner-all">
-    <span class="ui-icon ui-icon-gear"></span> GMMS
-  </button>
+<div>
+<button style="width: 100%;" class="ui-button ui-widget ui-corner-all gmms"><span class="ui-icon ui-icon-gear"></span> GMMS</button>
 </div>
 
 

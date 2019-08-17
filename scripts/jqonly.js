@@ -1,46 +1,98 @@
-$( function() {
-
+$( function() {/* предустановленные переменные*/
+	
 	GMMS.journal = [], //журнал
 	GMMS.log = function(message){
 		let date = new Date($.now());
 		date = date.toTimeString().split(" ");
 		$( "#panel-log div" ).prepend(date[0]+" "+message+"<br>");
 		GMMS.journal.push(date[0]+" "+message);
-	};
-
-	console.log("jquery first");
+	}
 	
+}),
+$( function() { /* события на странице*/
+
+
 	/* загружаем объекты связи */
+	
+	LoadingState = new $.Deferred(); // ждем разрешения вывести на страницу
 	
 	$( "#dialog-wait" ).dialog();//открываем окно
 	$.get("api.php?route=db/select/rcu")
 	.done(function(d){
-		
-		/*
-		
-		добавить запись в журнал
-		
-		*/
-		
 		//код ошибки = 0
 		if(!d.error)
 		{
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
+			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
 			GMMS.log("Объекты связи успешно загружены ("+d.response.length+")"); //логгируем	
-			console.log(d);
+			console.log("Загруженные объекты связи",d);
 		}
 		else//если есть ошибка в ответе
 		{
 			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+d.error+")<br><i>"+d.response.message+"</i>");
-			console.error(d);
+			GMMS.log("Ошибка загрузки объектов связи. Смотри лог"); //логгируем	
+			LoadingState.reject();
+			console.error("Ошибка в ответе от сервера",d);
 		}
-	
 	})
 	.fail(function(e){//если не удался запрос к файлу
 		$( "#dialog-wait p" ).html("Загрузка объектов связи не удалась<br>Смотри лог");
-		console.error(e);
+		GMMS.log("Ошибка загрузки объектов связи. Смотри лог"); //логгируем	
+		LoadingState.reject();
+		console.error("API не доступно",e);
 	});
+	
+	
+		/* вывод на страницу */
+		LoadingState
+		.done(function(){
+			console.log("Начинаем вывод на страницу", this);
+				
+			for(let RTS of this)
+			{
+				//console.log(RTS);
+				$("<div/>", {
+					"class": "rts", 
+					"html": "<div title='"+RTS.name+"' class='tower'></div><div class='name'>"+RTS.name+"</div>",
+					"data-name": RTS.name,
+					"data-host": RTS.host,
+					"data-sfn": RTS.sfn
+				})
+				.css({
+					"top": (100-RTS.coord.y)+"%",
+					"left": RTS.coord.x+"%"/*,
+					"font-weight": "bold",
+					"min-width": "150px",
+					"max-height": "25px",
+					"max-width": "150px",
+					"white-space": "nowrap",
+					"z-index": 1,
+					"position": "absolute"*/
+				})
+				.appendTo("#container-map");
+			}				
+
+			
+			
+			//$("div", {class:"rts" }).appendTo("#wrapper-map div");
+			
+			
+		})
+		.fail(function(){
+			console.log("Вывода не будет");
+		});
+	
+	/* end загрузка объектов связи */
+	
+	
+	
+	$("button.gmms").click(function(){
+		console.log(GMMS);
+	});
+	
+
+	console.log("jquery first");
 	
 	//$( "#dialog-wait" ).dialog({});
 	
@@ -141,7 +193,7 @@ $( function() {
 
 
 }),
-$(function(){
+$(function(){ /*  стили */
 	
 }),
 $(document).ready(function(){
