@@ -53,8 +53,8 @@
 <tr>
 
 <!---------- КАРТА ------------->
-<td id="wrapper-map" style="background:url('style/images/maps.png') no-repeat; width:1130px; vertical-align:top; position: relative;">
-<div id="container-map" style="height: 100%; width: 100%; ">
+<td id="wrapper-map" style="vertical-align:top; width: 1130px;">
+<div id="container-map" style="background:url('style/images/maps.png') no-repeat; height:1000px; width:1130px; top:0; position: relative;">
 
 </div>
 <!---@ end КАРТА-->
@@ -124,53 +124,15 @@
 <!-- Выбор объектов связи -->
 <div id="panel-select"><!-- start panel select-->
 <h3> Выбрать объекты связи</h3>
-	<div><!-- start container panel select-->
+	<div> <!-- start container panel select-->
 
-<fieldset id="field-select-all">
 
-<legend>
 <label for="checkbox-select-all">Выбрать все</label>
 <input type="checkbox" name="select-all" id="checkbox-select-all">
-</legend>
-
 <hr>
+<div id="container-select-all"></div>
 
-<div><!--Контейнер для Выбрать все start-->
-	<fieldset id="field-sfn-Bryansk">
-		<legend>
-			<label for="checkbox-sfn-Bryansk" >Одночастотная зона Брянск</label>
-			<input type="checkbox" name="sfn-Bryansk" id="checkbox-sfn-Bryansk" class="sfn">
-		</legend>
-
-		<div><!---Контейнер для ОЧС start-->
-			<label for="checkbox-host-10.32.3.2">Байкова</label>
-			<input type="checkbox" name="host-10.32.3.2" id="checkbox-host-10.32.3.2">
-
-			<label for="checkbox-host-10.32.1.2">Брянск</label>
-			<input type="checkbox" name="host-10.32.1.2" id="checkbox-host-10.32.1.2">
-
-			<label for="checkbox-host-10.32.10.2">Дятьково</label>
-			<input type="checkbox" name="host-10.32.10.2" id="checkbox-host-10.32.10.2">
-
-			<label for="checkbox-host-10.32.18.2">Красное</label>
-			<input type="checkbox" name="host-10.32.18.2" id="checkbox-host-10.32.18.2">
-
-			<label for="checkbox-host-10.32.24.2">Речица</label>
-			<input type="checkbox" name="host-10.32.24.2" id="checkbox-host-10.32.24.2">
-
-			<label for="checkbox-host-10.32.25.2">Сельцо</label>
-			<input type="checkbox" name="host-10.32.25.2" id="checkbox-host-10.32.25.2">
-		</div><!--Контейнер для ОЧС end-->
-	</fieldset><!--fieldset sfn 10.32.1.2-->
-	<br>
-
-
-
-</div><!-- Контейнер для Выбрать все end-->
-</fieldset><!--- end field-select-all-->
-
-
-  </div><!-- end container panel-select-->
+</div>  <!--end container panel-select-->
 </div><!-- end panel-select-->
 
 <hr>

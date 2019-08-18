@@ -60,6 +60,11 @@ class db
 		return $result;
 	}
 	
+	
+	
+	/* обработка запросов БД для rcu */
+	
+	
 }
 
 

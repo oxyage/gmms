@@ -38,7 +38,7 @@ class RCU
 	public $name;
 	
 	//ОЧЗ
-	public $zone;
+	public $sfn;
 	
 	//соединение с СДК
 	public $connection = array("cookie"=>"", //полученные куки авторизации
@@ -55,7 +55,7 @@ class RCU
 	все взаимодействия с СДК через методы */
 	
 	
-	//при создании объекта класса
+	//при создании объекта класса заполняем свойства если они были переданы
 	public function __construct($args = null)
 	{
 		if(is_null($args)) return true;

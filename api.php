@@ -154,14 +154,19 @@ switch($Route[0])
 						$get_rcu = $db->query("SELECT * FROM `rcu`");
 						$get_rcu = $db->fetch_assoc($get_rcu);
 						
+						
 						/*
-#######Warn!######### 		вынести в файл class.rcu.php
+#######Warn!######### 		стоит ли это выносить из файла?
 						*/
-						//то, что загрузили из БД, создать объекты класса rcu для каждой
-						$result = array();
+						
+						/*	группируем по ОЧС	*/
+						$sfn = array();// список одночастотных зон list, хосты - host
+						
+						/* делаем простой список объектов связи */
 						$list = array();
+						
+						/* список объектов связи по хостам */
 						$host = array();
-						$sfn = array();
 						
 						//для каждой строки декодим json
 						foreach($get_rcu as $i => $row)
@@ -169,14 +174,30 @@ switch($Route[0])
 							$row["coord"] = json_decode($row["coord"],true);
 							$row["auth"] = json_decode($row["auth"],true);
 							
-							$result["list"][] = $row;
-							$result["host"][$row["host"]] = $row;
-							$result["sfnbyhost"][$row["sfn"]][$row["host"]] = $row;
-							$result["sfnbylist"][$row["sfn"]][] = $row;
+							$list[] = $row;
+							$host[$row["host"]] = $row;
+							
+							
+							$sfn_info = array("name"=>$row["sfn_name"],"eng"=>$row["sfn_eng"],"uid"=>$row["sfn_uid"]);
+							//список одночастотных зон sfn[]
+							$sfn["list"][$sfn_info["uid"]] = $sfn_info;
+							
+							//список по хостам от номера очс
+						//	$sfn["uid"][$sfn_info["sfn_uid"]]["list"][$row["host"]] = $row;
+						//	$sfn["uid"][$sfn_info["sfn_uid"]]["host"][$row["host"]] = $row;
+							
+						//	$sfn["eng"][$sfn_info["sfn_eng"]][$row["host"]] = $row;
+							
+							$sfn["host"][$sfn_info["uid"]][$row["host"]] = $row;
+
 						}
 ######## Вынести в класс #########						
+						$result = array(); //вернем результат
 						
-						$API($result);
+						$API(array(
+						"sfn"=>$sfn,
+						"list"=>$list,
+						"host"=>$host));
 						
 						break;
 					}
