@@ -112,8 +112,8 @@ $( function() { /* события на странице*/
 		{
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
+			GMMS.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
-			GMMS.log("Объекты связи успешно загружены ("+d.response.list.length+")"); //логгируем	
 			console.log("Загруженные объекты связи",d);
 		}
 		else//если есть ошибка в ответе
@@ -195,7 +195,9 @@ $( function() { /* события на странице*/
 				
 				if(target === "select-all")
 				{
+					
 					if ($(this).is(':checked')){
+						GMMS.log("Выбраны все объекты связи"); //логгируем
 						$("#container-select-all").hide();
 					} else {
 						$("#container-select-all").show();
@@ -204,6 +206,8 @@ $( function() { /* события на странице*/
 				else
 				{
 					if ($(this).is(':checked')){
+//						let name = target.split("-");
+	//					GMMS.log("Выбран объект связи "+GMMS.name[1]); //логгируем								
 						$("#field-"+target+" div").hide();
 					} else {
 						$("#field-"+target+" div").show();
@@ -211,7 +215,7 @@ $( function() { /* события на странице*/
 				}
 			});			
 				
-				
+			GMMS.log("Объекты связи нанесены на карту"); //логгируем		
 				
 				
 		})
