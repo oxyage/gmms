@@ -8,7 +8,14 @@ $( function() {/* предустановленные переменные*/
 		GMMS.journal.push(date[0]+" "+message);
 	},
 	GMMS.sfn = [], //одночастотные сети
-	GMMS.func = {}
+	GMMS.func = {},
+	GMMS.api = function(data){
+		//console.log($.param(data,true));
+		$.post("api.php?route="+data.route, data)
+		.done(function(response){
+			console.log(response);
+		});
+	}
 	
 }),
 $( function(){ /* активация элементов на странице */
@@ -248,6 +255,7 @@ $( function() { /* события на странице*/
 		route = data.route.split("/");
 
 		data["host"] = $("#menu").data("host"); //host, name
+		data["name"] = $("#menu").data("name"); //host, name
 		
 		switch(route[0])
 		{
@@ -268,7 +276,18 @@ $( function() { /* события на странице*/
 						break;
 					}
 					case "quiet":{
-						console.log("Функция тихой авторизации");
+						console.log("Тихая авторизация на "+data.name);
+						$.post("api.php?route=rcu/auth",{
+							host: data.host,
+							username: "admin",
+							userpass: admin.userpass
+						})
+						.done(function(a){
+							console.log(a);
+						})
+						.fail(function(e){
+							console.log(e);
+						});
 						break;
 					}
 					default:{
