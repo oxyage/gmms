@@ -208,9 +208,7 @@ class RCU
 			
 			return new Exception("CURL запрос для POST завершился с ошибкой:\n".curl_errno($curl).": ".curl_error($curl), 21);			
 		}
-		
-		
-		
+	
 		if($this->request["curl"]["http_code"] == 200) //только если удачный запрос, завершаем нормально
 		{
 			//HTML страница (не менять кодировку здесь - отдать полностью обработчику как есть)
@@ -222,6 +220,105 @@ class RCU
 		}
 	}
 	
+	
+	public function parse($html)
+	{
+		if(empty($html))	return new Exception("Пустой обязательный параметр 'html'", 20);
+				
+		if(!defined('phpQuery')) 	return new Exception("Не подключен парсер class.phpQuery.php", 21);	
+		
+		$html = phpQuery::newDocument($html);	
+		
+		//найти имя РТС
+		$RCU_NAME = $html->find("div.menu_centre_name")->text();
+
+		//путь к таблице с устройствами
+		$Table = $html->find("table.pandora"); // таблица
+		$Table = pq($Table);
+			
+		//если ошибка в поиске	
+		if(!strlen($RCU_NAME) or !strlen($Table->text()))	
+			return new Exception("Не найдена таблица устройств и имя РТС на странице. Возможно авторизация не удалась", 22);
+		
+		//содержание таблицы
+		$Table_content = $html->find("table.pandora tr:gt(0)");
+		$Table_content = pq($Table_content);;
+		
+		//возвращаемый массив с устройствами
+		$DEVICES = array();
+		
+		//обходим массив таблицы девайсов
+		//начинаем парсинг со второй строки, т.к. первая - заголовок
+		foreach($Table_content as $tr) 
+		{
+			$tr = pq($tr);// к объекту phpQuery
+			
+			$one_device = array();//создаем новое устройство
+			
+			$one_device['url'] = $tr->find("a:first")->attr("href"); //url устройства
+			
+			/*
+			обходим столбцы с 0 по 4
+			0 - id
+			1 - name
+			2 - type
+			3 - port
+			4 - status_app (img)		*/
+			
+			$column = 0;
+			foreach($tr->find("td a:lt(4)") as $a) //проходим по строкам
+			{
+				$a = pq($a);//phpQuery
+				
+				$value = addslashes($a->text());
+
+
+				switch($column)
+				{
+					case 0:{	
+						$one_device["id"] = $value; //добавляем свойство 
+						break;
+					}
+					case 1:{	
+						$one_device["name"] = $value; //добавляем свойство 
+						break;
+					}
+					case 2:{	
+						$one_device["type"] = $value; //добавляем свойство 
+						break;
+					}
+					case 3:{
+						$one_device["port"] = $value; //добавляем свойство 
+						break;
+					}
+					
+					case 4:{
+						$img = $a->html();
+						$img = pq($img);
+						$value = str_replace("status_app_","",$img->attr("id"));	
+						$one_device["status_app"] = $value; //добавляем свойство 		
+						break;	
+					}
+					
+					default:{
+						
+					}
+				}				
+				
+				$column += 1;
+			}
+
+			$DEVICES[] = $one_device;	
+		}
+		
+		return array(
+		"rcu_name"=>$RCU_NAME, 
+		"count"=>sizeof($DEVICES), 
+		"devices"=>$DEVICES, 
+		"hash"=>md5($Table->text())
+		);
+		
+	}
 	
 	
 	

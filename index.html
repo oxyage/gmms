@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="scripts/main.js"></script>
 	<script type="text/javascript" src="scripts/jqonly.js"></script>
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="style/style.css">
+	<link rel="stylesheet" href="style/style.css?123">
 
 	<!-- Убрать в соответствующий файл -->
 	<script>
@@ -72,32 +72,53 @@
 
 
 <!-- Меню объекта связи -->
-<ul id="menu" style="width:180px; display:none;" class="">
-  <li class="ui-widget-header" >
+<ul id="menu" style="width:250px; position:absolute; top:50px; left:20px;" >
+  <li class="ui-widget-header" style="text-align:center; padding: 3px 0px; cursor: default;"  >
+    <div>Имя РТПС</div>
+  </li>
+  <li class="" >
     <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СДК</div>
+	 <ul style="width:200px">
+      <li>
+        <div><span class="ui-icon ui-icon-person"></span>Оператор</div>
+      </li>
+	   <li>
+        <div><span class="ui-icon ui-icon-extlink"></span>Страница входа</div>
+      </li>
+      <li>
+        <div><span class="ui-icon ui-icon-alert"></span>Администратор</div>
+      </li>
+    </ul>
   </li>
   <li>
     <div><span class="ui-icon ui-icon-key"></span>Авторизация</div>
   </li>
   <li class="ui-state-disabled">
-    <div><span class="ui-icon ui-icon-print"></span>Print...</div>
+    <div><span class="ui-icon ui-icon-print"></span>Сбросить соединение</div>
   </li>
   <li>
-    <div>Мониторинг</div>
-    <ul style="width:300px">
+    <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>
+	
+    <ul style="width:250px">
       <li>
-        <div><span class="ui-icon ui-icon-seek-start"></span>На каком спутнике 1 MUX</div>
+        <div>Входной сигнал спутника</div>
+		<ul style="width:100px">
+			<li><div>1 MUX</div></li>
+			<li><div>2 MUX</div></li>
+		</ul>	
       </li>
-      <li>
-        <div><span class="ui-icon ui-icon-stop"></span>На каком спутнике 2 MUX</div>
+	  <li>
+        <div>Синхронизация SFN</div>
+		<ul style="width:100px">
+			<li><div>1 MUX</div></li>
+			<li><div>2 MUX</div></li>
+		</ul>
       </li>
-      <li>
-        <div><span class="ui-icon ui-icon-play"></span>Наличие входов ASI на 1 MUX</div>
-      </li>
-      <li>
-        <div><span class="ui-icon ui-icon-seek-end"></span>Наличие входов ASI на 2 MUX</div>
+	  <li>
+        <div>Температура СДК</div>
       </li>
     </ul>
+	
   </li>
 </ul>
 
@@ -139,7 +160,7 @@
 
 <div id="panel-tabs">
   <ul>
-    <li><a href="#panel-tabs-monitoring"><span class="ui-icon ui-icon-lightbulb"></span> Мониторинг</a></li>
+    <li><a href="#panel-tabs-monitoring"><span class="ui-icon ui-icon-search"></span> Мониторинг</a></li>
     <li><a href="#panel-tabs-sunoutage"><span class="ui-icon ui-icon-calendar"></span> Интерференция</a></li>
     <li><a href="#panel-tabs-additional"><span class="ui-icon ui-icon-wrench"></span> Дополнительно</a></li>
   </ul>

@@ -37,3 +37,12 @@
   padding:1px 7px;
   text-overflow: ellipsis;
 }
+
+.ui-menu .ui-menu-item
+{
+list-style-image: none;
+	
+}
+
+ 
+ 

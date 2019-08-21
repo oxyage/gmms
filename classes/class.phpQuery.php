@@ -12,6 +12,7 @@
  * @package phpQuery
  */
 
+define("phpQuery", true); 
 // class names for instanceof
 // TODO move them as class constants into phpQuery
 define('DOMDOCUMENT', 'DOMDocument');

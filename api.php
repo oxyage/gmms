@@ -121,6 +121,43 @@ switch($Route[0])
 				break;
 			}
 			
+			case "parse": //parse
+			{
+				/* парсинг страницы устройств*/
+				
+				try	{
+					API::checkArgs("host,cookie");
+				}
+				catch(Exception $e)
+				{
+					$API($e); break;
+				}
+							
+				$input = array("host"=>$_REQUEST["host"], 
+				"cookie"=>$_REQUEST["cookie"]);
+				
+				include(CLASSES_PATH."class.phpQuery.php");
+				include(CLASSES_PATH."class.rcu.php");
+				
+				//создаем объект типа RCU
+				$RCU = new RCU;
+				//формируем url для запроса 
+				$URL = $RCU->protocol."://".$input["host"].$RCU->basedir;
+				//делаем POST запрос
+				$POST = $RCU->post($URL, $input["cookie"]);
+				
+				//отправляем результат запроса в функцию parse
+				$parseresult = $RCU->parse($POST);
+				
+				//обновить в базе данных хэш
+				#$update = $db->query("UPDATE `rcu` SET `devices_hash` = '".$devices_hash."' WHERE `host` = '".$input["host"]."'; ");
+				
+				//выводим результат
+				$API($parseresult);
+				
+				break;
+			}
+			
 			default: // если не указан 1 маршрут
 			{
 				$API(new Exception("undefined route #1 by route 'rcu'", 2));
@@ -255,7 +292,7 @@ class API
 		$arrayArgs = explode(",", $argsString);
 		foreach($arrayArgs as $i => $arg)
 		{
-			if(empty($_REQUEST[$arg]) or !isset($_REQUEST[$arg])) 
+			if(empty($_REQUEST[trim($arg)]) or !isset($_REQUEST[trim($arg)])) 
 				throw new Exception("Проверьте входные данные", 15);
 		}
 		return true;

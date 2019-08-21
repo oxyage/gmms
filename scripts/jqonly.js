@@ -88,7 +88,8 @@ $( function(){ /* активация элементов на странице */
 		
 	/* меню объекта связи*/
 	$( "#menu" ).menu({
-		position: { my: "left top", at: "right-5 top+5" }
+		//position: { my: "left top", at: "right-5 top+5" }
+		items: "> :not(.ui-widget-header)"
 	});
 	
 	/* прогресс бар	*/
