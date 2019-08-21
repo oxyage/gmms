@@ -8,17 +8,7 @@ $( function() {/* предустановленные переменные*/
 		GMMS.journal.push(date[0]+" "+message);
 	},
 	GMMS.sfn = [], //одночастотные сети
-	GMMS.func = {
-		/*getSFNbyList: function(list){
-			
-			for(let RTS of list)
-			{
-				if(typeof GMMS.sfn[RTS.sfn] === "undefined") GMMS.sfn[RTS.sfn] = [];
-				//GMMS.sfn[RTS.sfn] = RTS;
-				GMMS.sfn[RTS.sfn].push(RTS);
-			}
-		}*/
-	}
+	GMMS.func = {}
 	
 }),
 $( function(){ /* активация элементов на странице */
@@ -90,7 +80,7 @@ $( function(){ /* активация элементов на странице */
 	$( "#menu" ).menu({
 		//position: { my: "left top", at: "right-5 top+5" }
 		items: "> :not(.ui-widget-header)"
-	});
+	}).hide();
 	
 	/* прогресс бар	*/
 	$( "#progressbar" ).progressbar({
@@ -99,8 +89,6 @@ $( function(){ /* активация элементов на странице */
 
 }),
 $( function() { /* события на странице*/
-
-
 
 	/* загружаем объекты связи */
 	LoadingState = new $.Deferred(); // ждем разрешения вывести на страницу
@@ -138,6 +126,7 @@ $( function() { /* события на странице*/
 		.done(function(){
 			
 			console.log("this:",this);
+			GMMS.rcu = this;
 				
 			for(let RTS of this.list)
 			{
@@ -186,6 +175,28 @@ $( function() { /* события на странице*/
 			$( "#panel-select input" ).checkboxradio({
 				  icon: false
 				});	
+				
+				
+			/* клик на иконку РТС */	
+			$("div.rts").click(function(rts){
+		
+				let name = $(this).data("name");
+				let host = $(this).data("host");
+				let x = rts.pageX;
+				let y = rts.pageY;
+				
+				$("#menu").css({
+					top: y+"px",
+					left: x+"px"			
+				});
+				$("#menu .ui-widget-header div:first").text(name);
+				$("#menu").toggle();
+				$("#menu").data({
+					name: name,
+					host: host
+				});
+				
+			});
 
 			
 			/* действия кнопок выбор одночастотной зоны или всех*/
@@ -226,6 +237,60 @@ $( function() { /* события на странице*/
 	
 	/* end загрузка объектов связи */
 	
+	
+	
+	/*
+	 действия на кликах меню
+	*/
+	$("li.action").click(function(li){
+		
+		let data = $(this).data();
+		route = data.route.split("/");
+
+		data["host"] = $("#menu").data("host"); //host, name
+		
+		switch(route[0])
+		{
+			case "auth":
+			{
+
+				let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
+				let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
+				
+				switch(route[1])
+				{
+					case "operator":{
+						window.open("http://"+data.host+"/config/devices/?username=operator&userpass="+operator.userpass,"_blank");				
+						break;
+					}
+					case "admin":{
+						window.open("http://"+data.host+"/config/devices/?username=admin&userpass="+admin.userpass,"_blank");
+						break;
+					}
+					case "quiet":{
+						console.log("Функция тихой авторизации");
+						break;
+					}
+					default:{
+						window.open("http://"+data.host+"/config/devices/","_blank");
+					}
+					
+				}
+				break;
+			}
+			
+			
+			
+			default:{
+				console.warn("route[0] is null");
+				console.log(route);
+			}
+		}
+		
+		//console.log(		$(this).data()		);
+	});
+
+	/* end действия на кликах меню*/
 	
 	
 	$("button.gmms").click(function(){

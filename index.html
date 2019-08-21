@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="scripts/main.js"></script>
 	<script type="text/javascript" src="scripts/jqonly.js"></script>
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="style/style.css?123">
+	<link rel="stylesheet" href="style/style.css?13">
 
 	<!-- Убрать в соответствующий файл -->
 	<script>
@@ -72,53 +72,55 @@
 
 
 <!-- Меню объекта связи -->
-<ul id="menu" style="width:250px; position:absolute; top:50px; left:20px;" >
-  <li class="ui-widget-header" style="text-align:center; padding: 3px 0px; cursor: default;"  >
-    <div>Имя РТПС</div>
-  </li>
-  <li class="" >
+<ul id="menu" data-name="" data-host="" >
+  <li class="ui-widget-header"><div id="menu-header">Имя РТПС</div></li>
+  <li>
     <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СДК</div>
 	 <ul style="width:200px">
-      <li>
+	 <li class="ui-widget-header"><div>Привилегии</div></li>
+      <li class="action" data-route="auth/operator" title="Авторизоваться как оператор">
         <div><span class="ui-icon ui-icon-person"></span>Оператор</div>
       </li>
-	   <li>
-        <div><span class="ui-icon ui-icon-extlink"></span>Страница входа</div>
-      </li>
-      <li>
+	 <li class="action" data-route="auth/admin" title="Войти с правами администратора">
         <div><span class="ui-icon ui-icon-alert"></span>Администратор</div>
+      </li>
+	  <li class="action" data-route="auth/" title="Перейти на страницу авторизации">
+        <div><span class="ui-icon ui-icon-extlink"></span>Страница входа</div>
       </li>
     </ul>
   </li>
-  <li>
-    <div><span class="ui-icon ui-icon-key"></span>Авторизация</div>
+  <li class="action" data-route="auth/quiet">
+    <div><span class="ui-icon ui-icon-key"></span>Скрытая авторизация</div>
   </li>
-  <li class="ui-state-disabled">
+  <li class="ui-state-disabled action" data-route="connection/clear">
     <div><span class="ui-icon ui-icon-print"></span>Сбросить соединение</div>
   </li>
   <li>
-    <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>
-	
+    <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>	
     <ul style="width:250px">
+	<li class="ui-widget-header"><div>Параметры</div></li>
       <li>
         <div>Входной сигнал спутника</div>
-		<ul style="width:100px">
-			<li><div>1 MUX</div></li>
-			<li><div>2 MUX</div></li>
+		<ul style="width:130px">
+			<li class="ui-widget-header"><div>Мультиплекс</div></li>
+			<li class="action" data-route="monitoring/input/1mux"><div>1 MUX</div></li>
+			<li class="action" data-route="monitoring/input/2mux"><div>2 MUX</div></li>
 		</ul>	
       </li>
 	  <li>
         <div>Синхронизация SFN</div>
-		<ul style="width:100px">
-			<li><div>1 MUX</div></li>
-			<li><div>2 MUX</div></li>
+		<ul style="width:130px">
+			<li class="ui-widget-header"><div>Мультиплекс</div></li>
+			<li class="action" data-route="monitoring/sfn/1mux"><div>1 MUX</div></li>
+			<li class="action" data-route="monitoring/sfn/2mux"><div>2 MUX</div></li>
 		</ul>
       </li>
-	  <li>
-        <div>Температура СДК</div>
-      </li>
+	  <li class="action" data-route="monitoring/temperature/rcu"><div>Температура СДК</div></li>
     </ul>
 	
+  </li>
+  <li class="ui-state-disabled">
+    <div><span class="ui-icon ui-icon-signal-diag"></span>Комплексная проверка</div>
   </li>
 </ul>
 
