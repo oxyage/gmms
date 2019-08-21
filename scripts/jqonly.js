@@ -21,7 +21,7 @@ $( function(){ /* активация элементов на странице */
 	/*выбор объектов связи */
 	$( "#panel-select" ).accordion({
 	  collapsible: true,
-	 // active: false,
+	  active: false,
 	  heightStyle: "content",
 		icons:{
 			 header: "ui-icon-radio-on",
