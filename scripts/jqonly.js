@@ -246,70 +246,6 @@ $( function() { /* события на странице*/
 	
 	
 	
-	/*
-	 действия на кликах меню
-	*/
-	$("li.action").click(function(li){
-		
-		let data = $(this).data();
-		route = data.route.split("/");
-
-		data["host"] = $("#menu").data("host"); //host, name
-		data["name"] = $("#menu").data("name"); //host, name
-		
-		switch(route[0])
-		{
-			case "auth":
-			{
-
-				let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
-				let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
-				
-				switch(route[1])
-				{
-					case "operator":{
-						window.open("http://"+data.host+"/config/devices/?username=operator&userpass="+operator.userpass,"_blank");				
-						break;
-					}
-					case "admin":{
-						window.open("http://"+data.host+"/config/devices/?username=admin&userpass="+admin.userpass,"_blank");
-						break;
-					}
-					case "quiet":{
-						console.log("Тихая авторизация на "+data.name);
-						$.post("api.php?route=rcu/auth",{
-							host: data.host,
-							username: "admin",
-							userpass: admin.userpass
-						})
-						.done(function(a){
-							console.log(a);
-						})
-						.fail(function(e){
-							console.log(e);
-						});
-						break;
-					}
-					default:{
-						window.open("http://"+data.host+"/config/devices/","_blank");
-					}
-					
-				}
-				break;
-			}
-			
-			
-			
-			default:{
-				console.warn("route[0] is null");
-				console.log(route);
-			}
-		}
-		
-		//console.log(		$(this).data()		);
-	});
-
-	/* end действия на кликах меню*/
 	
 	
 	$("button.gmms").click(function(){
@@ -344,6 +280,108 @@ $( function() { /* события на странице*/
 	
 
 
+}),
+$(function(){ /*  меню объектов связи, действия с ними */
+
+/* действия на кликах меню */
+$("li.action").click(function(li){
+	
+	let data = $(this).data();
+	route = data.route.split("/");
+
+	data["host"] = $("#menu").data("host"); //host, name
+	data["name"] = $("#menu").data("name"); //host, name
+	
+	switch(route[0])
+	{
+		case "auth":
+		{
+
+			let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
+			let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
+			
+			switch(route[1])
+			{
+				case "operator":{
+					window.open("http://"+data.host+"/config/devices/?username=operator&userpass="+operator.userpass,"_blank");				
+					break;
+				}
+				case "admin":{
+					window.open("http://"+data.host+"/config/devices/?username=admin&userpass="+admin.userpass,"_blank");
+					break;
+				}
+				case "quiet":{
+					console.log("Тихая авторизация на "+data.name);
+					$.post("api.php?route=rcu/auth",{
+						host: data.host,
+						username: "admin",
+						userpass: admin.userpass
+					})
+					.done(function(a){
+						console.log(a);
+					})
+					.fail(function(e){
+						console.log(e);
+					});
+					break;
+				}
+				default:{
+					window.open("http://"+data.host+"/config/devices/","_blank");
+				}
+				
+			}
+			break;
+		}
+		case "function":
+		{
+			switch(route[1])
+			{
+				case "devices":
+				{
+					switch(route[2])
+					{
+						case "update":
+						{
+							console.log("Будем обновлять устройства в таблицах");
+							console.log("Первым делом таблица RCU");
+							console.log("За ней таблицу devices");		
+							break;
+						}
+						
+						
+					}
+					
+					break;
+				}
+				default:{
+					
+				}
+			}
+			break;
+		}
+		
+		
+		default:{
+			console.warn("route[0] is null");
+			console.log(route);
+		}
+	}
+	
+	//console.log(		$(this).data()		);
+});
+
+/* end действия на кликах меню*/
+
+
+
+/* обновить устройства в таблице rcu */
+
+
+
+
+
+
+	
 }),
 $(function(){ /*  стили */
 	

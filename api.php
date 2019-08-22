@@ -14,10 +14,20 @@ define('CONFIG_PATH', SITE_PATH."config".DIRSEP); // папка с настро�
 
 /*
 класс для взаимодействия сервера с удаленным СДК по HTTP
+http://10.32.1.3/gmms/api.php?route=rcu/auth&host=10.32.1.2&username=admin&userpass=kq9OXFVTKb&debug
 
-http://10.32.1.3/gmms/2.0.0/api.php?route=rcu/auth&host=10.32.1.2&username=admin&userpass=kq9OXFVTKb&debug
+#Доступные route
 
+rcu/auth
+rcu/post
+rcu/parse
 
+db/select/rcu
+db/update/rcu
+
+*/
+
+/*
 коды ошибок API
 10
 11
@@ -178,7 +188,6 @@ switch($Route[0])
 		//создаем экземпляр класса db
 		$db = new db($db_ini);
 		$db->connect(); //соединеняемся с БД и выбираем базу данных
-			
 		
 		switch($Route[1])
 		{
@@ -187,15 +196,10 @@ switch($Route[0])
 				switch($Route[2])//для предустановленного выбора
 				{
 					case "rcu":
-					{
+					{			
 						$get_rcu = $db->query("SELECT * FROM `rcu`");
 						$get_rcu = $db->fetch_assoc($get_rcu);
-						
-						
-						/*
-#######Warn!######### 		стоит ли это выносить из файла?
-						*/
-						
+
 						/*	группируем по ОЧС	*/
 						$sfn = array();// список одночастотных зон list, хосты - host
 						
@@ -213,17 +217,10 @@ switch($Route[0])
 							
 							$list[] = $row;
 							$host[$row["host"]] = $row;
-							
-							
+
 							$sfn_info = array("name"=>$row["sfn_name"],"eng"=>$row["sfn_eng"],"uid"=>$row["sfn_uid"]);
 							//список одночастотных зон sfn[]
 							$sfn["list"][$sfn_info["uid"]] = $sfn_info;
-							
-							//список по хостам от номера очс
-						//	$sfn["uid"][$sfn_info["sfn_uid"]]["list"][$row["host"]] = $row;
-						//	$sfn["uid"][$sfn_info["sfn_uid"]]["host"][$row["host"]] = $row;
-							
-						//	$sfn["eng"][$sfn_info["sfn_eng"]][$row["host"]] = $row;
 							
 							$sfn["host"][$sfn_info["uid"]][$row["host"]] = $row;
 
@@ -245,23 +242,42 @@ switch($Route[0])
 					}
 				}
 				
-				
-				/*try	{
-					API::checkArgs("table");
-				}
-				catch(Exception $e)
-				{
-					$API($e); break;
-				}
-				
-				$result = array($db, $db());
-				$API($result);
-				*/
 				break;
 			}
 			case "update":
 			{
-				$API();
+				switch($Route[2])//для предустановленного выбора
+				{
+					case "rcu":
+					{
+						//обновить информацию об устройствах в БД
+						
+						//сначала обновим хэш в таблице rcu
+						//devices обновляем в другом запросе
+						
+						
+						//передать на вход host и список устройств! хэш вычисляем здесь						
+						try	{
+							API::checkArgs("host,devices");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+									
+						$input = array("host"=>$_REQUEST["host"], 
+						"devices"=>$_REQUEST["devices"]);
+						
+						//устанавливаем соединение с БД
+						$update_rcu = $db->query("UPDATE `gmms`.`rcu` SET `devices_hash` = '".md5($input["devices"])."' WHERE `rcu`.`host` = '".$input["host"]."';");
+							
+						API($update_rcu);	
+						break;
+					}
+					default:{
+						//необязательный параметр
+					}
+				}
 				break;
 			}
 
