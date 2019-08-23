@@ -10,12 +10,36 @@
 	
 }
 
+/* panel */
+
+/* journal */
+#panel-log div span{
+	padding:1px 5px;
+}
+#panel-log div span.null{
+	
+}
+#panel-log div span.good{
+	background-color:#b9efb9;
+}
+#panel-log div span.warn{
+	background-color:#FFFFBF;
+}
+#panel-log div span.error{
+	background-color:#FFBFBF;
+}
+
+
+
+
+/* end -panel */
+
 
 
 .rts
 {
   font-weight: bold;  
-  min-width: 150px;  
+  /* min-width: 150px;  */
   white-space: nowrap;  
   z-index:1;  
   position: absolute;
@@ -63,6 +87,15 @@ text-align:center;
 padding: 3px 0px; 
 cursor: default;
 }
+
+
+/* tower style */
+.rts .wait		{ background-color: #0033AA; 	}
+.rts .auth		{ background-color: #B8FF74; 	}
+.rts .ready		{ background-color: #7FFFD4; 	}
+.rts .error		{ background-color: #ff1a1a; 	}
+.rts .action	{ background-color: #5F9EA0; 	}
+.rts .default	{ background-color: #EEE; 	}
 
  
  

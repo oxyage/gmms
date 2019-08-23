@@ -74,6 +74,7 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
+					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 							
@@ -106,24 +107,29 @@ switch($Route[0])
 			case "post":
 			{
 				try	{
-					API::checkArgs("url,cookie,data");
+					API::checkArgs("url,cookie,data,host");
 				}
 				catch(Exception $e)
 				{
+					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 				
 				$input = array("url"=>$_REQUEST["url"], 
 				"cookie"=>$_REQUEST["cookie"],
-				"data"=>$_REQUEST["data"]);
+				"data"=>$_REQUEST["data"],
+				"host"=>$_REQUEST["host"]);
 								
 				include(CLASSES_PATH."class.rcu.php");
 				
 				//создаем объект типа RCU
 				$RCU = new RCU;
+				$RCU->host = $input["host"];
+				$API->host = $input["host"];
 				//делаем POST запрос
 				$POST = $RCU->post($input["url"], $input["cookie"], $input["data"]);
 				//выводим результат
+				
 				$API($POST);
 				
 				
@@ -140,6 +146,7 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
+					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 							
@@ -151,6 +158,8 @@ switch($Route[0])
 				
 				//создаем объект типа RCU
 				$RCU = new RCU;
+				$RCU->host = $input["host"];
+				$API->host = $input["host"];
 				//формируем url для запроса 
 				$URL = $RCU->protocol."://".$input["host"].$RCU->basedir;
 				//делаем POST запрос
@@ -161,6 +170,8 @@ switch($Route[0])
 				
 				//обновить в базе данных хэш
 				#$update = $db->query("UPDATE `rcu` SET `devices_hash` = '".$devices_hash."' WHERE `host` = '".$input["host"]."'; ");
+				
+				//подмешиваем в ответ хост
 				
 				//выводим результат
 				$API($parseresult);
@@ -334,6 +345,7 @@ class API
 	public $error = 0;
 	public $response;
 	public $debug = false;
+	public $host = false;
 	
 	public function __invoke($a = null)
 	{
@@ -353,7 +365,7 @@ class API
 		}
 		
 		//только для вывода
-		$result = array("error" => $this->error, "response" => $this->response);
+		$result = array("error" => $this->error, "response" => $this->response, "host" => $this->host);
 						  
 		 if($this->debug)
 		 { 

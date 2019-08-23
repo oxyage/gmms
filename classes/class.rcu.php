@@ -41,7 +41,8 @@ class RCU
 	public $sfn;
 	
 	//соединение с СДК
-	public $connection = array("cookie"=>"", //полученные куки авторизации
+	public $connection = array("host"=>"",
+								"cookie"=>"", //полученные куки авторизации
 								"remote"=>"", //IP адрес авторизованного клиента
 								"timestamp"=>"", //timestamp время авторизации
 								"username"=>"", //имя авторизованного пользователя
@@ -96,6 +97,7 @@ class RCU
 	
 	public function set_connection()
 	{
+		$this->connection["host"] = $this->host; 
 		$this->connection["cookie"] = $this->cookie; 
 		$this->connection["remote"] = $this->request["server"]["REMOTE_ADDR"];
 		$this->connection["username"] = $this->username;
@@ -315,7 +317,7 @@ class RCU
 		"rcu_name"=>$RCU_NAME, 
 		"count"=>sizeof($DEVICES), 
 		"devices"=>$DEVICES, 
-		"hash"=>md5($Table->text())
+		"hash"=>md5($Table->text())		
 		);
 		
 	}
