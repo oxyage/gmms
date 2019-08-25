@@ -3,8 +3,6 @@ $( function() {/* предустановленные переменные*/
 	GMMS.journal = [], //журнал
 	GMMS.func = {
 		icon: function(state, host = false){
-					
-			
 			if(typeof host === "object")
 			{
 				//Object.keys(GMMS.rcu.sfn.host)
@@ -26,6 +24,43 @@ $( function() {/* предустановленные переменные*/
 			
 		},
 		
+		status: function(state = false, host = false){
+			
+			switch(state)
+			{
+				case "wait":{
+					
+					//state = "<img src='style/images/loader_opta.gif' style='width:35px; height:5px;'>";
+					
+					state = $("<img>").css({
+						width: "35px",
+						height: "5px"
+					}).attr("src","style/images/loader_opta.gif");		
+					
+					break;
+				}
+				default:{ 
+					state = ""; // нужны свежие идеи здесь
+				}
+			}
+			
+			if(typeof host === "object")
+			{
+				for(let _host of Object.keys(host))
+				{
+					$('#container-map .rts[data-host="'+host[_host]+'"] .name').html(state);
+				}
+			}
+			else if(!host)//значит все
+			{
+				$('#container-map .rts .name').html(state);
+			}
+			else
+			{
+				
+				$('#container-map .rts[data-host="'+host+'"] .name').html(state);
+			}			
+		},
 		log: function(message, status = null){
 			let date = new Date($.now());
 			date = date.toTimeString().split(" ");
