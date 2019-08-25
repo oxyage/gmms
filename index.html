@@ -15,16 +15,16 @@
 	<!--<script type="text/javascript" src="vendor/jquery-ui.js"></script>-->
 	<script type="text/javascript" src="vendor/jquery-ui.min.js"></script>
 	<!--<link rel="stylesheet" href="vendor/jquery-ui.css">-->
-	<link rel="stylesheet" href="vendor/jquery-ui.min.css">
+	<link rel="stylesheet" href="vendor/jquery-ui.min.css?1">
 	
 	<!-- jQuery Cookie -->
 	<script type="text/javascript" src="vendor/jquery.cookie.js"></script>
 		
 	<!--Пользовательские скрипты --->
 	<script type="text/javascript" src="scripts/main.js"></script>
-	<script type="text/javascript" src="scripts/jqonly.js"></script>
+	<script type="text/javascript" src="scripts/jqonly.js?1213"></script>
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="style/style.css?123">
+	<link rel="stylesheet" href="style/style.css?1">
 
 	<!-- Убрать в соответствующий файл -->
 	<script>
@@ -166,7 +166,7 @@
 
 </td>
 <!--панель управления-->
-<td style="vertical-align:top">
+<td id="panel" style="vertical-align:top">
 
 <div>
 <button style="width: 100%;" class="ui-button ui-widget ui-corner-all gmms"><span class="ui-icon ui-icon-gear"></span> GMMS</button>
@@ -178,7 +178,7 @@
 <!-- Выбор объектов связи -->
 <div id="panel-select"><!-- start panel select-->
 <h3> Выбрать объекты связи</h3>
-	<div> <!-- start container panel select-->
+	<div style="text-align:center;"> <!-- start container panel select-->
 
 
 <label for="checkbox-select-all">Выбрать все</label>

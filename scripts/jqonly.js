@@ -1,12 +1,6 @@
 $( function() {/* предустановленные переменные*/
 	
 	GMMS.journal = [], //журнал
-	GMMS.log = function(message, status = null){
-		let date = new Date($.now());
-		date = date.toTimeString().split(" ");
-		$( "#panel-log div" ).prepend("<span class='"+status+"'>"+date[0]+" "+message+"</span><br>");
-		GMMS.journal.push(date[0]+" "+message);
-	},
 	GMMS.func = {
 		icon: function(state, host = false){
 					
@@ -16,7 +10,7 @@ $( function() {/* предустановленные переменные*/
 				//Object.keys(GMMS.rcu.sfn.host)
 				for(let _host of Object.keys(host))
 				{
-					console.log(host[_host]);
+					//console.log(host[_host]);
 					$('.rts[data-host="'+host[_host]+'"] .tower').attr("class", "tower "+state);	
 				}
 			}
@@ -30,14 +24,33 @@ $( function() {/* предустановленные переменные*/
 			}
 			//$('[data-host="'+host+'"] .tower').css({"background-color": _status});	
 			
+		},
+		
+		log: function(message, status = null){
+			let date = new Date($.now());
+			date = date.toTimeString().split(" ");
+			$( "#panel-log div" ).prepend("<span class='"+status+"'>"+date[0]+" "+message+"</span><br>");
+			GMMS.journal.push(date[0]+" "+message);
+		},
+		api: function(data){
+			$.post("api.php?route="+data.route, data)
+			.done(function(response){
+				console.log(response);
+			})
 		}
 	},
-	GMMS.api = function(data){
-		//console.log($.param(data,true));
-		$.post("api.php?route="+data.route, data)
-		.done(function(response){
-			console.log(response);
-		});
+	/* предустановленные rcu */
+	GMMS.rcu = {
+		host: {}, //список по хостам
+		list: {}, //список
+		sfn: {
+			host:{}, //список по зонам по хостам
+			list:{}
+		},
+		select: [], //выбранные объекты
+		deferred:{}, //deferred объекты для запросов
+		auth:{} //авторизованные хосты
+
 	}
 	
 }),
@@ -46,7 +59,7 @@ $( function(){ /* активация элементов на странице */
 	/* панель выбора объектов связи */
 	$( "#panel-select" ).accordion({
 	  collapsible: true,
-	  active: false, //скрыть при загрузке
+	  //active: false, //скрыть при загрузке
 	  heightStyle: "content",
 		icons:{
 			 header: "ui-icon-radio-on",
@@ -126,21 +139,21 @@ $( function() { /* события на странице*/
 		{
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
-			GMMS.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
+			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
 			console.log("Загруженные объекты связи",d);
 		}
 		else//если есть ошибка в ответе
 		{
 			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+d.error+")<br><i>"+d.response.message+"</i>");
-			GMMS.log("Ошибка загрузки объектов связи. Смотри лог", "warn"); //логгируем	
+			GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "warn"); //логгируем	
 			LoadingState.reject();
 			console.warn("Ошибка в ответе от сервера",d);
 		}
 	})
 	.fail(function(e){//если не удался запрос к файлу
 		$( "#dialog-wait p" ).html("Загрузка объектов связи не удалась<br>Смотри лог");
-		GMMS.log("Ошибка загрузки объектов связи. Смотри лог", "error"); //логгируем	
+		GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "error"); //логгируем	
 		LoadingState.reject();
 		console.error("API не доступно",e);
 	});
@@ -150,9 +163,12 @@ $( function() { /* события на странице*/
 	LoadingState
 	.done(function(){
 		
-		//console.log("this:",this);
+		
 		//в консоль
-		GMMS.rcu = this;
+		GMMS.rcu.list = this.list;
+		GMMS.rcu.host = this.host;
+		GMMS.rcu.sfn.host = this.sfn.host;
+		GMMS.rcu.sfn.list = this.sfn.list;
 		
 		// в цикле выводим на карту
 		for(let RTS of this.list)
@@ -190,36 +206,73 @@ $( function() { /* события на странице*/
 		}				
 
 			
+			
 		//в цикле выводим в панель выбора объектов связи по одночастотным зонам	
 		for(let sfn_uid of Object.keys(this.sfn.host))
 		{
 			let sfn = this.sfn.list[sfn_uid];
-							
-			$("<fieldset>", {
-				"id": "field-sfn-"+sfn.eng,
-			})
-			.css({
-				"margin-top": "10px"
-			})
-			.append('<legend><label for="sfn-'+sfn.eng+'" >Одночастотная зона '+sfn.name+'</label><input type="checkbox" name="sfn-'+sfn.eng+'" id="sfn-'+sfn.eng+'" class="sfn"></legend><div></div><br>')
-			.appendTo("#container-select-all");
+			
+			$("#container-select-all").append(
+			
+				//добавим панель одночастотной зоны
+				$("<fieldset>", {
+					"id": "field-sfn-"+sfn.eng,
+					"data-sfn-eng": sfn.eng,
+					"data-sfn-name": sfn.name,
+					"data-sfn-uid": sfn.uid
+				})
+				.css({
+					"margin-top": "10px"
+				})
+				.append(
+					//Легенда панели
+					$("<legend>").append(
+						//добавить в тег легенду - label
+						$("<label>",{ 
+							"for": "sfn-"+sfn.eng 
+						})
+						.text("Одночастотная зона "+sfn.name)
+					),
+					//кнопка выбора на легенде (ОЧС)
+					$("<input>", {
+						"type": "checkbox",
+						"id": "sfn-"+sfn.eng,
+						"name": "sfn",
+						"data-sfn-eng": sfn.eng,
+						"data-sfn-name": sfn.name,
+						"data-sfn-uid": sfn.uid
+					}),
+					$("<div>").css({"text-align":"left"})
+				)
+			);
 			
 			//цикл в одночастотной зоне
 			for(let host of Object.keys(this.sfn.host[sfn_uid]))
 			{
-				console.log();
+				$("#field-sfn-"+sfn.eng+" div").append(
+					//добавляем label
+					$("<label>",{ 
+						"for": "checkbox-host-"+host
+					})
+					.text(this.host[host]["name"]),
+					
+					//добавляем input
+					$("<input/>", {
+						"type": "checkbox",
+						"id": "checkbox-host-"+host,
+						"name": "host",
+						"data-host": host,
+						"data-name": this.host[host]["name"],
+						"data-eng": this.host[host]["eng"]
+					})	
 				
-				$("<label>",{
-					"for": "checkbox-host-"+host
-				})
-				.append(this.host[host]["name"]+'<input type="checkbox" name="host-'+host+'" id="checkbox-host-'+host+'">')
-				.appendTo("#field-sfn-"+sfn.eng+" div");
+				);
 				
-			}
-			
+
+			}						
 		}
 
-		GMMS.log("Объекты связи нанесены на карту"); //логгируем		
+		GMMS.func.log("Объекты связи нанесены на карту"); //логгируем		
 			
 		
 		//активируем все чекбоксы объектов связи
@@ -229,29 +282,90 @@ $( function() { /* события на странице*/
 
 		
 		/* действия кнопок выбор одночастотной зоны или всех*/
+		
+		/*
+		
+		алгоритм
+		1. нажатие на input в панели выбора
+		2.* получить атрибут имя input и data-данные
+		-если нажали на кнопку выбрать все
+		3. скрываем все одночастотные зоны
+		4. ставим всем объектам иконки
+		5. добавляем в GMMS.rcu.select
+		6. выводим лог
+		7. снимаем все чекбоксы внутри
+		-если нажали на кнопку одночастотной зоны
+		3. скрываем эту одночастотную зону
+		4. ставим объектам в sfn иконки
+		5. добавляем в GMMS.rcu.select
+		6. выводим лог
+		7. снимаем чекбоксы внутри sfn зоны
+		-если нажали на кнопку хоста
+		4. ставим объекту иконку
+		5. добавляем в GMMS.rcu.select
+		6. выводим лог
+		
+		*/
+		
 		$('#panel-select input').click(function(){
 			
 			let target = $(this).attr("name");
-			console.log(target, $(this).is(':checked'));
+			let data = $(this).data();
+			let checked = $(this).is(':checked');
 			
 			if(target === "select-all")
 			{
-				
-				if ($(this).is(':checked')){
-					GMMS.log("Выбраны все объекты связи"); //логгируем
+				$('#container-select-all input').prop("checked", false);
+				$('#container-select-all input').checkboxradio("refresh");
+				if (checked){
+					GMMS.func.log("Выбраны все РТПС"); //логгируем
+					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
+					GMMS.func.icon("select");
 					$("#container-select-all").hide();
 				} else {
+					GMMS.func.log("Снят выбор всех РТПС"); //логгируем
+					GMMS.rcu.select = [];
+					GMMS.func.icon("default");
 					$("#container-select-all").show();
+					$("#container-select-all fieldset div").show();
+				}/**/
+			}
+			else if(target === "sfn")
+			{
+				$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
+				$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
+				if (checked)
+				{
+					GMMS.func.log("Выбрана ОЧС "+data.sfnName); //логгируем
+					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
+						GMMS.rcu.select.push(item); //добавляем каждый в select
+					});
+					GMMS.func.icon("select", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
+					$("#field-sfn-"+data.sfnEng+" div").hide();
+				} else 
+				{
+					GMMS.func.log("Снят выбор ОЧС "+data.sfnName); //логгируем
+					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
+						GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(item), 1);//удаляем каждый
+					});
+					GMMS.func.icon("default", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
+					$("#field-sfn-"+data.sfnEng+" div").show();
 				}
 			}
-			else
+			else if(target === "host")
 			{
-				if ($(this).is(':checked')){
-//						let name = target.split("-");
-//					GMMS.log("Выбран объект связи "+GMMS.name[1]); //логгируем								
-					$("#field-"+target+" div").hide();
-				} else {
-					$("#field-"+target+" div").show();
+			//	$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
+			//	$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
+				if(checked){
+					GMMS.func.log("Выбрана РТПС "+data.name); //логгируем
+					GMMS.rcu.select.push(data.host);
+					GMMS.func.icon("select", data.host);
+				}
+				else{
+					GMMS.func.log("Снят выбор РТПС "+data.name); //логгируем
+					GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(data.host), 1);
+					GMMS.func.icon("default", data.host);
+
 				}
 			}
 		});			
@@ -366,7 +480,7 @@ $("li.action").click(function(li){
 							console.log("Будем обновлять устройства в таблицах");
 							console.log("Первым делом таблица RCU");
 							
-							GMMS.log("Обновляем устройства СДК "+data.name);
+							GMMS.func.log("Обновляем устройства СДК "+data.name);
 							
 							/* добавить прогрессбар */
 							
@@ -378,17 +492,17 @@ $("li.action").click(function(li){
 							.done(function(d){
 								if(!d.error)
 								{
-									GMMS.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"good");
+									GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"good");
 									console.log(d.response);
 								}
 								else
 								{
-									GMMS.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
 									console.warn(d);
 								}				
 							})
 							.fail(function(e){
-								GMMS.log("Ошибка обновления устрйоств (см. лог)","error");
+								GMMS.func.log("Ошибка обновления устрйоств (см. лог)","error");
 								console.error(e);
 							});
 							

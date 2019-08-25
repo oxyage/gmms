@@ -12,6 +12,22 @@
 
 /* panel */
 
+
+
+/* panel management */
+#panel{
+	padding: .3em;
+}
+#panel .ui-tabs{
+	padding:0;
+	margin:.3em;
+}
+#panel .ui-helper-reset{
+	padding: 0.3em 0.3em;
+}
+
+
+
 /* journal */
 #panel-log div span{
 	padding:1px 5px;
@@ -28,7 +44,6 @@
 #panel-log div span.error{
 	background-color:#FFBFBF;
 }
-
 
 
 
@@ -90,12 +105,14 @@ cursor: default;
 
 
 /* tower style */
-.rts .wait		{ background-color: #0033AA; 	}
-.rts .auth		{ background-color: #B8FF74; 	}
-.rts .ready		{ background-color: #7FFFD4; 	}
-.rts .error		{ background-color: #ff1a1a; 	}
-.rts .action	{ background-color: #5F9EA0; 	}
-.rts .default	{ background-color: #EEE; 	}
+.rts .wait		{ background-color: #0033AA; 	} /* темно-синий - черный */
+.rts .auth		{ background-color: #B8FF74; 	} /* салатовый */
+.rts .ready		{ background-color: #7FFFD4; 	} /* бирюзовый */
+.rts .error		{ background-color: #ff6060; 	} /* красный */
+.rts .black		{ background-color: #000; 		} /* черный */
+.rts .orange	{ background-color: #e2c928; 	} /* оранжевый */
+.rts .select	{ background-color: #3498db; 	} /* цвет башни */
+.rts .default	{ background-color: #EEE; 		} /* серый */
 
  
  
