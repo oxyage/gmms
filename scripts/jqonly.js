@@ -54,12 +54,13 @@ $( function() {/* предустановленные переменные*/
 	}
 	
 }),
+//#######################################################################################################
 $( function(){ /* активация элементов на странице */
 
 	/* панель выбора объектов связи */
 	$( "#panel-select" ).accordion({
 	  collapsible: true,
-	  //active: false, //скрыть при загрузке
+	  active: false, //скрыть при загрузке
 	  heightStyle: "content",
 		icons:{
 			 header: "ui-icon-radio-on",
@@ -92,7 +93,7 @@ $( function(){ /* активация элементов на странице */
 	/* журнал */
 	$( "#panel-log" ).accordion({
 	  collapsible: true,
-	  //active: false,
+	  active: false,
 	  heightStyle: "content",
 	  icons: {
 		  header: "ui-icon-note",
@@ -125,6 +126,7 @@ $( function(){ /* активация элементов на странице */
 		});
 
 }),
+//#######################################################################################################
 $( function() { /* события на странице*/
 
 
@@ -322,13 +324,15 @@ $( function() { /* события на странице*/
 					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
 					GMMS.func.icon("select");
 					$("#container-select-all").hide();
+					$.cookie("select", "all");
 				} else {
 					GMMS.func.log("Снят выбор всех РТПС"); //логгируем
 					GMMS.rcu.select = [];
 					GMMS.func.icon("default");
 					$("#container-select-all").show();
 					$("#container-select-all fieldset div").show();
-				}/**/
+					$.removeCookie("select");
+				}
 			}
 			else if(target === "sfn")
 			{
@@ -354,8 +358,6 @@ $( function() { /* события на странице*/
 			}
 			else if(target === "host")
 			{
-			//	$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
-			//	$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
 				if(checked){
 					GMMS.func.log("Выбрана РТПС "+data.name); //логгируем
 					GMMS.rcu.select.push(data.host);
@@ -415,6 +417,7 @@ $( function() { /* события на странице*/
 
 
 }),
+//#######################################################################################################
 $(function(){ /*  меню объектов связи, действия с ними */
 
 /* действия на кликах меню */
@@ -449,7 +452,7 @@ $("li.action").click(function(li){
 					console.log("Тихая авторизация на "+data.name);
 					$.post("api.php?route=rcu/auth",{
 						host: data.host,
-						username: "admin",
+						username: "admin", //исправить, тут должно быть не так
 						userpass: admin.userpass
 					})
 					.done(function(a){
@@ -545,14 +548,17 @@ $("li.action").click(function(li){
 
 	
 }),
+//#######################################################################################################
 $(function(){ /*  стили */
 	
 }),
+//#######################################################################################################
 $(function(){ /*  служебные функции */
 	
 	
 	
 }),
+//#######################################################################################################
 $(document).click(function(event){ /* клик по документу */
 	
 	if($(event.target).parents("ul#menu").length === 0 && $(event.target).closest(".rts").length === 0) // если клик вне меню или на РТС
@@ -561,6 +567,7 @@ $(document).click(function(event){ /* клик по документу */
 	}
 	
 }),
+//#######################################################################################################
 $(document).ready(function(){ /* после загрузки DOM */
 	
 	
