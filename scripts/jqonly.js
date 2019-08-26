@@ -23,43 +23,113 @@ $( function() {/* предустановленные переменные*/
 			//$('[data-host="'+host+'"] .tower').css({"background-color": _status});	
 			
 		},
-		
+
+		//
+		/*
+			GMMS.func.status() - обновить все статусы на дефолтные
+		*/
 		status: function(state = false, host = false){
 			
 			switch(state)
 			{
 				case "wait":{
 					
-					//state = "<img src='style/images/loader_opta.gif' style='width:35px; height:5px;'>";
-					
-					state = $("<img>").css({
-						width: "35px",
-						height: "5px"
-					}).attr("src","style/images/loader_opta.gif");		
-					
+					state = "<img src='style/images/loader_opta.gif' style='width:35px; height:5px;'>";
 					break;
 				}
-				default:{ 
-					state = ""; // нужны свежие идеи здесь
+				default: { // false			
 				}
 			}
 			
-			if(typeof host === "object")
+			if(typeof host === "object") //массив объектов
 			{
 				for(let _host of Object.keys(host))
 				{
-					$('#container-map .rts[data-host="'+host[_host]+'"] .name').html(state);
+					$('#container-map .rts[data-host="'+host[_host]+'"] .name').html(function(){
+
+						if(!state)	return	$(this).parent().data("name");
+						else		return state;
+					});
 				}
 			}
 			else if(!host)//значит все
 			{
-				$('#container-map .rts .name').html(state);
+				$('#container-map .rts .name').html(function(){
+					
+					if(!state)		return	$(this).parent().data("name");
+					else			return state;
+				});
 			}
 			else
 			{
-				
-				$('#container-map .rts[data-host="'+host+'"] .name').html(state);
+				$('#container-map .rts[data-host="'+host+'"] .name').html(function(){
+					
+					if(!state)		return	$(this).parent().data("name");
+					else			return state;
+				});
 			}			
+		},
+		select: function(target, data, checked){
+			
+			/*let target = $(this).attr("name");
+			let data = $(this).data();
+			let checked = $(this).is(':checked');
+			*/
+			if(target === "select-all")
+			{
+				$('#container-select-all input').prop("checked", false);
+				$('#container-select-all input').checkboxradio("refresh");
+				if (checked){
+					GMMS.func.log("Выбраны все РТПС"); //логгируем
+					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
+					GMMS.func.icon("select");
+					$("#container-select-all").hide();
+					$.cookie("select", "all");
+				} else {
+					GMMS.func.log("Снят выбор всех РТПС"); //логгируем
+					GMMS.rcu.select = [];
+					GMMS.func.icon("default");
+					$("#container-select-all").show();
+					$("#container-select-all fieldset div").show();
+					$.removeCookie("select");
+				}
+			}
+			else if(target === "sfn")
+			{
+				$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
+				$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
+				if (checked)
+				{
+					GMMS.func.log("Выбрана ОЧС "+data.sfnName); //логгируем
+					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
+						GMMS.rcu.select.push(item); //добавляем каждый в select
+					});
+					GMMS.func.icon("select", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
+					$("#field-sfn-"+data.sfnEng+" div").hide();
+				} else 
+				{
+					GMMS.func.log("Снят выбор ОЧС "+data.sfnName); //логгируем
+					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
+						GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(item), 1);//удаляем каждый
+					});
+					GMMS.func.icon("default", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
+					$("#field-sfn-"+data.sfnEng+" div").show();
+				}
+			}
+			else if(target === "host")
+			{
+				if(checked){
+					GMMS.func.log("Выбрана РТПС "+data.name); //логгируем
+					GMMS.rcu.select.push(data.host);
+					GMMS.func.icon("select", data.host);
+				}
+				else{
+					GMMS.func.log("Снят выбор РТПС "+data.name); //логгируем
+					GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(data.host), 1);
+					GMMS.func.icon("default", data.host);
+
+				}
+			}
 		},
 		log: function(message, status = null){
 			let date = new Date($.now());
@@ -225,6 +295,8 @@ $( function() { /* события на странице*/
 				let name = $(this).data("name");
 				let host = $(this).data("host");
 				
+				console.log(name, host);
+				
 				$("#menu")
 				.css({
 					top: rts.pageY+"px",
@@ -268,7 +340,7 @@ $( function() { /* события на странице*/
 						$("<label>",{ 
 							"for": "sfn-"+sfn.eng 
 						})
-						.text("Одночастотная зона "+sfn.name)
+						.html("<b>Одночастотная зона "+sfn.name+"</b>")
 					),
 					//кнопка выбора на легенде (ОЧС)
 					$("<input>", {
@@ -346,10 +418,14 @@ $( function() { /* события на странице*/
 		
 		$('#panel-select input').click(function(){
 			
+			
 			let target = $(this).attr("name");
 			let data = $(this).data();
 			let checked = $(this).is(':checked');
 			
+			GMMS.func.select(target, data, checked);
+			
+			/*
 			if(target === "select-all")
 			{
 				$('#container-select-all input').prop("checked", false);
@@ -405,6 +481,8 @@ $( function() { /* события на странице*/
 
 				}
 			}
+			
+			*/
 		});			
 			
 		
