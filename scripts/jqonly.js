@@ -131,6 +131,24 @@ $( function() {/* предустановленные переменные*/
 				}
 			}
 		},
+		auth: function(host){ // не передавать параметры имени пользователя и пароля
+		
+			return $.post("api.php?route=rcu/auth",{
+				host: host,
+				username: "admin", //исправить, тут должно быть не так
+				userpass: GMMS.rcu.host[host]["auth"]["admin"].userpass
+			});
+		},
+		connection:{
+			set: function(host){
+//				console.log(GMMS.rcu.auth[host];
+				return $.post("api.php?route=db/insert/connection", GMMS.rcu.auth[host]);
+			},
+			find: function(){
+				return $.post("api.php?route=db/select/connection");
+			}
+		},
+		
 		log: function(message, status = null){
 			let date = new Date($.now());
 			date = date.toTimeString().split(" ");
@@ -237,6 +255,7 @@ $( function() { /* события на странице*/
 
 	/* загрузка объектов связи  */
 	LoadingState = new $.Deferred(); // ждем разрешения вывести на страницу
+	ConnectionFindState = new $.Deferred(); // ждем разрешения на запрос в БД за соединениями
 	
 	$( "#dialog-wait" ).dialog();//открываем окно
 	$.get("api.php?route=db/select/rcu")
@@ -270,12 +289,12 @@ $( function() { /* события на странице*/
 	LoadingState
 	.done(function(){
 		
-		
 		//в консоль
 		GMMS.rcu.list = this.list;
 		GMMS.rcu.host = this.host;
 		GMMS.rcu.sfn.host = this.sfn.host;
 		GMMS.rcu.sfn.list = this.sfn.list;
+		ConnectionFindState.resolve();
 		
 		// в цикле выводим на карту
 		for(let RTS of this.list)
@@ -294,9 +313,7 @@ $( function() { /* события на странице*/
 			.click(function(rts){
 				let name = $(this).data("name");
 				let host = $(this).data("host");
-				
-				console.log(name, host);
-				
+			
 				$("#menu")
 				.css({
 					top: rts.pageY+"px",
@@ -391,31 +408,6 @@ $( function() { /* события на странице*/
 
 		
 		/* действия кнопок выбор одночастотной зоны или всех*/
-		
-		/*
-		
-		алгоритм
-		1. нажатие на input в панели выбора
-		2.* получить атрибут имя input и data-данные
-		-если нажали на кнопку выбрать все
-		3. скрываем все одночастотные зоны
-		4. ставим всем объектам иконки
-		5. добавляем в GMMS.rcu.select
-		6. выводим лог
-		7. снимаем все чекбоксы внутри
-		-если нажали на кнопку одночастотной зоны
-		3. скрываем эту одночастотную зону
-		4. ставим объектам в sfn иконки
-		5. добавляем в GMMS.rcu.select
-		6. выводим лог
-		7. снимаем чекбоксы внутри sfn зоны
-		-если нажали на кнопку хоста
-		4. ставим объекту иконку
-		5. добавляем в GMMS.rcu.select
-		6. выводим лог
-		
-		*/
-		
 		$('#panel-select input').click(function(){
 			
 			
@@ -425,71 +417,26 @@ $( function() { /* события на странице*/
 			
 			GMMS.func.select(target, data, checked);
 			
-			/*
-			if(target === "select-all")
-			{
-				$('#container-select-all input').prop("checked", false);
-				$('#container-select-all input').checkboxradio("refresh");
-				if (checked){
-					GMMS.func.log("Выбраны все РТПС"); //логгируем
-					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
-					GMMS.func.icon("select");
-					$("#container-select-all").hide();
-					$.cookie("select", "all");
-				} else {
-					GMMS.func.log("Снят выбор всех РТПС"); //логгируем
-					GMMS.rcu.select = [];
-					GMMS.func.icon("default");
-					$("#container-select-all").show();
-					$("#container-select-all fieldset div").show();
-					$.removeCookie("select");
-				}
-			}
-			else if(target === "sfn")
-			{
-				$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
-				$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
-				if (checked)
-				{
-					GMMS.func.log("Выбрана ОЧС "+data.sfnName); //логгируем
-					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
-						GMMS.rcu.select.push(item); //добавляем каждый в select
-					});
-					GMMS.func.icon("select", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
-					$("#field-sfn-"+data.sfnEng+" div").hide();
-				} else 
-				{
-					GMMS.func.log("Снят выбор ОЧС "+data.sfnName); //логгируем
-					Object.keys(GMMS.rcu.sfn.host[data.sfnUid]).map(function(item, index, array){ //проходим по значениям массива
-						GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(item), 1);//удаляем каждый
-					});
-					GMMS.func.icon("default", Object.keys(GMMS.rcu.sfn.host[data.sfnUid]));
-					$("#field-sfn-"+data.sfnEng+" div").show();
-				}
-			}
-			else if(target === "host")
-			{
-				if(checked){
-					GMMS.func.log("Выбрана РТПС "+data.name); //логгируем
-					GMMS.rcu.select.push(data.host);
-					GMMS.func.icon("select", data.host);
-				}
-				else{
-					GMMS.func.log("Снят выбор РТПС "+data.name); //логгируем
-					GMMS.rcu.select.splice( GMMS.rcu.select.indexOf(data.host), 1);
-					GMMS.func.icon("default", data.host);
-
-				}
-			}
-			
-			*/
 		});			
 			
 		
 	})
 	.fail(function(){
 		console.warn("Вывода не будет");
+		ConnectionFindState.reject();
 	});
+	
+	
+	ConnectionFindState
+	.done(function(){
+		console.log("ConnectionFindState done");
+		let find = GMMS.func.connection.find();
+		console.log(find);
+	})
+	.fail(function(){
+		console.warn("Запроса авторизованных хостов не будет");
+	});
+	
 	
 /* end загрузка объектов связи */
 	
@@ -562,17 +509,36 @@ $("li.action").click(function(li){
 					break;
 				}
 				case "quiet":{
-					console.log("Тихая авторизация на "+data.name);
-					$.post("api.php?route=rcu/auth",{
-						host: data.host,
-						username: "admin", //исправить, тут должно быть не так
-						userpass: admin.userpass
-					})
-					.done(function(a){
-						console.log(a);
+					
+					GMMS.func.log("Скрытая авторизация на "+GMMS.rcu.host[data.host].name);
+					GMMS.func.status("wait",data.host);
+					GMMS.func.icon("wait",data.host);					
+					
+					GMMS.func.auth(data.host)
+					.done(function(d){
+						
+						if(!d.error)
+						{
+							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name,"good");
+							GMMS.rcu.auth[d.host] = d.response;
+							//сохраняем в БД
+							GMMS.func.connection.set(d.host);
+							GMMS.func.status(false,d.host);
+							GMMS.func.icon("ready",d.host);
+							console.log(GMMS.rcu.auth);
+						}
+						else
+						{
+							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
+							GMMS.func.status(false,d.host);
+							GMMS.func.icon("error",d.host);
+							console.warn(d);
+						}
+						
 					})
 					.fail(function(e){
-						console.warn(e);
+						GMMS.func.log("Ошибка обращения к API","error");
+						console.error(e);
 					});
 					break;
 				}
@@ -598,27 +564,42 @@ $("li.action").click(function(li){
 							
 							GMMS.func.log("Обновляем устройства СДК "+data.name);
 							
+							GMMS.func.status("wait",data.host);
+							GMMS.func.icon("wait",data.host);
 							/* добавить прогрессбар */
+							
+							if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
+							{
+								GMMS.func.log("Нет данных об авторизации "+data.name,"error");
+								GMMS.func.status(false,data.host);
+								GMMS.func.icon("error",data.host);
+								break;
+							}
+
 							
 							$.post("api.php?route=rcu/parse",{
 								host: data.host,
-								cookie: "RCUSESSID=6a81dbd75e57121f8d79896d0c427c63; path=/"
+								cookie: GMMS.rcu.auth[data.host].cookie
 								
 							})
 							.done(function(d){
 								if(!d.error)
 								{
 									GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"good");
-									console.log(d.response);
+									GMMS.func.status(false,d.host);
+									GMMS.func.icon("ready",d.host);
+									console.log(d);
 								}
 								else
 								{
 									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
+									GMMS.func.status(false,d.host);
+									GMMS.func.icon("error",d.host);
 									console.warn(d);
 								}				
 							})
 							.fail(function(e){
-								GMMS.func.log("Ошибка обновления устрйоств (см. лог)","error");
+								GMMS.func.log("Ошибка обращения к API","error");
 								console.error(e);
 							});
 							

@@ -247,6 +247,18 @@ switch($Route[0])
 						
 						break;
 					}
+					case "connection":
+					{
+						//1440 sec = 24 минуты
+						
+						$connections = $db->query("SELECT * FROM `connections` WHERE TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 ORDER BY `uid` DESC");
+						$connections = $db->fetch_assoc($connections);
+						
+						$API($connections);	
+						break;
+						//SELECT * FROM `connections` WHERE DATE(`timestamp`) = CURDATE() AND TIME(`timestamp`) - CURTIME() < 1440 ORDER BY `uid` DESC
+						
+					}
 					
 					default:
 					{
@@ -283,13 +295,51 @@ switch($Route[0])
 						//устанавливаем соединение с БД
 						$update_rcu = $db->query("UPDATE `gmms`.`rcu` SET `devices_hash` = '".md5($input["devices"])."' WHERE `rcu`.`host` = '".$input["host"]."';");
 							
-						API($update_rcu);	
+						$API($update_rcu);	
 						break;
 					}
 					default:{
 						//необязательный параметр
 					}
 				}
+				break;
+			}
+			case "insert":{
+				
+				switch($Route[2])//для предустановленного выбора
+				{
+					
+					case "connection":{
+						
+						try	{
+							API::checkArgs("host,cookie,username,userpass,timestamp,remote");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+									
+						$input = array("host"=>$_REQUEST["host"], 
+						"cookie"=>$_REQUEST["cookie"],
+						"username"=>$_REQUEST["username"],
+						"userpass"=>$_REQUEST["userpass"],
+						"timestamp"=>$_REQUEST["timestamp"],
+						"remote"=>$_REQUEST["remote"]);
+						
+						$insert_connection = $db->query("INSERT INTO `gmms`.`connections` (`uid`, `host`, `cookie`, `username`, `userpass`, `timestamp`, `remote`) VALUES (NULL, '".$input["host"]."', '".$input["cookie"]."', '".$input["username"]."', '".$input["userpass"]."', CURRENT_TIMESTAMP, '".$input["remote"]."');");
+						
+						
+						
+						$API($insert_connection);	
+	
+						break;
+					}
+					default:{
+						//необязательный параметр
+					}
+				}
+				
+				
 				break;
 			}
 
