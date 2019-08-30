@@ -551,6 +551,26 @@ $("li.action").click(function(li){
 		}
 		case "function":
 		{
+			
+			GMMS.func.status("wait",data.host);
+			GMMS.func.icon("wait",data.host);
+			
+			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
+			{
+				GMMS.func.log("Нет данных об авторизации "+data.name,"error");
+				GMMS.func.status(false,data.host);
+				GMMS.func.icon("error",data.host);
+				break;
+			}
+			
+			/*
+			
+			тут же добавить проверку авторизации
+			
+			*/
+			
+			
+			
 			switch(route[1])
 			{
 				case "devices":
@@ -563,19 +583,6 @@ $("li.action").click(function(li){
 							console.log("Первым делом таблица RCU");
 							
 							GMMS.func.log("Обновляем устройства СДК "+data.name);
-							
-							GMMS.func.status("wait",data.host);
-							GMMS.func.icon("wait",data.host);
-							/* добавить прогрессбар */
-							
-							if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
-							{
-								GMMS.func.log("Нет данных об авторизации "+data.name,"error");
-								GMMS.func.status(false,data.host);
-								GMMS.func.icon("error",data.host);
-								break;
-							}
-
 							
 							$.post("api.php?route=rcu/parse",{
 								host: data.host,
@@ -618,10 +625,65 @@ $("li.action").click(function(li){
 			}
 			break;
 		}
-		
+		case "monitoring":
+		{
+			GMMS.func.status("wait",data.host);
+			GMMS.func.icon("wait",data.host);
+			
+			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
+			{
+				GMMS.func.log("Нет данных об авторизации "+data.name,"error");
+				GMMS.func.status(false,data.host);
+				GMMS.func.icon("error",data.host);
+				break;
+			}
+			
+			/*
+			
+			тут же добавить проверку авторизации
+			
+			*/
+			
+			switch(route[1])
+			{
+				/*
+				добавлять новые режимы мониторинга
+				*/
+				case "sfn":{
+					
+					let mux = route[2].split("-")[1];
+					
+					
+					break;
+				}
+				
+				case "input":{
+					
+					let mux = route[2].split("-")[1];
+					
+					break;
+				}
+			
+				case "complex":{
+					
+					console.log("Комплексный мониторинг");
+					
+					break;
+				}
+			
+			
+				default:{
+					console.warn("route[1] is undefined");
+					console.log(route);
+				}
+				
+				
+			}
+			break;
+		}
 		
 		default:{
-			console.warn("route[0] is null");
+			console.warn("route[0] is undefined");
 			console.log(route);
 		}
 	}

@@ -190,7 +190,7 @@ class RCU
 	public function post($url, $cookie = null, $data = null)
 	{
 		if(empty($url))	return new Exception("Отсутствует обязательный параметр 'url'", 20);
-		
+		if(empty($cookie)) $cookie = $this->cookie;
 		//url - полный адрес страницы с протоколом
 		
 		$curl = curl_init(); // инициализируем CURL
@@ -312,6 +312,16 @@ class RCU
 
 			$DEVICES[] = $one_device;	
 		}
+		
+		/*
+		
+		добавить группировку
+		1 MUX =
+		2 MUX =
+		СДК
+		(или какие то параметры поиска устройства)
+		
+		*/
 		
 		return array(
 		"rcu_name"=>$RCU_NAME, 

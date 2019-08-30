@@ -61,6 +61,8 @@ $API = new API;
 
 if($Debug) $API->debug = true;
 
+$API->host = !empty($_REQUEST["host"]) ?  $_REQUEST["host"] : false;
+
 switch($Route[0])
 {
 	case "rcu":
@@ -74,7 +76,6 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
-					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 							
@@ -87,7 +88,6 @@ switch($Route[0])
 				//создали объект класса RCU
 				//заполнили данными
 				$RCU = new RCU($input);
-				$API->host = $input["host"];
 				//запросили авторизацию получили заголовки
 				$RCU->headers = $RCU->auth(); //
 				//обработали заголовки
@@ -112,7 +112,6 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
-					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 				
@@ -126,7 +125,6 @@ switch($Route[0])
 				//создаем объект типа RCU
 				$RCU = new RCU;
 				$RCU->host = $input["host"];
-				$API->host = $input["host"];
 				//делаем POST запрос
 				$POST = $RCU->post($input["url"], $input["cookie"], $input["data"]);
 				//выводим результат
@@ -147,7 +145,6 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
-					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 							
@@ -159,18 +156,19 @@ switch($Route[0])
 				
 				//создаем объект типа RCU
 				$RCU = new RCU;
-				$RCU->host = $input["host"];
-				$API->host = $input["host"];
+				$RCU->host = $input["host"]; //для запроса
+				$RCU->cookie = $input["cookie"];
 				//формируем url для запроса 
-				$URL = $RCU->protocol."://".$input["host"].$RCU->basedir;
+				$URL = $RCU->protocol."://".$RCU->host.$RCU->basedir;
 				//делаем POST запрос
-				$POST = $RCU->post($URL, $input["cookie"]);
+				$POST = $RCU->post($URL);
 				
 				//отправляем результат запроса в функцию parse
 				$parseresult = $RCU->parse($POST);
 				
 				//обновить в базе данных хэш
 				#$update = $db->query("UPDATE `rcu` SET `devices_hash` = '".$devices_hash."' WHERE `host` = '".$input["host"]."'; ");
+				
 				
 				//подмешиваем в ответ хост
 				
@@ -186,7 +184,6 @@ switch($Route[0])
 				}
 				catch(Exception $e)
 				{
-					$API->host = @$_REQUEST["host"];
 					$API($e); break;
 				}
 				
@@ -201,7 +198,16 @@ switch($Route[0])
 				$API->module(CLASSES_PATH."class.rcu.php");
 				$API->module(TEMPLATES_PATH.$input["type_id"].".php");
 				
-				$device = new Device($input["action"]);
+				//ставим куки
+				$RCU = new RCU;
+				$RCU->host = $input["host"];
+				$RCU->cookie = $input["cookie"];
+				
+				$Device = new Device($input["action"]); // результат запуска функции по `action` пути
+				
+				
+				
+				
 				
 				$API($device);
 				

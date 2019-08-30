@@ -37,7 +37,13 @@ class _10000
 						switch($action[2])
 						{
 								case "sfn":{
+									//какие данные нужны чтобы найти галочку sfn?
+									//есть ли она тут вообще? может это мощный передатчик
+									//url до галочки
+									//название параметра
+									
 									$this->Device = $this->monitoring_modulator_sfn();
+									
 									break;
 								}
 							
@@ -70,7 +76,7 @@ class _10000
 	
 	public function monitoring_modulator_sfn()
 	{
-		return "будем искать галочку sfn";
+		return array("url"=>"/config/mt2/dvbt2/?id={id}", "find"=>"t2SfnSynchronization");
 	}
 	
 	/*
