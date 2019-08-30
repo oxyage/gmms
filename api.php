@@ -179,7 +179,36 @@ switch($Route[0])
 				
 				break;
 			}
-			
+			case "device":
+			{
+				try	{
+					API::checkArgs("host,cookie,url,type_id");
+				}
+				catch(Exception $e)
+				{
+					$API->host = @$_REQUEST["host"];
+					$API($e); break;
+				}
+				
+				$input = array("host"=>$_REQUEST["host"], 
+				"cookie"=>$_REQUEST["cookie"],
+				"url"=>$_REQUEST["url"], 
+				"type_id"=>$_REQUEST["type_id"]);
+				
+				include(CLASSES_PATH."class.phpQuery.php");
+				include(CLASSES_PATH."class.rcu.php");
+				//include(CLASSES_PATH."class.rcu.php")
+				
+				
+				/*
+				
+				подключение устройств шаблонов
+				
+				*/
+				
+				
+				break;
+			}
 			default: // если не указан 1 маршрут
 			{
 				$API(new Exception("undefined route #1 by route 'rcu'", 2));
