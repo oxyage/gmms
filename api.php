@@ -179,10 +179,10 @@ switch($Route[0])
 				
 				break;
 			}
-			case "device":
+			case "device": //*для работы с устройством
 			{
 				try	{
-					API::checkArgs("host,cookie,url,type_id");
+					API::checkArgs("host,cookie,id,type_id"); //id = ид устройства в таблице (для ссылок), type_id = для подключения шаблона
 				}
 				catch(Exception $e)
 				{
@@ -191,21 +191,36 @@ switch($Route[0])
 				}
 				
 				$input = array("host"=>$_REQUEST["host"], 
-				"cookie"=>$_REQUEST["cookie"],
-				"url"=>$_REQUEST["url"], 
-				"type_id"=>$_REQUEST["type_id"]);
-			
+				"cookie"=>@$_REQUEST["cookie"],
+				"type_id"=>$_REQUEST["type_id"],
+				"id"=>$_REQUEST["id"],
+				"action"=>@$_REQUEST["action"]//действия с устройством напр monitoring/input/1
+				);
+				
 				$API->module(CLASSES_PATH."class.phpQuery.php");
 				$API->module(CLASSES_PATH."class.rcu.php");
-				$API->module(TEMPLATES_PATH."10000.php");
+				$API->module(TEMPLATES_PATH.$input["type_id"].".php");
 				
-				//include(CLASSES_PATH."class.rcu.php")
+				$device = new Device($input["action"]);
 				
+				$API($device);
 				
 				/*
 				
-				подключение устройств шаблонов
+				API принимает данные на вход
+				соответственно подключает необходимые файлы
+				rcu
+				template
+				выдать возможные функции от устройства !
+				как необязательные параметры передать коды запросов - на получение информации или отправку формы
 				
+				по полученным кодам запроса - из template получить необходимые данные
+				отправить их посредством rcu->post
+				результат запроса интерпретировать снова в template
+				результат интерпретации получить в API и отправить пользователю
+				
+
+			
 				*/
 				
 				

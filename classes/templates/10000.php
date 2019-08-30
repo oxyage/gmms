@@ -4,9 +4,94 @@
 // phpQuery needed
 
 
-class init extends _10000{} //класс инициализации для запуска любого типа устройства
-class _10000 extends Device
+class Device extends _10000{} //класс инициализации для запуска любого типа устройства
+//результат работы класса должен быть следующий
+/*
+1 режим - на получение данных
+результат этого режима будет отправлен методом RCU->post на определенную страницу с определенными данными (куки не нужны здесь)
+
+
+2 режим - на интерпретацию данных
+результат этого режима будет распарсенная страница с выводом только результатов
+
+
+*/
+class _10000
 {
+	public $Device;
+	
+	public $action = "";
+	public function __construct($action) //запустить функцию в зависимости от action monitoring/modulator/sfn
+	{
+		$action = explode("/",$action);
+		$this->action = $action;
+		
+		switch($action[0])
+		{
+			case "monitoring":{
+				
+				switch($action[1])
+				{
+					case "modulator":{
+						
+						switch($action[2])
+						{
+								case "sfn":{
+									$this->Device = $this->monitoring_modulator_sfn();
+									break;
+								}
+							
+								default:{
+									$this->Device =  "третье действие не определено";
+								}
+						}	
+						
+						break;
+					}
+					
+					default:{
+						$this->Device = "второе действие не определено";
+					}
+					
+				}
+				
+				
+				break;
+			}
+			
+			default:{
+				$this->Device = "первое действие не определено";
+			}
+		}
+	}
+	
+	
+	
+	
+	public function monitoring_modulator_sfn()
+	{
+		return "будем искать галочку sfn";
+	}
+	
+	/*
+	
+	поддерживаемые функции
+	$allow_actions = array(
+		"monitoring"=>array("input", "lock", "sfn", "gps"),
+		
+		
+		
+		);
+	
+	
+	
+	
+	*/
+	
+	public function __invoke($a)
+	{
+			return $this->Device;
+	}
 	
 	public $general_info;
 	public $power;
