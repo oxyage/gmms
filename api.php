@@ -5,12 +5,12 @@ ini_set('display_startup_errors', 1);//выводить ошибки startup
 ini_set('error_reporting', E_ALL);//выводить ошибки
 ini_set('default_charset', "UTF-8");//нормальная кодировка
 
-define("classes_dir", "classes");
 
 define("DIRSEP", DIRECTORY_SEPARATOR);
 define('SITE_PATH', realpath(dirname(__FILE__).DIRSEP."..".DIRSEP).DIRSEP."gmms".DIRSEP); //корневая папка 
 define('CLASSES_PATH', SITE_PATH."classes".DIRSEP); // папка с классами
 define('CONFIG_PATH', SITE_PATH."config".DIRSEP); // папка с настройками
+define('TEMPLATES_PATH', CLASSES_PATH."templates".DIRSEP); //папка с шаблонами устройств
 
 /*
 класс для взаимодействия сервера с удаленным СДК по HTTP
@@ -82,7 +82,7 @@ switch($Route[0])
 				"username"=>$_REQUEST["username"],
 				"userpass"=>$_REQUEST["userpass"]);
 				
-				include(CLASSES_PATH."class.rcu.php");
+				$API->module(CLASSES_PATH."class.rcu.php");
 				
 				//создали объект класса RCU
 				//заполнили данными
@@ -121,7 +121,7 @@ switch($Route[0])
 				"data"=>$_REQUEST["data"],
 				"host"=>$_REQUEST["host"]);
 								
-				include(CLASSES_PATH."class.rcu.php");
+				$API->module(CLASSES_PATH."class.rcu.php");
 				
 				//создаем объект типа RCU
 				$RCU = new RCU;
@@ -154,8 +154,8 @@ switch($Route[0])
 				$input = array("host"=>$_REQUEST["host"], 
 				"cookie"=>$_REQUEST["cookie"]);
 				
-				include(CLASSES_PATH."class.phpQuery.php");
-				include(CLASSES_PATH."class.rcu.php");
+				$API->module(CLASSES_PATH."class.phpQuery.php");
+				$API->module(CLASSES_PATH."class.rcu.php");
 				
 				//создаем объект типа RCU
 				$RCU = new RCU;
@@ -194,9 +194,11 @@ switch($Route[0])
 				"cookie"=>$_REQUEST["cookie"],
 				"url"=>$_REQUEST["url"], 
 				"type_id"=>$_REQUEST["type_id"]);
+			
+				$API->module(CLASSES_PATH."class.phpQuery.php");
+				$API->module(CLASSES_PATH."class.rcu.php");
+				$API->module(TEMPLATES_PATH."10000.php");
 				
-				include(CLASSES_PATH."class.phpQuery.php");
-				include(CLASSES_PATH."class.rcu.php");
 				//include(CLASSES_PATH."class.rcu.php")
 				
 				
@@ -225,7 +227,7 @@ switch($Route[0])
 		//парсим настройки для бд
 		$db_ini = parse_ini_file(CONFIG_PATH."db.ini");
 		//подключаем класс бд
-		include(CLASSES_PATH."class.db.php");
+		$API->module(CLASSES_PATH."class.db.php");
 		//создаем экземпляр класса db
 		$db = new db($db_ini);
 		$db->connect(); //соединеняемся с БД и выбираем базу данных
@@ -455,6 +457,20 @@ class API
 			 echo json_encode($result);
 	}
 	
+	
+	public function module($file) //функция подключения модуля с проверкой на его наличие 
+	{
+		$check = file_exists($file);
+		if($check === FALSE)
+		{
+			return $this(new Exception("Невозможно подключить файл :: ".$file));
+		}
+		else
+		{
+			include($file);
+		}
+		
+	}
 	
 }
 
