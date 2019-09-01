@@ -303,6 +303,27 @@ switch($Route[0])
 					{
 						//1440 sec = 24 минуты
 						
+						if(!strcmp($Route[3], "host"))
+						{
+							try	{
+							API::checkArgs("host");
+							}
+							catch(Exception $e)
+							{
+								$API($e); break;
+							}
+							
+							$input = array("host"=>$_REQUEST["host"]);
+							
+							$connection = $db->query("SELECT * FROM `connections` WHERE `host`='".$input["host"]."' AND TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 ORDER BY `timestamp` DESC");
+							
+							$connection = $db->fetch_assoc($connection);
+						
+							$API($connection);	
+							
+							break;
+						}
+						
 						$connections = $db->query("SELECT * FROM `connections` WHERE TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 ORDER BY `uid` DESC");
 						$connections = $db->fetch_assoc($connections);
 						

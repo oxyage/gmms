@@ -1,5 +1,10 @@
 $( function() {/* предустановленные переменные*/
 	
+	GMMS.config = { //конфигурационные параметры
+		
+		autoAuth: true
+		
+	},
 	GMMS.journal = [], //журнал
 	GMMS.func = {
 		icon: function(state, host = false){
@@ -77,8 +82,8 @@ $( function() {/* предустановленные переменные*/
 			*/
 			if(target === "select-all")
 			{
-				$('#container-select-all input').prop("checked", false);
-				$('#container-select-all input').checkboxradio("refresh");
+				$('#checkbox-select-all').prop("checked", checked);
+				$('#checkbox-select-all').checkboxradio("refresh");
 				if (checked){
 					GMMS.func.log("Выбраны все РТПС"); //логгируем
 					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
@@ -96,7 +101,7 @@ $( function() {/* предустановленные переменные*/
 			}
 			else if(target === "sfn")
 			{
-				$("#field-sfn-"+data.sfnEng+" div input").prop("checked", false);
+				$("#field-sfn-"+data.sfnEng+" div input").prop("checked", checked);
 				$("#field-sfn-"+data.sfnEng+" div input").checkboxradio("refresh");
 				if (checked)
 				{
@@ -139,6 +144,57 @@ $( function() {/* предустановленные переменные*/
 				userpass: GMMS.rcu.host[host]["auth"]["admin"].userpass
 			});
 		},
+		checkAuth: function(host){
+			
+		 //ищем сначала в GMMS.rcu.auth
+			if(typeof GMMS.rcu.auth[host] === "undefined" || typeof GMMS.rcu.auth[host].cookie === "undefined") {
+				//продолжаем поиск в БД
+
+				return GMMS.func.connection.get(host);
+				/*.done(function(d){
+
+					if(!d.error)
+					{
+						
+						//успешный ответ, проверить есть ли куки и выбрать последние
+						
+						if(d.response.length === 0) 
+						{
+							result.reject();
+						}
+						else{
+							GMMS.rcu.auth[host] = d.response[0];
+							//result.resolveWith({"one":"not", "two":"2"}, ["one"]);							
+							result.resolveWith(d);
+						}
+					}
+					else//если есть ошибка в ответе
+					{
+						GMMS.func.log("Ошибка поиска соединения в БД", "warn"); //логгируем	
+						console.warn("Ошибка в ответе от сервера",d);
+						result.reject();
+					}
+					
+					
+				})
+				.fail(function(e){//если не удался запрос к файлу
+					GMMS.func.log("Не удалось обратиться к API", "error"); //логгируем	
+					console.error("API не доступно",e);
+					result.reject();
+				});
+				*/
+				
+			}
+			else{
+				return GMMS.rcu.auth[host];
+			}
+		 
+		 //затем ищем свежие записи в бд
+		 
+			
+			
+			
+		},
 		connection:{
 			set: function(host){
 //				console.log(GMMS.rcu.auth[host];
@@ -146,6 +202,9 @@ $( function() {/* предустановленные переменные*/
 			},
 			find: function(){
 				return $.post("api.php?route=db/select/connection");
+			},
+			get: function(host){
+				return $.post("api.php?route=db/select/connection/host", {host: host});
 			}
 		},
 		
@@ -212,17 +271,34 @@ $( function(){ /* активация элементов на странице */
 	  icon: false
 	});
 	
+	/* кнопки показать имена РТС */
+	$( "#auto-auth" ).checkboxradio({
+	
+		icon: false
+	});
+	$("#auto-auth").prop("checked", true);
+	$("#auto-auth" ).checkboxradio("refresh");
+	
 	
 	/* журнал */
 	$( "#panel-log" ).accordion({
 	  collapsible: true,
-	  active: false,
+	  active: $.cookie("panel-log") === "0" && parseInt($.cookie("panel-log")),
 	  heightStyle: "content",
 	  icons: {
 		  header: "ui-icon-note",
 		activeHeader: "ui-icon-note"
-		  }
+		  },
+		activate: function( event, ui ) { //добавить куки
+			
+			let panelLog = $( "#panel-log" ).accordion("option", "active");
+			$.cookie("panel-log", panelLog);
+			console.log($.cookie("panel-log"));
+			
+		}  
 	});
+	
+	console.log("jqonly.js");
 	
 	/* диалоговое окно */
 	$( "#dialog" ).dialog({});
@@ -267,7 +343,7 @@ $( function() { /* события на странице*/
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
 			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
-			console.log("Загруженные объекты связи",d);
+			console.log("Объекты связи загружены из БД",d);
 		}
 		else//если есть ошибка в ответе
 		{
@@ -399,8 +475,8 @@ $( function() { /* события на странице*/
 		}
 
 		GMMS.func.log("Объекты связи нанесены на карту"); //логгируем		
-			
-		
+	
+
 		//активируем все чекбоксы объектов связи
 		$( "#panel-select input" ).checkboxradio({
 			  icon: false
@@ -419,6 +495,11 @@ $( function() { /* события на странице*/
 			
 		});			
 			
+		if($.cookie("select") === "all")  
+		{
+			GMMS.func.select("select-all", false, true);
+		}		
+			
 		
 	})
 	.fail(function(){
@@ -431,7 +512,7 @@ $( function() { /* события на странице*/
 	.done(function(){
 		console.log("ConnectionFindState done");
 		let find = GMMS.func.connection.find();
-		console.log(find);
+	//	console.log(find);
 	})
 	.fail(function(){
 		console.warn("Запроса авторизованных хостов не будет");
@@ -450,15 +531,8 @@ $( function() { /* события на странице*/
 	
 
 	console.log("jquery first");
-	
-	
-	
-	
-	
-	
-	
 
-	/* */
+	/* нажатие на кнопку Показать имена РТС */
 	$('#show-rts-names').click(function(){
 		
 		if ($(this).is(':checked')){
@@ -470,6 +544,19 @@ $( function() { /* события на странице*/
 		}
 	
 	});
+		
+	/* */
+	$('#auto-auth').click(function(){
+		
+		if ($(this).is(':checked')){
+			
+			GMMS.config.autoAuth = true;
+		} else {
+			GMMS.config.autoAuth = false;
+		}
+		
+		console.log("GMMS.config.autoAuth", GMMS.config.autoAuth);
+	});	
 		
 	
 		
@@ -555,14 +642,20 @@ $("li.action").click(function(li){
 			GMMS.func.status("wait",data.host);
 			GMMS.func.icon("wait",data.host);
 			
-			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
+		/*	if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
 				GMMS.func.log("Нет данных об авторизации "+data.name,"error");
 				GMMS.func.status(false,data.host);
 				GMMS.func.icon("error",data.host);
 				break;
 			}
-			
+		*/	
+		
+		//DEBUG
+			GMMS.func.checkAuth(data.host).done(function(d){
+				console.log(d);
+			});
+			break;
 			/*
 			
 			тут же добавить проверку авторизации
