@@ -303,8 +303,11 @@ switch($Route[0])
 					{
 						//1440 sec = 24 минуты
 						
-						if(!strcmp($Route[3], "host"))
+						if(sizeof($Route) > 3)
 						{
+							
+							if(strcmp($Route[3], "host") !== 0) break;
+							
 							try	{
 							API::checkArgs("host");
 							}
@@ -315,7 +318,7 @@ switch($Route[0])
 							
 							$input = array("host"=>$_REQUEST["host"]);
 							
-							$connection = $db->query("SELECT * FROM `connections` WHERE `host`='".$input["host"]."' AND TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 ORDER BY `timestamp` DESC");
+							$connection = $db->query("SELECT `cookie`,`host`,`remote`,`timestamp`,`username`,`userpass` FROM `connections` WHERE `host`='".$input["host"]."' AND TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 GROUP BY `host` ORDER BY `timestamp` DESC LIMIT 1");
 							
 							$connection = $db->fetch_assoc($connection);
 						
@@ -324,7 +327,9 @@ switch($Route[0])
 							break;
 						}
 						
-						$connections = $db->query("SELECT * FROM `connections` WHERE TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 ORDER BY `uid` DESC");
+						$connections = $db->query("SELECT `cookie`,`host`,`remote`,`timestamp`,`username`,`userpass` FROM `connections` INNER JOIN (
+							SELECT max(`uid`) AS `maxUid` FROM `connections` WHERE TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 GROUP BY `host`
+							) AS `MAX` ON `connections`.`uid` = `MAX`.`maxUid` ORDER BY `uid` DESC");
 						$connections = $db->fetch_assoc($connections);
 						
 						$API($connections);	

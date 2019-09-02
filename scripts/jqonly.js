@@ -7,6 +7,7 @@ $( function() {/* предустановленные переменные*/
 	},
 	GMMS.journal = [], //журнал
 	GMMS.func = {
+		
 		icon: function(state, host = false){
 			if(typeof host === "object")
 			{
@@ -146,50 +147,40 @@ $( function() {/* предустановленные переменные*/
 		},
 		checkAuth: function(host){
 			
+			let result = $.Deferred();
+			
+			
+		//доделать функцию полностью	
 		 //ищем сначала в GMMS.rcu.auth
 			if(typeof GMMS.rcu.auth[host] === "undefined" || typeof GMMS.rcu.auth[host].cookie === "undefined") {
 				//продолжаем поиск в БД
 
-				return GMMS.func.connection.get(host);
-				/*.done(function(d){
-
-					if(!d.error)
-					{
-						
-						//успешный ответ, проверить есть ли куки и выбрать последние
-						
-						if(d.response.length === 0) 
-						{
-							result.reject();
-						}
-						else{
-							GMMS.rcu.auth[host] = d.response[0];
-							//result.resolveWith({"one":"not", "two":"2"}, ["one"]);							
-							result.resolveWith(d);
-						}
-					}
-					else//если есть ошибка в ответе
-					{
-						GMMS.func.log("Ошибка поиска соединения в БД", "warn"); //логгируем	
-						console.warn("Ошибка в ответе от сервера",d);
-						result.reject();
-					}
+				//return GMMS.func.connection.get(host);
+				GMMS.func.connection.get(host).done(function(d){
 					
-					
+					console.log(d);
+					if(!d.error){
+						result.resolveWith(d, ["response"]);
+					}
+					else{
+						result.reject();					
+					}
+					return result;
 				})
-				.fail(function(e){//если не удался запрос к файлу
-					GMMS.func.log("Не удалось обратиться к API", "error"); //логгируем	
-					console.error("API не доступно",e);
-					result.reject();
+				.fail(function(e){
+					console.error(e);
+					
 				});
-				*/
 				
 			}
 			else{
-				return GMMS.rcu.auth[host];
+				//return GMMS.rcu.auth[host];
+				result.resolveWith(GMMS.rcu.auth, [host]);
+				return result;
 			}
 		 
 		 //затем ищем свежие записи в бд
+		 
 		 
 			
 			
@@ -273,7 +264,7 @@ $( function(){ /* активация элементов на странице */
 	
 	/* кнопки показать имена РТС */
 	$( "#auto-auth" ).checkboxradio({
-	
+		disabled: true,
 		icon: false
 	});
 	$("#auto-auth").prop("checked", true);
@@ -407,6 +398,7 @@ $( function() { /* события на странице*/
 			.appendTo("#container-map");			
 		}				
 
+		GMMS.func.log("Объекты связи нанесены на карту"); //логгируем	
 			
 			
 		//в цикле выводим в панель выбора объектов связи по одночастотным зонам	
@@ -473,14 +465,14 @@ $( function() { /* события на странице*/
 
 			}						
 		}
+		
+		GMMS.func.log("Объекты связи выведены в панель выбора"); //логгируем	
 
-		GMMS.func.log("Объекты связи нанесены на карту"); //логгируем		
-	
-
+		
 		//активируем все чекбоксы объектов связи
 		$( "#panel-select input" ).checkboxradio({
-			  icon: false
-			});	
+		  icon: false
+		});	
 
 		
 		/* действия кнопок выбор одночастотной зоны или всех*/
@@ -495,10 +487,41 @@ $( function() { /* события на странице*/
 			
 		});			
 			
+		/*	после загрузки всех  объектов	*/	
+		//ставим выбор всех объектов
+		//#### доделать на остальные выборы
 		if($.cookie("select") === "all")  
 		{
 			GMMS.func.select("select-all", false, true);
 		}		
+		
+		//ищем авторизованные соединения 
+		let find_connections = GMMS.func.connection.find();
+		find_connections.done(function(d){
+			
+			if(!d.error)
+			{
+				for(let i of d.response)
+				{
+					GMMS.rcu.auth[i.host] = i;
+					GMMS.func.status(false,i.host);
+					GMMS.func.icon("ready",i.host);
+					GMMS.func.log("Найдено соединение "+GMMS.rcu.host[i.host].name,"good");
+				}
+				console.log(GMMS.rcu.auth);
+			}
+			else
+			{
+				GMMS.func.log("Ошибка поиска соединений (#"+d.error+")","warn");
+				console.warn(d);
+			}
+			
+			
+		}).fail(function(e){
+			GMMS.func.log("Ошибка обращения к API при загрузке соединений","error");
+			console.error(e);
+		});
+		
 			
 		
 	})
