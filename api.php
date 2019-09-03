@@ -189,9 +189,10 @@ switch($Route[0])
 				}
 				
 				$input = array("host"=>$_REQUEST["host"], 
-				"cookie"=>@$_REQUEST["cookie"],
-				"type_id"=>$_REQUEST["type_id"],
-				"id"=>$_REQUEST["id"],
+				"cookie"=>@$_REQUEST["cookie"], //для post запроса
+				"type_id"=>$_REQUEST["type_id"], //для подключения шаблона
+				"id"=>$_REQUEST["id"], //для исправления ссылки от шаблона
+				"purposes"=>@$_REQUEST["purposes"], //для передачи доп данных в шаблон
 				"action"=>@$_REQUEST["action"]//действия с устройством напр monitoring/input/1
 				);
 				
@@ -204,13 +205,23 @@ switch($Route[0])
 				$RCU->host = $input["host"];
 				$RCU->cookie = $input["cookie"];
 				
-				$Device = new Device($input["action"]); // результат запуска функции по `action` пути
 				
+				$Device = new Device($input["action"], $input["purposes"]); // результат запуска функции по `action` пути
 				
+				//получили данные, теперь их отправляем
+
+				//формируем url для запроса 
+				$Device->Info["url"] = str_replace("{id}", $input["id"], $Device->Info["url"]);
+				$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"];
+				$POST = $RCU->post($URL);	
+
+				//полученную страницу интерпретируем
+				$result = $Device->Info["callback"]($POST);
 				
+				//отдаем в результат
+				$API($result);			
 				
-				
-				$API($device);
+				//$API($result); //__invoke чтобы получить всю инфу
 				
 				/*
 				

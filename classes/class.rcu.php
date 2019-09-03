@@ -231,6 +231,9 @@ class RCU
 		if(strpos($device["name"], "1 MUX") !== FALSE) $purpose["mux"] = 1;
 		else if(strpos($device["name"], "2 MUX") !== FALSE) $purpose["mux"] = 2;
 		
+		
+		
+		
 		/* функция устройства */
 		
 		if(strpos($device["type"], "Передатчик") !== FALSE) $purpose["func"] = "Tx";
@@ -238,6 +241,17 @@ class RCU
 		{
 			$purpose["func"] = "Repl";
 			$purpose["mux"] = 1;
+		}
+		
+		/* мощность передатчика */
+		if(strpos($device["type"], "Передатчик") !== FALSE)
+		{
+			if(strpos($device["name"], "250") !== FALSE) $purpose["power"] = 250;
+			else if(strpos($device["name"], "500") !== FALSE) $purpose["power"] = 500;
+			else if(strpos($device["name"], "1000") !== FALSE) $purpose["power"] = 1000;
+			else if(strpos($device["name"], "2000") !== FALSE) $purpose["power"] = 2000;
+			else if(strpos($device["name"], "5000") !== FALSE) $purpose["power"] = 5000;
+			else if(strpos($device["name"], "100Вт") !== FALSE) $purpose["power"] = 100;
 		}
 		
 		$device["purposes"] = $purpose;	

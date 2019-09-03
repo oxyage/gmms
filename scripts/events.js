@@ -189,7 +189,7 @@ $( function() { /* события на странице*/
 					GMMS.func.icon("ready",i.host);
 					GMMS.func.log("Найдено соединение "+GMMS.rcu.host[i.host].name,"good");
 				}
-				console.log(GMMS.rcu.auth);
+				console.log("rcu.auth: ",GMMS.rcu.auth);
 			}
 			else
 			{

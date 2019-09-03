@@ -28,16 +28,16 @@
 	<!--<script type="text/javascript" src="scripts/jqonly.js?1142221"></script>-->
 	
 	<!-- Предустановленные переменные и функции -->
-	<script type="text/javascript" src="scripts/predefined.js?45"></script>
+	<script type="text/javascript" src="scripts/predefined.js?4345"></script>
 	
 	<!-- Активация элементов на странице -->
 	<script type="text/javascript" src="scripts/elements.js"></script>
 	
 	<!-- События на странице -->
-	<script type="text/javascript" src="scripts/events.js"></script>
+	<script type="text/javascript" src="scripts/events.js?2"></script>
 	
 	<!-- Меню объекта связи и действия с ним -->
-	<script type="text/javascript" src="scripts/menu.js?122"></script>
+	<script type="text/javascript" src="scripts/menu.js?13122"></script>
 	
 
 	
@@ -50,7 +50,11 @@
 	$( function() {
 	/* для отладки*/
 	  
-	
+	  
+	/* для поддержания соединения */  
+	setInterval(function(){
+	  console.log("Обновляем +300 сек");
+	}, 300000);
 
 
 	console.log("index.html");

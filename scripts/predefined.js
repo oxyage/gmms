@@ -150,10 +150,13 @@ $( function() {
 		},
 		checkAuth: function(host){
 			
-			GMMS.rcu.deferred[host] = {};
-			//GMMS.rcu.deferred[host]["checkAuth"] = {};
+			if(typeof GMMS.rcu.deferred[host] === "undefined") 
+				GMMS.rcu.deferred[host] = {};
+			
+
 			GMMS.rcu.deferred[host]["checkAuth"] = $.Deferred();
-			 
+			
+
 			if(typeof GMMS.rcu.auth[host] === "object" && GMMS.rcu.auth[host].cookie !== "undefined")
 			{
 				GMMS.rcu.deferred[host]["checkAuth"].resolveWith(GMMS.rcu.auth, [GMMS.rcu.auth[host]]);

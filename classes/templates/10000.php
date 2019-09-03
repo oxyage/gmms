@@ -18,13 +18,19 @@ class Device extends _10000{} //класс инициализации для з�
 */
 class _10000
 {
-	public $Device;
+	public $Info;
 	
+	public $Purposes;
+	public $Power = 0;
 	public $action = "";
-	public function __construct($action) //запустить функцию в зависимости от action monitoring/modulator/sfn
+	
+	public function __construct($action, $purposes) //запустить функцию в зависимости от action monitoring/modulator/sfn
 	{
 		$action = explode("/",$action);
 		$this->action = $action;
+		
+		$this->Purposes = $purposes;
+		$this->Power = $purposes["power"];
 		
 		switch($action[0])
 		{
@@ -42,13 +48,15 @@ class _10000
 									//url до галочки
 									//название параметра
 									
-									$this->Device = $this->monitoring_modulator_sfn();
-									
+									//вызываем функцию которая даст нам информацию какие данные отправить чтобы получить страницу с SFN галочкой
+									$this->Info = $this->monitoring_modulator_sfn();
+								
+								
 									break;
 								}
 							
 								default:{
-									$this->Device =  "третье действие не определено";
+									$this->Info =  "третье действие не определено";
 								}
 						}	
 						
@@ -56,7 +64,7 @@ class _10000
 					}
 					
 					default:{
-						$this->Device = "второе действие не определено";
+						$this->Info = "второе действие не определено";
 					}
 					
 				}
@@ -66,58 +74,72 @@ class _10000
 			}
 			
 			default:{
-				$this->Device = "первое действие не определено";
+				$this->Info = "первое действие не определено";
 			}
 		}
 	}
-	
-	
-	
-	
+
+
+
 	public function monitoring_modulator_sfn()
 	{
-		return array("url"=>"/config/mt2/dvbt2/?id={id}", "find"=>"t2SfnSynchronization");
+		
+		
+		
+		$data = array("url"=>"/config/exc_tvt_p/1/control/?id={id}", 
+					"find"=>"t2SfnSynchronization",
+					"power"=>$this->Power);
+		
+		$data["callback"] = function($html){
+		
+			$html = phpQuery::newDocument($html);	
+		
+			//найти имя РТС
+			$primary = $html->find("select[name=primarySource] option:selected")->text();
+			/**/
+			
+			return $primary;
+		
+		};
+		
+		return $data;
 	}
+	
+	
 	
 	/*
 	
 	поддерживаемые функции
 	$allow_actions = array(
 		"monitoring"=>array("input", "lock", "sfn", "gps"),
-		
-		
-		
+	
 		);
-	
-	
-	
-	
 	*/
 	
-	public function __invoke($a)
+	public function __invoke()
 	{
 			return $this->Device;
 	}
 	
-	public $general_info;
+	/*public $general_info;
 	public $power;
 	public $titan;
 	public $input_url;
 	public $input_name;
 
-	public $form;
+	public $form;*/
 	
 	public $type_name = "";
 	public $type_id = "10000";
 
 	
-		
 	public $TxPower = array(	"100"=>"Полярис ТВЦ2-100",
-								"250"=>"Полярис ТВЦ2-200/250",
-								"500"=>"Полярис ТВЦ2-300/500",
-								"1000"=>"Полярис ТВЦ2-1000",
-								"2000"=>"Полярис ТВЦ/ТВЦ2-2000",
-								"5000"=>"Полярис ТВЦ/ТВЦ2-5000");	
+							"250"=>"Полярис ТВЦ2-200/250",
+							"500"=>"Полярис ТВЦ2-300/500",
+							"1000"=>"Полярис ТВЦ2-1000",
+							"2000"=>"Полярис ТВЦ/ТВЦ2-2000",
+							"5000"=>"Полярис ТВЦ/ТВЦ2-5000");		
+
 	/*	41000	40250	40501	40100	20700	20800	*/	
 	
 	//WORK
@@ -304,7 +326,7 @@ class _10000
 	
 	
 	}
-	
+	/*
 	public function info()
 	{
 		
@@ -321,7 +343,7 @@ class _10000
 		#"type_id" => $this->type_id);
 	
 	}
-
+*/
 	/*
 	
 	этот класс должен содержать методы доступа к различным страницам устройства
