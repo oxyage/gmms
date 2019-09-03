@@ -222,6 +222,30 @@ class RCU
 		}
 	}
 	
+	/*  определение принадлежности устройства к */
+	public function purposes($device)
+	{
+		$purpose = array();
+		
+		/* принадлежность к мультиплексу */
+		if(strpos($device["name"], "1 MUX") !== FALSE) $purpose["mux"] = 1;
+		else if(strpos($device["name"], "2 MUX") !== FALSE) $purpose["mux"] = 2;
+		
+		/* функция устройства */
+		
+		if(strpos($device["type"], "Передатчик") !== FALSE) $purpose["func"] = "Tx";
+		else if(strpos($device["type"], "Реплейсер") !== FALSE) 
+		{
+			$purpose["func"] = "Repl";
+			$purpose["mux"] = 1;
+		}
+		
+		$device["purposes"] = $purpose;	
+		
+		
+		
+		return $device;
+	}
 	
 	public function parse($html)
 	{
@@ -310,6 +334,7 @@ class RCU
 				$column += 1;
 			}
 
+			$one_device = $this->purposes($one_device);
 			$DEVICES[] = $one_device;	
 		}
 		

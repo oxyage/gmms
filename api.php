@@ -14,6 +14,7 @@ define('TEMPLATES_PATH', CLASSES_PATH."templates".DIRSEP); //папка с ша�
 
 /*
 класс для взаимодействия сервера с удаленным СДК по HTTP
+
 http://10.32.1.3/gmms/api.php?route=rcu/auth&host=10.32.1.2&username=admin&userpass=kq9OXFVTKb&debug
 
 #Доступные route

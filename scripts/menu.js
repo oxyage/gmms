@@ -31,6 +31,32 @@ $("li.action").click(function(li){
 					window.open("http://"+data.host+"/config/devices/?username=admin&userpass="+admin.userpass,"_blank");
 					break;
 				}
+				case "check":{
+					
+					GMMS.func.log("Проверка авторизации на "+GMMS.rcu.host[data.host].name,true);
+					
+					GMMS.func.checkAuth(data.host)
+					.done(function(d){
+					
+						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" авторизован",false,"good");
+						console.log("-rcu.auth",GMMS.rcu.auth);
+					})
+					.fail(function(e){
+						
+						//если ошибка обращения к API - выходим
+						//если просто не найдены сведения - авторизовываемся
+						if(e.error === 0)
+						{
+							GMMS.func.log("Запись об авторизации не найдена - "+GMMS.rcu.host[e.host].name, true,"warn");
+						}
+						else {
+							GMMS.func.log("Ошибка обращения к API", true,"error");
+						}
+					});
+					
+					
+					break;
+				}
 				case "quiet":{
 					
 					GMMS.func.log("Скрытая авторизация на "+GMMS.rcu.host[data.host].name);
@@ -42,7 +68,7 @@ $("li.action").click(function(li){
 						
 						if(!d.error)
 						{
-							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name,"good");
+							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, true,"good");
 							GMMS.rcu.auth[d.host] = d.response;
 							//сохраняем в БД
 							GMMS.func.connection.set(d.host);
@@ -52,7 +78,7 @@ $("li.action").click(function(li){
 						}
 						else
 						{
-							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
+							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
 							GMMS.func.status(false,d.host);
 							GMMS.func.icon("error",d.host);
 							console.warn(d);
@@ -60,7 +86,7 @@ $("li.action").click(function(li){
 						
 					})
 					.fail(function(e){
-						GMMS.func.log("Ошибка обращения к API","error");
+						GMMS.func.log("Ошибка обращения к API",true,"error");
 						console.error(e);
 					});
 					break;
@@ -77,21 +103,25 @@ $("li.action").click(function(li){
 			
 			GMMS.func.status("wait",data.host);
 			GMMS.func.icon("wait",data.host);
-			
-		/*	if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
+		/*	
+			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,"error");
+				GMMS.func.log("Нет данных об авторизации "+data.name,true,"error");
 				GMMS.func.status(false,data.host);
 				GMMS.func.icon("error",data.host);
 				break;
 			}
 		*/	
-		
-		//DEBUG
+	
 			GMMS.func.checkAuth(data.host).done(function(d){
 				console.log(d);
+			})
+			.fail(function(){
+				
+				
 			});
 			break;
+			
 			/*
 			
 			тут же добавить проверку авторизации
@@ -111,7 +141,7 @@ $("li.action").click(function(li){
 							console.log("Будем обновлять устройства в таблицах");
 							console.log("Первым делом таблица RCU");
 							
-							GMMS.func.log("Обновляем устройства СДК "+data.name);
+							GMMS.func.log("Обновляем устройства СДК "+data.name,true);
 							
 							$.post("api.php?route=rcu/parse",{
 								host: data.host,
@@ -121,21 +151,21 @@ $("li.action").click(function(li){
 							.done(function(d){
 								if(!d.error)
 								{
-									GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"good");
+									GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],true,"good");
 									GMMS.func.status(false,d.host);
 									GMMS.func.icon("ready",d.host);
 									console.log(d);
 								}
 								else
 								{
-									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn");
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
 									GMMS.func.status(false,d.host);
 									GMMS.func.icon("error",d.host);
 									console.warn(d);
 								}				
 							})
 							.fail(function(e){
-								GMMS.func.log("Ошибка обращения к API","error");
+								GMMS.func.log("Ошибка обращения к API",true,"error");
 								console.error(e);
 							});
 							
@@ -161,7 +191,7 @@ $("li.action").click(function(li){
 			
 			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,"error");
+				GMMS.func.log("Нет данных об авторизации "+data.name,true,"error");
 				GMMS.func.status(false,data.host);
 				GMMS.func.icon("error",data.host);
 				break;

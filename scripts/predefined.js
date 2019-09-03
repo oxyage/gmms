@@ -150,44 +150,40 @@ $( function() {
 		},
 		checkAuth: function(host){
 			
-			let result = $.Deferred();
-			
-			
-		//доделать функцию полностью	
-		 //ищем сначала в GMMS.rcu.auth
-			if(typeof GMMS.rcu.auth[host] === "undefined" || typeof GMMS.rcu.auth[host].cookie === "undefined") {
+			GMMS.rcu.deferred[host] = {};
+			//GMMS.rcu.deferred[host]["checkAuth"] = {};
+			GMMS.rcu.deferred[host]["checkAuth"] = $.Deferred();
+			 
+			if(typeof GMMS.rcu.auth[host] === "object" && GMMS.rcu.auth[host].cookie !== "undefined")
+			{
+				GMMS.rcu.deferred[host]["checkAuth"].resolveWith(GMMS.rcu.auth, [GMMS.rcu.auth[host]]);
+			}
+			else
+			{
 				//продолжаем поиск в БД
-
-				//return GMMS.func.connection.get(host);
+				//console.log("Требуется поиск в БД");
 				GMMS.func.connection.get(host).done(function(d){
 					
-					console.log(d);
 					if(!d.error){
-						result.resolveWith(d, ["response"]);
+						if(d.response.length > 0) 
+						{
+							GMMS.rcu.deferred[host]["checkAuth"].resolveWith(GMMS.rcu.auth, [d.response[0]]);
+							GMMS.rcu.auth[host] = d.response[0];
+						}
+						else	GMMS.rcu.deferred[host]["checkAuth"].rejectWith(GMMS.rcu.auth, [d]);
+						
 					}
 					else{
-						result.reject();					
+						GMMS.rcu.deferred[host]["checkAuth"].rejectWith(GMMS.rcu.auth, [e]);					
 					}
-					return result;
 				})
-				.fail(function(e){
-					console.error(e);
-					
-				});
-				
+				.fail(function(e){//ошибка обращения к API
+					GMMS.func.log("Ошибка обращения к API",true,"error");
+					GMMS.rcu.deferred[host]["checkAuth"].rejectWith(GMMS.rcu.auth, [e]);
+				});	
 			}
-			else{
-				//return GMMS.rcu.auth[host];
-				result.resolveWith(GMMS.rcu.auth, [host]);
-				return result;
-			}
-		 
-		 //затем ищем свежие записи в бд
-		 
-		 
 			
-			
-			
+			return GMMS.rcu.deferred[host]["checkAuth"];		
 		},
 		connection:{
 			set: function(host){
@@ -202,9 +198,15 @@ $( function() {
 			}
 		},
 		
-		log: function(message, status = null){
+		log: function(message, toConsole = false, status = null){
 			let date = new Date($.now());
 			date = date.toTimeString().split(" ");
+				if(toConsole === true) //дублируем в консоль
+				{
+					if(status === "error") console.error("Log: "+message);		
+					else if(status === "warn") console.warn("Log: "+message);		
+					else console.log("Log: "+message);		
+				}
 			$( "#panel-log div" ).prepend("<span class='"+status+"'>"+date[0]+" "+message+"</span><br>");
 			GMMS.journal.push(date[0]+" "+message);
 		},

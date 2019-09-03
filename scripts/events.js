@@ -234,7 +234,7 @@ $( function() { /* события на странице*/
 	});
 	
 
-	console.log("jquery first");
+	console.log("jquery events");
 
 	/* нажатие на кнопку Показать имена РТС */
 	$('#show-rts-names').click(function(){
