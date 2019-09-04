@@ -28,21 +28,21 @@
 	<!--<script type="text/javascript" src="scripts/jqonly.js?1142221"></script>-->
 	
 	<!-- Предустановленные переменные и функции -->
-	<script type="text/javascript" src="scripts/predefined.js?4345"></script>
+	<script type="text/javascript" src="scripts/predefined.js?423554345"></script>
 	
 	<!-- Активация элементов на странице -->
 	<script type="text/javascript" src="scripts/elements.js"></script>
 	
 	<!-- События на странице -->
-	<script type="text/javascript" src="scripts/events.js?2"></script>
+	<script type="text/javascript" src="scripts/events.js?352"></script>
 	
 	<!-- Меню объекта связи и действия с ним -->
-	<script type="text/javascript" src="scripts/menu.js?13122"></script>
+	<script type="text/javascript" src="scripts/menu.js?13425231122"></script>
 	
 
 	
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="style/style.css?1">
+	<link rel="stylesheet" href="style/style.css?12">
 
 	<!-- Убрать в соответствующий файл -->
 	<script>
@@ -138,18 +138,28 @@
   <!-- Мониторинг параметров ui-state-disabled-> -->
   <li class="">
     <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>	
-    <ul style="width:250px">
+    <ul style="width:350px">
 	
 	<!-- Параметры -> -->
 	<li class="ui-widget-header"><div>Параметры</div></li>
       <li>
-        <div>Входной сигнал спутника</div>
+        <div>Входной сигнал передатчика (основной) </div>
 		<ul style="width:130px">
 		
 			<!-- Выбор мультиплекса -->
 			<li class="ui-widget-header"><div>Мультиплекс</div></li>
-			<li class="action" data-route="monitoring/input/mux-1"><div>1 MUX</div></li>
-			<li class="action" data-route="monitoring/input/mux-2"><div>2 MUX</div></li>
+			<li class="action" data-route="monitoring/inputPrimary/mux-1"><div>1 MUX</div></li>
+			<li class="action" data-route="monitoring/inputPrimary/mux-2"><div>2 MUX</div></li>
+		</ul>	
+      </li>
+	  <li>
+        <div>Входной сигнал передатчика (дополнительный)</div>
+		<ul style="width:130px">
+		
+			<!-- Выбор мультиплекса -->
+			<li class="ui-widget-header"><div>Мультиплекс</div></li>
+			<li class="action" data-route="monitoring/inputSecondary/mux-1"><div>1 MUX</div></li>
+			<li class="action" data-route="monitoring/inputSecondary/mux-2"><div>2 MUX</div></li>
 		</ul>	
       </li>
 	  <li>

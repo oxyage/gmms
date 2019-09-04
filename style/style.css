@@ -111,7 +111,7 @@ cursor: default;
 .rts .error		{ background-color: #ff6060; 	} /* красный */
 .rts .black		{ background-color: #000; 		} /* черный */
 .rts .orange	{ background-color: #e2c928; 	} /* оранжевый */
-.rts .select	{ background-color: #3498db; 	} /* цвет башни */
+.rts .select	{ background-color: #c5c5c5; 	} /* цвет башни */
 .rts .default	{ background-color: #EEE; 		} /* серый */
 
  

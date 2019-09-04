@@ -14,7 +14,7 @@ class Device extends _10000{} //класс инициализации для з�
 2 режим - на интерпретацию данных
 результат этого режима будет распарсенная страница с выводом только результатов
 
-
+доступные функции зависят от мощности передатчика
 */
 class _10000
 {
@@ -22,15 +22,20 @@ class _10000
 	
 	public $Purposes;
 	public $Power = 0;
-	public $action = "";
+	public $action;
 	
-	public function __construct($action, $purposes) //запустить функцию в зависимости от action monitoring/modulator/sfn
+	public $id;
+	
+	public function __construct($action, $id, $purposes) //запустить функцию в зависимости от action monitoring/modulator/sfn
 	{
 		$action = explode("/",$action);
 		$this->action = $action;
 		
 		$this->Purposes = $purposes;
 		$this->Power = $purposes["power"];
+		$this->id = $id;
+		
+		if($this->Power == 0) return new Exception("Передатчик не определен. Мощность 0 Вт");
 		
 		switch($action[0])
 		{
@@ -52,6 +57,17 @@ class _10000
 									$this->Info = $this->monitoring_modulator_sfn();
 								
 								
+									break;
+								}
+								case "input_primary":{
+									// получить основной вход модулятора
+									$this->Info = $this->monitoring_modulator_inputPrimary();
+									break;
+								}
+								
+								case "input_secondary":{
+									// получить дополнительный вход модулятора
+									$this->Info = $this->monitoring_modulator_inputSecondary();
 									break;
 								}
 							
@@ -83,9 +99,7 @@ class _10000
 
 	public function monitoring_modulator_sfn()
 	{
-		
-		
-		
+		/*	
 		$data = array("url"=>"/config/exc_tvt_p/1/control/?id={id}", 
 					"find"=>"t2SfnSynchronization",
 					"power"=>$this->Power);
@@ -96,7 +110,56 @@ class _10000
 		
 			//найти имя РТС
 			$primary = $html->find("select[name=primarySource] option:selected")->text();
-			/**/
+		
+			
+			return $primary;
+		
+		};
+		
+		return $data;
+		*/
+	}
+	
+	/*
+	//один тип 
+	100 - Один модулятор
+	250 - один модулятор
+	500 - один модулятор
+	1000 - два модулятора
+	
+	//другой тип
+	2000 - два модулятора
+	5000 - два модулятора
+	*/
+
+	public function monitoring_modulator_inputPrimary()
+	{
+		
+		$array_url = array(
+			"100" => "/config/mt2/input/?id={id}",
+			"250" => "/config/mt2/input/?id={id}",
+			"500" => "/config/mt2/input/?id={id}",
+			"1000" => array("/config/mt2/0/input/?id={id}", "/config/mt2/1/input/?id={id}"),
+			"2000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}"),
+			"5000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}")
+		);
+		
+		$array_param = array(
+			"100" => "inpu1TsSource",
+			"250" => "inpu1TsSource",
+			"500" => "inpu1TsSource",
+			"1000" => "inpu1TsSource",
+			"2000" => "primarySource",
+			"5000" => "primarySource");
+
+		$data = array("url"=>str_replace("{id}", $this->id, $array_url[$this->Power]), 
+					"find"=>$array_param[$this->Power],
+					"power"=>$this->Power);
+		
+		$data["callback"] = function($html, $find){
+		
+			$html = phpQuery::newDocument($html);	
+			$primary = $html->find("select[name=".$find."] option:selected")->text();
 			
 			return $primary;
 		
@@ -106,6 +169,39 @@ class _10000
 	}
 	
 	
+	public function monitoring_modulator_inputSecondary()
+	{
+		$array_url = array(
+			"100" => "/config/mt2/input/?id={id}",
+			"250" => "/config/mt2/input/?id={id}",
+			"500" => "/config/mt2/input/?id={id}",
+			"1000" => array("/config/mt2/0/input/?id={id}", "/config/mt2/1/input/?id={id}"),
+			"2000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}"),
+			"5000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}")
+		);
+		
+		$array_param = array(
+			"100" => "inpu2TsSource",
+			"250" => "inpu2TsSource",
+			"500" => "inpu2TsSource",
+			"1000" => "inpu2TsSource",
+			"2000" => "secondarySource",
+			"5000" => "secondarySource");
+
+		$data = array("url"=>str_replace("{id}", $this->id, $array_url[$this->Power]), 
+					"find"=>$array_param[$this->Power],
+					"power"=>$this->Power);
+		
+		$data["callback"] = function($html, $find){
+			
+			$html = phpQuery::newDocument($html);	
+			$secondary = $html->find("select[name=".$find."] option:selected")->text();
+			
+			return $secondary;	
+		};
+		
+		return $data;
+	}
 	
 	/*
 	
@@ -121,100 +217,10 @@ class _10000
 			return $this->Device;
 	}
 	
-	/*public $general_info;
-	public $power;
-	public $titan;
-	public $input_url;
-	public $input_name;
-
-	public $form;*/
-	
 	public $type_name = "";
 	public $type_id = "10000";
 
 	
-	public $TxPower = array(	"100"=>"Полярис ТВЦ2-100",
-							"250"=>"Полярис ТВЦ2-200/250",
-							"500"=>"Полярис ТВЦ2-300/500",
-							"1000"=>"Полярис ТВЦ2-1000",
-							"2000"=>"Полярис ТВЦ/ТВЦ2-2000",
-							"5000"=>"Полярис ТВЦ/ТВЦ2-5000");		
-
-	/*	41000	40250	40501	40100	20700	20800	*/	
-	
-	//WORK
-	public function getInputURLbyPower($id)
-	{
-		switch($this->power)
-		{
-			case "100":{}
-			case "250":{}
-			case "500":
-			{
-				$this->input_url = "/config/mt2/input/?id=".$id;
-				$this->input_name = "inpu1TsSource";
-				break;
-			}
-			case "1000":
-			{
-				$this->input_url[0] = "/config/mt2/0/input/?id=".$id;
-				$this->input_url[1] = "/config/mt2/1/input/?id=".$id;	
-				$this->input_name = "inpu1TsSource";			
-				break;
-			}
-			case "2000":{}
-			case "5000":
-			{
-				$this->input_url[0] = "/config/exc_tvt_p/0/control/?id=".$id;	
-				$this->input_url[1] = "/config/exc_tvt_p/1/control/?id=".$id;	
-				$this->input_name = "primarySource";
-				break;
-			}
-		
-			default:{}
-		}
-	}	
-
-	//WORK
-	public function setType($type_name) // определяем мощность по имени типа
-	{
-		foreach($this->TxPower as $power => $model)
-		{
-			if(false !== strpos($type_name, $model))
-			{
-
-			$this->power = $power;
-			}
-		}
-	}
-	
-	public function parseForm()
-	{
-		$find = "";
-		switch($this->power)
-		{
-			case "100":{}
-			case "250":{}
-			case "500":{}
-			case "1000":
-			{
-				$find = $this->pqHTML->find("select[name=inpu1TsSource] option:selected")->text();	
-				break;
-			}
-			case "2000":{}
-			case "5000":
-			{
-				$find = $this->pqHTML->find("select[name=primarySource] option:selected")->text();		
-				break;
-			}
-			default:{			
-			$find = "default";
-			}
-		}
-	
-		
-		return $find;
-	}
 	
 	public function getForm($reserve = false)
 	{
@@ -313,48 +319,9 @@ class _10000
 	}
 	
 		
-	public function init()
-	{	
-	#$this->name = $this->pqHTML->find("div.skathi")->text();
-	#$this->general_info = $this->pqHTML->find("span#idSysModel")->text();
-	#$this->DefinePower();
-	//здесь же разбираем левое меню для нахождения ссылок на управление входными сигналами
 	
-	#$this->titan = $this->pqHTML->find("table.titan")->text();	
-	
-	
-	
-	
-	}
-	/*
-	public function info()
-	{
-		
-		return array(
-		"HTML"=>$this->HTML,
-		"titan"=>$this->titan,
-		"input_url" => $this->input_url,
-		"power" => $this->power
-		);
-		#
-		#"name" => $this->name,
-		#
-		#"general_info" => $this->general_info,
-		#"type_id" => $this->type_id);
-	
-	}
-*/
-	/*
-	
-	этот класс должен содержать методы доступа к различным страницам устройства
-	
-	
-	*/
-
-
-
-
 }
+
 
 
 

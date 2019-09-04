@@ -4,6 +4,7 @@ $( function() { /* события на странице*/
 	/* загрузка объектов связи  */
 	LoadingState = new $.Deferred(); // ждем разрешения вывести на страницу
 	ConnectionFindState = new $.Deferred(); // ждем разрешения на запрос в БД за соединениями
+	DevicesFindState = new $.Deferred(); // ждем разрешения на запрос в БД за устройствами
 	
 	$( "#dialog-wait" ).dialog();//открываем окно
 	$.get("api.php?route=db/select/rcu")
@@ -15,6 +16,7 @@ $( function() { /* события на странице*/
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
 			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
+			DevicesFindState.resolve(); //разрешаем загрузить устройства
 			console.log("Объекты связи загружены из БД",d);
 		}
 		else//если есть ошибка в ответе
@@ -210,6 +212,12 @@ $( function() { /* события на странице*/
 		console.warn("Вывода не будет");
 		ConnectionFindState.reject();
 	});
+	
+	DevicesFindState
+	.done(function(){
+		console.log("Загружаем список устройств");
+	})
+	.fail(function(){});
 	
 	
 	ConnectionFindState

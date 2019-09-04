@@ -120,37 +120,7 @@ $("li.action").click(function(li){
 					{
 						case "update":
 						{
-							console.log("Будем обновлять устройства в таблицах");
-							console.log("Первым делом таблица RCU");
-							
-							GMMS.func.log("Обновляем устройства СДК "+data.name,true);
-							
-							$.post("api.php?route=rcu/parse",{
-								host: data.host,
-								cookie: GMMS.rcu.auth[data.host].cookie
-								
-							})
-							.done(function(d){
-								if(!d.error)
-								{
-									GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],true,"good");
-									GMMS.func.status(false,d.host);
-									GMMS.func.icon("ready",d.host);
-									console.log(d);
-								}
-								else
-								{
-									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
-									GMMS.func.status(false,d.host);
-									GMMS.func.icon("error",d.host);
-									console.warn(d);
-								}				
-							})
-							.fail(function(e){
-								GMMS.func.log("Ошибка обращения к API",true,"error");
-								console.error(e);
-							});
-							
+							GMMS.func.rcu.function.devices.update(data.host);				
 
 							break;
 						}
@@ -202,9 +172,9 @@ $("li.action").click(function(li){
 					break;
 				}
 				
-				case "input":{
+				case "inputSecondary":{
 					
-					let mux = route[2].split("-")[1];
+					GMMS.func.rcu.monitoring.inputSecondary(data.host);
 					
 					break;
 				}

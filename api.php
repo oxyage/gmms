@@ -66,6 +66,17 @@ $API->host = !empty($_REQUEST["host"]) ?  $_REQUEST["host"] : false;
 
 switch($Route[0])
 {
+	case "system":
+	{
+		//$return = "Result: ";
+	    $sys[] = exec("snmpget -m 0  -L n -c private -v 2c -t 8 10.32.1.2:8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
+		$sys[] = exec("snmpget -m 0  -L n -c private -v 2c -t 8 10.32.1.2:8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
+		
+		
+		$API($sys);
+		
+		break;
+	}
 	case "rcu":
 	{
 		switch($Route[1])
@@ -206,18 +217,32 @@ switch($Route[0])
 				$RCU->cookie = $input["cookie"];
 				
 				
-				$Device = new Device($input["action"], $input["purposes"]); // результат запуска функции по `action` пути
+				$Device = new Device($input["action"], $input["id"],$input["purposes"]); // результат запуска функции по `action` пути
 				
 				//получили данные, теперь их отправляем
 
 				//формируем url для запроса 
-				$Device->Info["url"] = str_replace("{id}", $input["id"], $Device->Info["url"]);
-				$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"];
-				$POST = $RCU->post($URL);	
-
-				//полученную страницу интерпретируем
-				$result = $Device->Info["callback"]($POST);
+				//$Device->Info["url"] = str_replace("{id}", $input["id"], $Device->Info["url"]);
 				
+				if(is_array($Device->Info["url"]))
+				{
+					//делаем несколько запросов
+					foreach($Device->Info["url"] as $i => $url)
+					{
+						$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"][$i];
+						$POST = $RCU->post($URL);
+						//полученную страницу интерпретируем
+						$result[$i] = $Device->Info["callback"]($POST, $Device->Info["find"]);
+					}
+				}
+				else
+				{
+					$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"];
+					$POST = $RCU->post($URL);	
+					//полученную страницу интерпретируем
+					$result = $Device->Info["callback"]($POST, $Device->Info["find"]);
+				}
+
 				//отдаем в результат
 				$API($result);			
 				
@@ -348,6 +373,114 @@ switch($Route[0])
 						break;
 						//SELECT * FROM `connections` WHERE DATE(`timestamp`) = CURDATE() AND TIME(`timestamp`) - CURTIME() < 1440 ORDER BY `uid` DESC
 						
+					}
+					case "devices":
+					{
+						$API->module(CLASSES_PATH."class.rcu.php");
+						switch($Route[3])
+						{
+							case "host":{
+								
+								try	{
+								API::checkArgs("host");
+								}
+								catch(Exception $e)
+								{
+									$API($e); break;
+								}
+								
+								$input = array("host"=>$_REQUEST["host"]);
+								
+								$devices = $db->query("SELECT * FROM `devices` WHERE `host`='".$input["host"]."' ORDER BY `id` ASC");
+								$devices = $db->fetch_assoc($devices);
+								
+								foreach($devices as $i => $device)
+								{
+									$devices[$i]["purposes"] = RCU::purposes($device);
+								}
+								
+								
+								$API($devices);	
+								break;
+								
+							}
+							case "mux":{
+								
+								
+								
+								try	{
+								API::checkArgs("mux");
+								}
+								catch(Exception $e)
+								{
+									$API($e); break;
+								}
+								
+								$input = array("mux"=>$_REQUEST["mux"]);
+								
+								$devices = $db->query("SELECT * FROM `devices` WHERE `name` LIKE '%".$input["mux"]." MUX%' ORDER BY `id` ASC");
+								$devices = $db->fetch_assoc($devices);
+								
+								foreach($devices as $i => $device)
+								{
+									$devices[$i]["purposes"] = RCU::purposes($device);
+								}
+								
+								$API($devices);	
+								
+								break;
+							}
+							case "purpose":{
+								
+								try	{
+									API::checkArgs("host");
+								}
+								catch(Exception $e)
+								{
+									$API($e); break;
+								}
+								
+								$input = array("host"=>$_REQUEST["host"],
+								"mux"=>@$_REQUEST["mux"],
+								"func"=>@$_REQUEST["func"]);
+								
+								
+								$WHERE = "WHERE `host`='".$input["host"]."'";
+								if(!empty($input["mux"]))
+								{
+									$WHERE .= " AND `name` LIKE '%".$input["mux"]."%'"; 
+								}
+								
+								if(!empty($input["func"]))
+								{
+									$WHERE .= " AND `type` LIKE '%".$input["func"]."%'"; 
+								}
+								
+								$devices = $db->query("SELECT * FROM `devices` ".$WHERE." ORDER BY `id` ASC");
+								$devices = $db->fetch_assoc($devices);
+								
+								foreach($devices as $i => $device)
+								{
+									$devices[$i]["purposes"] = RCU::purposes($device);
+								}
+								
+								$API($devices);	
+								
+								break;
+							}
+							
+							default:{
+								$devices = $db->query("SELECT * FROM `devices` ORDER BY `host` ASC");
+								$devices = $db->fetch_assoc($devices);
+								$API($devices);	
+								
+							}
+						}
+						
+						
+						
+						
+						break;
 					}
 					
 					default:
