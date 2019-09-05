@@ -15,7 +15,7 @@
 	<!--<script type="text/javascript" src="vendor/jquery-ui.js"></script>-->
 	<script type="text/javascript" src="vendor/jquery-ui.min.js"></script>
 	<!--<link rel="stylesheet" href="vendor/jquery-ui.css">-->
-	<link rel="stylesheet" href="vendor/jquery-ui.min.css?1">
+	<link rel="stylesheet" href="vendor/jquery-ui.min.css?<?=time()?>">
 	
 	<!-- jQuery Cookie -->
 	<script type="text/javascript" src="vendor/jquery.cookie.js"></script>
@@ -23,21 +23,21 @@
 		
 	<!--Пользовательские скрипты --->
 	<!--Служебные функции --->
-	<script type="text/javascript" src="scripts/main.js?f"></script>
+	<script type="text/javascript" src="scripts/main.js?<?=time()?>"></script>
 	
 	<!--<script type="text/javascript" src="scripts/jqonly.js?1142221"></script>-->
 	
 	<!-- Предустановленные переменные и функции -->
-	<script type="text/javascript" src="scripts/predefined.js?543f124242"></script>
+	<script type="text/javascript" src="scripts/predefined.js?<?=time()?>"></script>
 	
 	<!-- Активация элементов на странице -->
-	<script type="text/javascript" src="scripts/elements.js?fsdf"></script>
+	<script type="text/javascript" src="scripts/elements.js?<?=time()?>"></script>
 	
 	<!-- События на странице -->
-	<script type="text/javascript" src="scripts/events.js?32f522"></script>
+	<script type="text/javascript" src="scripts/events.js?<?=time()?>"></script>
 	
 	<!-- Меню объекта связи и действия с ним -->
-	<script type="text/javascript" src="scripts/menu.js?1331122"></script>
+	<script type="text/javascript" src="scripts/menu.js?<?=time()?>"></script>
 	
 
 	
