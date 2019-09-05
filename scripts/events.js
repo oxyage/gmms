@@ -14,10 +14,10 @@ $( function() { /* события на странице*/
 		{
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
-			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")"); //логгируем	
+			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")", true); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
 			DevicesFindState.resolve(); //разрешаем загрузить устройства
-			console.log("Объекты связи загружены из БД",d);
+		//	console.log("Объекты связи загружены из БД",d);
 		}
 		else//если есть ошибка в ответе
 		{
@@ -213,13 +213,7 @@ $( function() { /* события на странице*/
 		ConnectionFindState.reject();
 	});
 	
-	DevicesFindState
-	.done(function(){
-		console.log("Загружаем список устройств");
-	})
-	.fail(function(){});
-	
-	
+	/*
 	ConnectionFindState
 	.done(function(){
 		console.log("ConnectionFindState done");
@@ -229,7 +223,7 @@ $( function() { /* события на странице*/
 	.fail(function(){
 		console.warn("Запроса авторизованных хостов не будет");
 	});
-	
+	*/
 	
 /* end загрузка объектов связи */
 	

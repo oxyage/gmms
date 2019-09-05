@@ -258,41 +258,87 @@ $( function() {
 							host: host
 						};
 					let mux = route[2].split("-")[1];
+										
+					//надо найти мощность передатчика и его ИД по переменной mux
+					//после отправлять запрос
 					
-					//по мультиплексу получить мощность и ID
-					
-					console.log("Будем искать input в secondary");
-					
-					$.post("api.php?route=rcu/device",{
+				//находим устройство
+					$.post("api.php?route=db/select/device",{
 						host: data.host,
-						cookie: GMMS.rcu.auth[data.host].cookie,
-						type_id: 10000,
-						action: "monitoring/modulator/input_secondary",
-						id:2, //передать сюда ИД передатчика
-						purposes:{
-							"power": 250 //передать сюда его мощность
-						}
+						func: "Передатчик",
+						mux: mux
 					})
-					.done(function(d){
-						if(!d.error)
+					.done(function(data){
+						if(!data.error)
 						{
-							GMMS.func.log(data.name+": "+d.response,true,"good");
-							GMMS.func.status(d.response,d.host);
-							GMMS.func.icon("ready",d.host);
-							console.log(d);
+							if(data.response.length > 1){
+								
+								GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию",true,"warn");
+							}
+							data.response = data.response[0];
+							//теперь можно отправлять запрос на само устройство
+							
+							//console.log("Вот: ",data);
+							//return false;
+							
+							//отправляем запрос
+							$.post("api.php?route=rcu/device",{
+								host: data.host,
+								cookie: GMMS.rcu.auth[data.host].cookie,
+								type_id: 10000,
+								action: "monitoring/modulator/input_secondary",
+								id: data.response.id, //передать сюда ИД передатчика
+								purposes:{
+									"mux": mux,
+									"power": data.response.power //передать сюда его мощность
+								}
+							})
+							.done(function(d){
+								if(!d.error)
+								{
+									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response,true,"good");
+									GMMS.func.status(d.response, d.host);
+									GMMS.func.icon("ready",d.host);
+									console.log(d);
+								}
+								else
+								{
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+									GMMS.func.status(false,d.host);
+									GMMS.func.icon("error",d.host);
+									console.warn(d);
+								}				
+							})
+							.fail(function(e){
+								GMMS.func.log("Ошибка обращения к API",true,"error");
+								console.error(e);
+							});
+							
+							
+							
+							
+							
+							
 						}
 						else
 						{
-							GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+							GMMS.func.log("Не могу получить устройства из БД "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
 							GMMS.func.status(false,d.host);
 							GMMS.func.icon("error",d.host);
 							console.warn(d);
-						}				
+						}
 					})
 					.fail(function(e){
+						
 						GMMS.func.log("Ошибка обращения к API",true,"error");
 						console.error(e);
+						
 					});
+					
+					/*
+					
+					
+					*/
 					
 				}
 			}

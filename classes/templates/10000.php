@@ -22,6 +22,7 @@ class _10000
 	
 	public $Purposes;
 	public $Power = 0;
+	public $MUX;
 	public $action;
 	
 	public $id;
@@ -34,6 +35,7 @@ class _10000
 		$this->Purposes = $purposes;
 		$this->Power = $purposes["power"];
 		$this->id = $id;
+		$this->MUX = $purposes["mux"];
 		
 		if($this->Power == 0) return new Exception("Передатчик не определен. Мощность 0 Вт");
 		
@@ -165,6 +167,8 @@ class _10000
 		
 		};
 		
+		
+		
 		return $data;
 	}
 	
@@ -200,7 +204,49 @@ class _10000
 			return $secondary;	
 		};
 		
+		
+		$data["represent"] = function($array){
+			
+			//как представить результат
+			
+			$text = $this->MUX." MUX: ";
+			if(!is_array($array))
+			{
+					$text .= $this->AsiToSat($array);
+					return $text;
+			}
+			
+			foreach($array as $i => $a)
+			{			
+				$text .= $this->AsiToSat($a)."; ";	
+			}
+			
+			return $text;
+		};
+		
+		
 		return $data;
+	}
+	
+	
+	public function AsiToSat($asi)
+	{
+		switch($asi)
+		{
+			case "ASI 1":{}
+			case "ASI1":{
+				return "40°";
+				break;
+			}
+			case "ASI 2":{}
+			case "ASI2":{
+				return "53°";	
+				break;
+			}
+			default:{
+				return $asi;	
+			}
+		}
 	}
 	
 	/*

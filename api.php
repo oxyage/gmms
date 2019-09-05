@@ -243,6 +243,10 @@ switch($Route[0])
 					$result = $Device->Info["callback"]($POST, $Device->Info["find"]);
 				}
 
+
+				//отобразить представление в читаемом результате
+				$result = $Device->Info["represent"]($result);
+				
 				//отдаем в результат
 				$API($result);			
 				
@@ -374,6 +378,55 @@ switch($Route[0])
 						//SELECT * FROM `connections` WHERE DATE(`timestamp`) = CURDATE() AND TIME(`timestamp`) - CURTIME() < 1440 ORDER BY `uid` DESC
 						
 					}
+					
+					case "device": //поиск ОДНОГО УСТРОЙСТВА с host, mux
+					{
+						$API->module(CLASSES_PATH."class.rcu.php");
+						try	{
+						API::checkArgs("host");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+						
+						//обязательный параметр - host
+						$input = array("host"=>$_REQUEST["host"],
+						"mux"=>@$_REQUEST["mux"],
+						"func"=>@$_REQUEST["func"]);
+						
+						
+						$WHERE = "WHERE `host`='".$input["host"]."'";
+						if(!empty($input["mux"]))
+						{
+							$WHERE .= " AND `name` LIKE '%".$input["mux"]." MUX%'"; 
+						}
+						
+						if(!empty($input["func"]))
+						{
+							$WHERE .= " AND `type` LIKE '%".$input["func"]."%'"; 
+						}
+						
+						$devices = $db->query("SELECT * FROM `devices` ".$WHERE." ORDER BY `id` ASC");
+						$devices = $db->fetch_assoc($devices);
+						
+						if(sizeof($devices) < 1)
+						{
+							$API(new Exception("Устройств по заданным критериям не найдено", 411));
+							break;
+						}
+						
+						foreach($devices as $i => $device)
+						{
+							$devices[$i]["purposes"] = RCU::purposes($device);
+						}
+						
+						$API($devices);	
+						
+						break;
+						
+					}
+					
 					case "devices":
 					{
 						$API->module(CLASSES_PATH."class.rcu.php");
