@@ -114,11 +114,11 @@ $("li.action").click(function(li){
 			
 			switch(route[1])
 			{
-				case "devices":
+				case "rcu":
 				{
 					switch(route[2])
 					{
-						case "update":
+						case "devices.update":
 						{
 							GMMS.func.rcu.function.devices.update(data.host);				
 

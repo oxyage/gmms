@@ -178,10 +178,8 @@ switch($Route[0])
 				//отправляем результат запроса в функцию parse
 				$parseresult = $RCU->parse($POST);
 				
-				//обновить в базе данных хэш
-				#$update = $db->query("UPDATE `rcu` SET `devices_hash` = '".$devices_hash."' WHERE `host` = '".$input["host"]."'; ");
 				
-				
+			
 				//подмешиваем в ответ хост
 				
 				//выводим результат
@@ -548,17 +546,13 @@ switch($Route[0])
 			{
 				switch($Route[2])//для предустановленного выбора
 				{
-					case "rcu":
+					case "rcu.devices": # db/update/rcu.devices
 					{
 						//обновить информацию об устройствах в БД
 						
-						//сначала обновим хэш в таблице rcu
-						//devices обновляем в другом запросе
-						
-						
 						//передать на вход host и список устройств! хэш вычисляем здесь						
 						try	{
-							API::checkArgs("host,devices");
+							API::checkArgs("host,devices_hash,devices_table,rcu_name");
 						}
 						catch(Exception $e)
 						{
@@ -566,10 +560,16 @@ switch($Route[0])
 						}
 									
 						$input = array("host"=>$_REQUEST["host"], 
-						"devices"=>$_REQUEST["devices"]);
+						"rcu_name" => $_REQUEST["rcu_name"],
+						"devices_hash" => $_REQUEST["devices_hash"],
+						"devices_table"=>$_REQUEST["devices_table"]);
 						
 						//устанавливаем соединение с БД
-						$update_rcu = $db->query("UPDATE `gmms`.`rcu` SET `devices_hash` = '".md5($input["devices"])."' WHERE `rcu`.`host` = '".$input["host"]."';");
+						$update_rcu = $db->query("UPDATE `rcu` SET 
+						`rcu_name` = '".$input["rcu_name"]."', 
+						`devices_table`='".mysql_real_escape_string($input["devices_table"])."',
+						`devices_hash`='".$input["devices_hash"]."'		
+						WHERE `host` = '".$input["host"]."';");
 							
 						$API($update_rcu);	
 						break;

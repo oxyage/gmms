@@ -128,9 +128,9 @@
 	<!-- Параметры -> -->
 	<li class="ui-widget-header"><div>Функции</div></li>
 		<li class="action ui-state-disabled" data-route="function/devices/update"> <div><span class="ui-icon ui-icon-arrowreturn-1-s"></span>Обновить таблицу СДК</div></li>
-		<li class="action" data-route="function/devices/update"> <div><span class="ui-icon ui-icon-refresh"></span>Обновить устройства</div></li>
+		<li class="action" data-route="function/rcu/devices.update"> <div><span class="ui-icon ui-icon-refresh"></span>Обновить устройства</div></li>
 		<li class="action ui-state-disabled" data-route="function/connection/clear"><div>Сбросить соединение</div></li>
-		<li class="action" data-route="auth/check"><div><span class=""></span>Проверка авторизации</div></li>
+		<li class="action ui-state-disabled" data-route="auth/check"><div><span class=""></span>Проверка авторизации</div></li>
 		<li class="action" data-route="auth/quiet"><div><span class="ui-icon ui-icon-key"></span>Скрытая авторизация</div></li>
 	</ul>
   </li>

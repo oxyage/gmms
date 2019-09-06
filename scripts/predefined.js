@@ -229,9 +229,24 @@ $( function() {
 							if(!d.error)
 							{
 								GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],true,"good");
+								
+								
+								
+								/*обновить в БД*/
 								GMMS.func.status(false,d.host);
 								GMMS.func.icon("ready",d.host);
 								console.log(d);
+								
+								$.post("api.php?route=db/update/rcu.devices",{
+									host: d.host,
+									rcu_name: d.response.rcu_name,
+									devices_hash: d.response.devices_hash,
+									devices_table: d.response.devices_table})
+								.done(function(){})
+								.fail(function(e){
+									console.log(d.host+": не удалось обновить устройства в БД");
+								});
+								
 							}
 							else
 							{

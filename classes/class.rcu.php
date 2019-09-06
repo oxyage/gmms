@@ -342,7 +342,7 @@ class RCU
 				$column += 1;
 			}
 
-			$one_device["purposes"] = $this->purposes($one_device);
+			//$one_device["purposes"] = $this->purposes($one_device);
 			$DEVICES[] = $one_device;	
 		}
 		
@@ -360,7 +360,8 @@ class RCU
 		"rcu_name"=>$RCU_NAME, 
 		"count"=>sizeof($DEVICES), 
 		"devices"=>$DEVICES, 
-		"hash"=>md5($Table->text())		
+		"devices_table"=>json_encode($DEVICES), 
+		"devices_hash"=>md5($Table->text())		
 		);
 		
 	}
