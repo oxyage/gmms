@@ -371,6 +371,10 @@ $( function() {
 				}
 			$( "#panel-log div" ).prepend("<span class='"+status+"'>"+date[0]+" "+message+"</span><br>");
 			GMMS.journal.push(date[0]+" "+message);
+			
+			$.post("api.php?route=db/insert/log",{
+				text: message
+			});
 		},
 		api: function(data){
 			$.post("api.php?route="+data.route, data)

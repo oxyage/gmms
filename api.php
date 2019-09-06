@@ -604,11 +604,31 @@ switch($Route[0])
 						
 						$insert_connection = $db->query("INSERT INTO `gmms`.`connections` (`uid`, `host`, `cookie`, `username`, `userpass`, `timestamp`, `remote`) VALUES (NULL, '".$input["host"]."', '".$input["cookie"]."', '".$input["username"]."', '".$input["userpass"]."', CURRENT_TIMESTAMP, '".$input["remote"]."');");
 						
-						
-						
 						$API($insert_connection);	
 	
 						break;
+					}
+					case "log":{
+						
+						try	{
+							API::checkArgs("text");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+									
+						$input = array(//"host"=>$_REQUEST["host"], 
+						"text"=>$_REQUEST["text"]);
+						
+						
+						
+						$insert_log = $db->query("INSERT INTO `gmms`.`log` (`uid`, `timestamp`, `remote`, `host`, `text`) 
+						VALUES (NULL, CURRENT_TIMESTAMP, '".$_SERVER["REMOTE_ADDR"]."', '".$input["host"]."', '".$input["text"]."');");
+						
+						$API($insert_log);	
+	
+						break;				
 					}
 					default:{
 						//необязательный параметр
