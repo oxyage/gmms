@@ -103,7 +103,7 @@ $("li.action").click(function(li){
 			
 			GMMS.func.status("wait",data.host);
 			GMMS.func.icon("wait",data.host);
-			
+			/*
 			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
 				GMMS.func.log("Нет данных об авторизации "+data.name,true,"error");
@@ -111,6 +111,7 @@ $("li.action").click(function(li){
 				GMMS.func.icon("error",data.host);
 				break;
 			}
+			*/
 			
 			switch(route[1])
 			{
@@ -120,7 +121,16 @@ $("li.action").click(function(li){
 					{
 						case "devices.update":
 						{
-							GMMS.func.rcu.function.devices.update(data.host);				
+							
+							GMMS.func.checkAuth(data.host)
+							.done(function(data){
+								console.log("Проверка авторизации завершена", data);
+								GMMS.func.rcu.function.devices.update(data.host);				
+							})
+							.fail(function(e){
+								console.log("Проверка авторизации ошибка", e);
+							});
+							
 
 							break;
 						}

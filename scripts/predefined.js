@@ -166,14 +166,29 @@ $( function() {
 				//продолжаем поиск в БД
 				//console.log("Требуется поиск в БД");
 				GMMS.func.connection.get(host).done(function(d){
-					
+					let host = d.host;
 					if(!d.error){
 						if(d.response.length > 0) 
 						{
 							GMMS.rcu.deferred[host]["checkAuth"].resolveWith(GMMS.rcu.auth, [d.response[0]]);
 							GMMS.rcu.auth[host] = d.response[0];
 						}
-						else	GMMS.rcu.deferred[host]["checkAuth"].rejectWith(GMMS.rcu.auth, [d]);
+						else	//автоматическая попытка авторизации
+						{
+							
+							GMMS.func.auth(host)
+							.done(function(d){
+								
+								GMMS.rcu.deferred[d.host]["checkAuth"].resolveWith(GMMS.rcu.auth, [d.response[0]]);
+								GMMS.rcu.auth[d.host] = d.response[0];
+							})
+							.fail(function(){
+								GMMS.rcu.deferred[d.host]["checkAuth"].rejectWith(GMMS.rcu.auth, [d]);	
+							});
+							
+						//
+						}	
+						
 						
 					}
 					else{
