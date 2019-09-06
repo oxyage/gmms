@@ -148,7 +148,18 @@ $( function() {
 				userpass: GMMS.rcu.host[host]["auth"]["admin"].userpass
 			});
 		},
-		checkAuth: function(host){
+		checkAuth: function(host)
+		{
+			
+			if(typeof GMMS.rcu.auth[host] === "object" && GMMS.rcu.auth[host].cookie !== "undefined")
+			{
+					return true;
+			}	
+	
+			return false;
+			
+		},
+		checkAuth_deferred: function(host){
 			
 			if(typeof GMMS.rcu.deferred[host] === "undefined") 
 				GMMS.rcu.deferred[host] = {};
@@ -196,7 +207,7 @@ $( function() {
 					}
 				})
 				.fail(function(e){//ошибка обращения к API
-					GMMS.func.log("Ошибка обращения к API",true,"error");
+				//	GMMS.func.log("Ошибка обращения к API",true,"error");
 					GMMS.rcu.deferred[host]["checkAuth"].rejectWith(GMMS.rcu.auth, [e]);
 				});	
 			}
@@ -220,6 +231,7 @@ $( function() {
 				return $.post("api.php?route=db/select/devices");
 			}
 		},
+		//GMMS.func.rcu 
 		rcu:{
 			function:{
 				devices:{
@@ -230,10 +242,10 @@ $( function() {
 							host: host
 						};
 						
-						console.log("Будем обновлять устройства в таблицах");
-						console.log("Первым делом таблица RCU");
+						//console.log("Будем обновлять устройства в таблицах");
+						//console.log("Первым делом таблица RCU");
 						
-						GMMS.func.log("Обновляем устройства СДК "+data.name,true);
+						GMMS.func.log("Обновляем устройства СДК "+data.name);
 						
 						$.post("api.php?route=rcu/parse",{
 							host: data.host,
@@ -243,14 +255,13 @@ $( function() {
 						.done(function(d){
 							if(!d.error)
 							{
-								GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],true,"good");
+								GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"info", d.host, d);
 								
 								
 								
 								/*обновить в БД*/
 								GMMS.func.status(false,d.host);
 								GMMS.func.icon("ready",d.host);
-								console.log(d);
 								
 								$.post("api.php?route=db/update/rcu.devices",{
 									host: d.host,
@@ -265,14 +276,14 @@ $( function() {
 							}
 							else
 							{
-								GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+								GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","info", d.host, d);
 								GMMS.func.status(false,d.host);
 								GMMS.func.icon("error",d.host);
 								console.warn(d);
 							}				
 						})
 						.fail(function(e){
-							GMMS.func.log("Ошибка обращения к API",true,"error");
+							GMMS.func.log("Ошибка обращения к API","error",e.host,e);
 							console.error(e);
 						});
 						
@@ -303,7 +314,7 @@ $( function() {
 						{
 							if(data.response.length > 1){
 								
-								GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию",true,"warn");
+							//	GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию",true,"warn");
 							}
 							data.response = data.response[0];
 							//теперь можно отправлять запрос на само устройство
@@ -326,21 +337,20 @@ $( function() {
 							.done(function(d){
 								if(!d.error)
 								{
-									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response,true,"good");
+									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response,"info", d.host, d);
 									GMMS.func.status(d.response, d.host);
 									GMMS.func.icon("ready",d.host);
-									console.log(d);
 								}
 								else
 								{
-									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn", d.host, d);
 									GMMS.func.status(false,d.host);
 									GMMS.func.icon("error",d.host);
 									console.warn(d);
 								}				
 							})
 							.fail(function(e){
-								GMMS.func.log("Ошибка обращения к API",true,"error");
+								GMMS.func.log("Ошибка обращения к API","error", e.host, e);
 								console.error(e);
 							});
 							
@@ -352,7 +362,7 @@ $( function() {
 						}
 						else
 						{
-							GMMS.func.log("Не могу получить устройства из БД "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+							GMMS.func.log("Не могу получить устройства из БД "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn", d.host, d);
 							GMMS.func.status(false,d.host);
 							GMMS.func.icon("error",d.host);
 							console.warn(d);
@@ -360,7 +370,7 @@ $( function() {
 					})
 					.fail(function(e){
 						
-						GMMS.func.log("Ошибка обращения к API",true,"error");
+						GMMS.func.log("Ошибка обращения к API","error", e.host,e);
 						console.error(e);
 						
 					});
@@ -375,27 +385,79 @@ $( function() {
 
 		
 		},
-		log: function(message, toConsole = false, status = null){
-			let date = new Date($.now());
-			date = date.toTimeString().split(" ");
-				if(toConsole === true) //дублируем в консоль
-				{
-					if(status === "error") console.error("Log: "+message);		
-					else if(status === "warn") console.warn("Log: "+message);		
-					else console.log("Log: "+message);		
-				}
-			$( "#panel-log div" ).prepend("<span class='"+status+"'>"+date[0]+" "+message+"</span><br>");
-			GMMS.journal.push(date[0]+" "+message);
+		//GMMS.func.log(message, status = "log", host = 0, object = {})
+		log: function(message, status = "log", host = 0, object = {}){
 			
-			$.post("api.php?route=db/insert/log",{
-				text: message
+			/*
+			
+			Задачи функции:
+			
+			*Отобразить сообщение в 
+			-консоли + объект ответа
+			-журнале сообщение 
+			
+			*Записать в БД - нужны host и json-объект ответа
+			
+			*Записать в GMMS.journal
+			
+			Формат в журнале:
+			<red>чч:мм:сс Ошибка, смотри лог {name} </red>
+			<yellow>чч:мм:сс Предупреждение, смотри лог {name} </yellow>
+			<green>чч:мм:сс Успешное выполнение команды {name} </green>
+			чч:мм:сс Обычное действие {name}
+			
+			Формат в консоли:
+			console.error("Ошибка", name, object)
+			console.warn("Предупреждение", name, object)
+			console.log("Успешное выполнение или обычное действие", name, object)
+			
+			Формат в БД:
+			Передать text, host
+			remote, timestamp - запишутся автоматически
+			
+			
+			Как построить фунцию?
+			
+			Передать параметры:
+			message, хост, объект ответа , статус ошибки
+			
+			
+			
+			Рефакторинг функции:
+			передавать host
+			передавать object для консоли
+			JSON объект записывать в БД
+			
+			*/
+			
+			//GMMS.func.log(message, status = "log", host = 0, object = {})
+			
+			function addZero(i){
+				return (i < 10 && "0"+i) || i; 
+			}
+		
+			let date = new Date(); //формируем дату
+			time = addZero(date.getHours())+":"+addZero(date.getMinutes())+":"+addZero(date.getSeconds());
+			
+			$( "#panel-log div.journal" ).prepend("<div class='"+status+"'>"+time+" "+message+"</div>"); //пишем в журнал
+				
+			GMMS.journal.push(time+" "+message, object); //в журнал переменной
+
+			console[status](message, object);//в консоль
+			
+			GMMS.func.api({ //в базу данных
+				route: "db/insert/log",
+				message: message,
+				host: host,
+				object: JSON.stringify(object)
+			})
+			.fail(function(e){
+				console.error("GMMS.func.log",e)
 			});
+			
 		},
 		api: function(data){
-			$.post("api.php?route="+data.route, data)
-			.done(function(response){
-				console.log(response);
-			})
+			return $.post("api.php?route="+data.route, data);
 		}
 	},
 	/* предустановленные rcu */

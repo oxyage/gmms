@@ -4,6 +4,8 @@
 	<title>Система группового управления</title>
 	<!-- Мета-теги -->
 	<meta charset="utf-8">
+	<!-- <meta http-equiv="refresh" content="10"> -->
+	
 	<link rel="shortcut icon" href="style/images/favicon.ico" type="image/x-icon">
 	
 	<!--Файлы поставщиков /vendor -->
@@ -42,7 +44,7 @@
 
 	
 	<!--Пользовательская таблица стилей -->
-	<link rel="stylesheet" href="style/style.css?12">
+	<link rel="stylesheet" href="style/style.css?<?=time()?>">
 
 	<!-- Убрать в соответствующий файл -->
 	<script>
@@ -260,7 +262,7 @@
 
 <div id="panel-log">
   <h2> Журнал выполнения команд</h2>
-  <div style="max-height:300px;"></div>
+  <div style="max-height:300px;" class="journal"></div>
 </div>
 
 </td>

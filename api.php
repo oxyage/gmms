@@ -611,20 +611,21 @@ switch($Route[0])
 					case "log":{
 						
 						try	{
-							API::checkArgs("text");
+							API::checkArgs("message, host");
 						}
 						catch(Exception $e)
 						{
 							$API($e); break;
 						}
 									
-						$input = array(//"host"=>$_REQUEST["host"], 
-						"text"=>$_REQUEST["text"]);
+						$input = array("host"=>$_REQUEST["host"], 
+						"message"=>$_REQUEST["message"],
+						"object"=>@$_REQUEST["object"]);
 						
 						
 						
-						$insert_log = $db->query("INSERT INTO `gmms`.`log` (`uid`, `timestamp`, `remote`, `host`, `text`) 
-						VALUES (NULL, CURRENT_TIMESTAMP, '".$_SERVER["REMOTE_ADDR"]."', '".$input["host"]."', '".$input["text"]."');");
+						$insert_log = $db->query("INSERT INTO `gmms`.`log` (`uid`, `timestamp`, `remote`, `host`, `message`, `object`) 
+						VALUES (NULL, CURRENT_TIMESTAMP, '".$_SERVER["REMOTE_ADDR"]."', '".$input["host"]."', '".$input["message"]."', '".$input["object"]."');");
 						
 						$API($insert_log);	
 	
@@ -666,7 +667,7 @@ class API
 		$arrayArgs = explode(",", $argsString);
 		foreach($arrayArgs as $i => $arg)
 		{
-			if(empty($_REQUEST[trim($arg)]) or !isset($_REQUEST[trim($arg)])) 
+			if(( !is_numeric($_REQUEST[trim($arg)]) and empty($_REQUEST[trim($arg)])) or !isset($_REQUEST[trim($arg)])) 
 				throw new Exception("Проверьте входные данные", 15);
 		}
 		return true;
@@ -703,7 +704,8 @@ class API
 				"message" => $a->getMessage(), 
 				"file" => $a->getFile(), 
 				"line" => $a->getLine(), 
-				"trace"=>$a->getTrace()
+				"trace"=>$a->getTrace(),
+				"request"=>$_REQUEST
 				);
 		}
 		else

@@ -14,7 +14,7 @@ $( function() { /* события на странице*/
 		{
 			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
-			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")", true); //логгируем	
+			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")", "log", 0, d); //логгируем	
 			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
 			DevicesFindState.resolve(); //разрешаем загрузить устройства
 		//	console.log("Объекты связи загружены из БД",d);
@@ -22,16 +22,14 @@ $( function() { /* события на странице*/
 		else//если есть ошибка в ответе
 		{
 			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+d.error+")<br><i>"+d.response.message+"</i>");
-			GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "warn"); //логгируем	
+			GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "warn", 0, d); //логгируем	
 			LoadingState.reject();
-			console.warn("Ошибка в ответе от сервера",d);
 		}
 	})
 	.fail(function(e){//если не удался запрос к файлу
 		$( "#dialog-wait p" ).html("Загрузка объектов связи не удалась<br>Смотри лог");
-		GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "error"); //логгируем	
+		GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "error", 0, e); //логгируем	
 		LoadingState.reject();
-		console.error("API не доступно",e);
 	});
 	
 	
@@ -189,19 +187,19 @@ $( function() { /* события на странице*/
 					GMMS.rcu.auth[i.host] = i;
 					GMMS.func.status(false,i.host);
 					GMMS.func.icon("ready",i.host);
-					GMMS.func.log("Найдено соединение "+GMMS.rcu.host[i.host].name,"good");
+					GMMS.func.log("Найдено соединение "+GMMS.rcu.host[i.host].name, "info", i.host, i);
 				}
 				console.log("rcu.auth: ",GMMS.rcu.auth);
 			}
 			else
 			{
-				GMMS.func.log("Ошибка поиска соединений (#"+d.error+")","warn");
+				GMMS.func.log("Ошибка поиска соединений (#"+d.error+")","warn",0,d);
 				console.warn(d);
 			}
 			
 			
 		}).fail(function(e){
-			GMMS.func.log("Ошибка обращения к API при загрузке соединений","error");
+			GMMS.func.log("Ошибка обращения к API при загрузке соединений","error",0,e);
 			console.error(e);
 		});
 		

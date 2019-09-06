@@ -29,13 +29,33 @@
 
 
 /* journal */
+#panel-log div.journal div{
+	margin: 3px 1px;
+	padding:1px 5px;
+	border-bottom: 1px solid #ddd;
+}
+#panel-log div.journal div.info{
+	background-color:#b9efb9;
+}
+#panel-log div.journal div.warn{
+	background-color:#FFFFBF;
+}
+#panel-log div.journal div.error{
+	background-color:#FFBFBF;
+}
+
+
+
 #panel-log div span{
 	padding:1px 5px;
 }
 #panel-log div span.null{
 	
 }
-#panel-log div span.good{
+#panel-log div span.log{
+	
+}
+#panel-log div span.info{
 	background-color:#b9efb9;
 }
 #panel-log div span.warn{

@@ -33,12 +33,12 @@ $("li.action").click(function(li){
 				}
 				case "check":{
 					
-					GMMS.func.log("Проверка авторизации на "+GMMS.rcu.host[data.host].name,true);
+					GMMS.func.log("Проверка авторизации на "+GMMS.rcu.host[data.host].name,"log",data.host);
 					
 					GMMS.func.checkAuth(data.host)
 					.done(function(d){
 					
-						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" авторизован",false,"good");
+						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" авторизован","info",d.host,d);
 						console.log("-rcu.auth",GMMS.rcu.auth);
 					})
 					.fail(function(e){
@@ -47,10 +47,10 @@ $("li.action").click(function(li){
 						//если просто не найдены сведения - авторизовываемся
 						if(e.error === 0)
 						{
-							GMMS.func.log("Запись об авторизации не найдена - "+GMMS.rcu.host[e.host].name, true,"warn");
+							GMMS.func.log("Запись об авторизации не найдена - "+GMMS.rcu.host[e.host].name, "warn", e.host, e);
 						}
 						else {
-							GMMS.func.log("Ошибка обращения к API", true,"error");
+							GMMS.func.log("Ошибка обращения к API","error",e.host,e);
 						}
 					});
 					
@@ -59,7 +59,7 @@ $("li.action").click(function(li){
 				}
 				case "quiet":{
 					
-					GMMS.func.log("Скрытая авторизация на "+GMMS.rcu.host[data.host].name);
+					GMMS.func.log("Скрытая авторизация на "+GMMS.rcu.host[data.host].name, "log", data.host);
 					GMMS.func.status("wait",data.host);
 					GMMS.func.icon("wait",data.host);					
 					
@@ -68,7 +68,7 @@ $("li.action").click(function(li){
 						
 						if(!d.error)
 						{
-							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, true,"good");
+							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, "info", d.host, d);
 							GMMS.rcu.auth[d.host] = d.response;
 							//сохраняем в БД
 							GMMS.func.connection.set(d.host);
@@ -78,7 +78,7 @@ $("li.action").click(function(li){
 						}
 						else
 						{
-							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")",true,"warn");
+							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn",d.host,d);
 							GMMS.func.status(false,d.host);
 							GMMS.func.icon("error",d.host);
 							console.warn(d);
@@ -86,7 +86,7 @@ $("li.action").click(function(li){
 						
 					})
 					.fail(function(e){
-						GMMS.func.log("Ошибка обращения к API",true,"error");
+						GMMS.func.log("Ошибка обращения к API","error",e.host,e);
 						console.error(e);
 					});
 					break;
@@ -103,6 +103,14 @@ $("li.action").click(function(li){
 			
 			GMMS.func.status("wait",data.host);
 			GMMS.func.icon("wait",data.host);
+			
+			if(!GMMS.func.checkAuth(data.host))
+			{
+				GMMS.func.log("Нет данных об авторизации "+data.name,"error",data.host);
+				GMMS.func.status(false,data.host);
+				GMMS.func.icon("error",data.host);
+				break;
+			}
 			/*
 			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
@@ -121,16 +129,7 @@ $("li.action").click(function(li){
 					{
 						case "devices.update":
 						{
-							
-							GMMS.func.checkAuth(data.host)
-							.done(function(data){
-								console.log("Проверка авторизации завершена", data);
-								GMMS.func.rcu.function.devices.update(data.host);				
-							})
-							.fail(function(e){
-								console.log("Проверка авторизации ошибка", e);
-							});
-							
+							GMMS.func.rcu.function.devices.update(data.host);				
 
 							break;
 						}
@@ -157,7 +156,7 @@ $("li.action").click(function(li){
 			
 			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
 			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,true,"error");
+				GMMS.func.log("Нет данных об авторизации "+data.name,"error", data.host);
 				GMMS.func.status(false,data.host);
 				GMMS.func.icon("error",data.host);
 				break;
