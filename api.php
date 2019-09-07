@@ -672,7 +672,7 @@ class API
 		}
 		return true;
 	}
-
+/*
 	//функция поиска заголовка в массиве haystack, needle
 	public static function find_headers($haystack, $needle) // ищем в заголовках haystack заголовках needle
 	{	
@@ -687,7 +687,7 @@ class API
 			}
 		}
 	}
-	
+*/	
 
 	
 	public $error = 0;
