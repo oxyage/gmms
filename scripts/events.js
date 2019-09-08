@@ -151,9 +151,7 @@ $( function() { /* события на странице*/
 
 		
 		//активируем все чекбоксы объектов связи
-		$( "#panel-select input" ).checkboxradio({
-		  icon: false
-		});	
+		$( "#panel-select input" ).checkboxradio({		  icon: false		});	
 
 		
 		/* действия кнопок выбор одночастотной зоны или всех*/
@@ -166,6 +164,7 @@ $( function() { /* события на странице*/
 			
 			GMMS.func.select(target, data, checked);
 			
+	
 		});			
 			
 		/*	после загрузки всех  объектов	*/	

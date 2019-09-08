@@ -214,18 +214,6 @@
 
 <hr>
 
-<!-- Выбор объектов связи -->
-<div id="panel-select"><!-- start panel select-->
-	<h3> Выбрать объекты связи</h3>
-	<div style="text-align:center"> <!-- start container panel select-->
-		<label for="checkbox-select-all" style="width:70%; font-weight: bold;">Выбрать все</label>
-		<input type="checkbox" name="select-all" id="checkbox-select-all">
-		<hr>
-		<div id="container-select-all" style="text-align:left"></div>
-	</div>  <!--end container panel-select-->
-</div><!-- end panel-select-->
-
-<hr>
 
 <div id="panel-tabs">
   <ul>
@@ -234,6 +222,16 @@
     <li><a href="#panel-tabs-additional"><span class="ui-icon ui-icon-wrench"></span> Дополнительно</a></li>
   </ul>
   <div id="panel-tabs-monitoring">
+ 
+	<label for="1mux">1 MUX</label>
+	<input class="panel-radio" name="mux" type="radio" id="1mux" value="1" data-route=""> 
+  
+	<label for="2mux">2 MUX</label>
+	<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
+	
+	<button class="ui-button ui-widget ui-corner-all">Button with only text</button>
+  
+  
     Мониторинг сигналов ASI<br>
 	Активный вход спутниковый
   </div>
@@ -242,7 +240,12 @@
   </div>
   <div id="panel-tabs-additional">
    
-   Включение выключение замены PLP<br>
+<!--   Включение выключение замены PLP<br> -->
+Выберите объекты связи и авторизуйтесь в них:
+<button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
+
+<button class="panel-button" data-route="rcu/click" >Клик по ней</button>
+<hr>
 
 <label for="show-rts-names">Имена объектов связи</label>
 <input type="checkbox" name="" id="show-rts-names"> 
@@ -259,6 +262,23 @@
 </div>
 
 <hr>
+
+
+
+
+<!-- Выбор объектов связи -->
+<div id="panel-select"><!-- start panel select-->
+	<h3> Список объектов связи</h3>
+	<div style="text-align:center"> <!-- start container panel select-->
+		<label for="checkbox-select-all" style="width:70%; font-weight: bold;">Выбрать все</label>
+		<input type="checkbox" name="select-all" id="checkbox-select-all">
+		<hr>
+		<div id="container-select-all" style="text-align:left"></div>
+	</div>  <!--end container panel-select-->
+</div><!-- end panel-select-->
+
+<hr>
+
 
 <div id="panel-log">
   <h2> Журнал выполнения команд</h2>

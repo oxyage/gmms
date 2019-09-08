@@ -78,7 +78,7 @@ $( function() {
 				});
 			}			
 		},
-		select: function(target, data, checked){
+		select: function(target, data, checked){ //выбор объектов связи
 			
 			/*let target = $(this).attr("name");
 			let data = $(this).data();
@@ -86,15 +86,19 @@ $( function() {
 			*/
 			if(target === "select-all")
 			{
-				$('#checkbox-select-all').prop("checked", checked);
-				$('#checkbox-select-all').checkboxradio("refresh");
+				
+				$('#checkbox-select-all, #container-select-all input').prop("checked", checked);
+				$('#checkbox-select-all, #container-select-all input').checkboxradio("refresh");
+				
 				if (checked){
+					
 					GMMS.func.log("Выбраны все РТПС"); //логгируем
 					GMMS.rcu.select = Object.keys(GMMS.rcu.host);
 					GMMS.func.icon("select");
 					$("#container-select-all").hide();
 					$.cookie("select", "all");
 				} else {
+					
 					GMMS.func.log("Снят выбор всех РТПС"); //логгируем
 					GMMS.rcu.select = [];
 					GMMS.func.icon("default");
@@ -138,6 +142,12 @@ $( function() {
 					GMMS.func.icon("default", data.host);
 
 				}
+			}
+		},
+		selected:function(callback){
+			for(host of GMMS.rcu.select)
+			{
+				callback(host);
 			}
 		},
 		auth: function(host){ // не передавать параметры имени пользователя и пароля
@@ -377,6 +387,47 @@ $( function() {
 			}
 
 		
+		},
+		panelClick:function(data){
+			
+			let route = data.route.split("/");
+			
+			switch(route[0])
+			{
+				case "rcu":{
+					
+					switch(route[1])
+					{
+						case "auth":{
+							
+							let sizeof = GMMS.rcu.select.length;
+							console.log(sizeof);
+							GMMS.func.selected(function(host){
+				
+								//console.log("Запускаем авторизацию на хост ", host);
+								
+								
+							});
+							
+							
+							
+							break;
+						}
+						default:{
+							console.error("route[1] undefined");
+						}
+					}
+					break;
+				}
+				default:{
+					console.error("route[0] undefined");
+				}
+			}
+			
+			
+			
+			
+			
 		},
 		//GMMS.func.log(message, status = "log", host = 0, object = {})
 		log: function(message, status = "log", host = 0, object = {}){
