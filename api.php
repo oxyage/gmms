@@ -77,11 +77,11 @@ switch($Route[0])
 		
 		break;
 	}
-	case "rcu":
+	case "rcu": // rcu
 	{
 		switch($Route[1])
 		{
-			case "auth":
+			case "auth": // rcu/auth
 			{
 				try	{
 					API::checkArgs("host,username,userpass");
@@ -117,7 +117,7 @@ switch($Route[0])
 			}
 			
 			//post
-			case "post":
+			case "post": //  rcu/post
 			{
 				try	{
 					API::checkArgs("url,cookie,data,host");
@@ -148,7 +148,7 @@ switch($Route[0])
 				break;
 			}
 			
-			case "parse": //parse
+			case "parse": //  rcu/parse
 			{
 				/* парсинг страницы устройств*/
 				
@@ -187,10 +187,10 @@ switch($Route[0])
 				
 				break;
 			}
-			case "device": //*для работы с устройством
+			case "device": // rcu/device		для работы с определенным абстрактным устройством
 			{
 				try	{
-					API::checkArgs("host,cookie,id,type_id"); //id = ид устройства в таблице (для ссылок), type_id = для подключения шаблона
+					API::checkArgs("host,cookie,type_id,action"); //id = ид устройства в таблице (для ссылок), type_id = для подключения шаблона
 				}
 				catch(Exception $e)
 				{
@@ -198,30 +198,96 @@ switch($Route[0])
 				}
 				
 				$input = array("host"=>$_REQUEST["host"], 
-				"cookie"=>@$_REQUEST["cookie"], //для post запроса
-				"type_id"=>$_REQUEST["type_id"], //для подключения шаблона
-				"id"=>$_REQUEST["id"], //для исправления ссылки от шаблона
-				"purposes"=>@$_REQUEST["purposes"], //для передачи доп данных в шаблон
-				"action"=>@$_REQUEST["action"]//действия с устройством напр monitoring/input/1
-				);
+						"cookie"=>@$_REQUEST["cookie"], //для post запроса
+						"type_id"=>$_REQUEST["type_id"], //для подключения шаблона
+						"device"=>@$_REQUEST["device"], //полная запись из таблицы устройства
+						"action"=>$_REQUEST["action"]//действия с устройством напр monitoring/input/1
+						//мультиплекс нужен для ответа
+					);
 				
 				$API->module(CLASSES_PATH."class.phpQuery.php");
 				$API->module(CLASSES_PATH."class.rcu.php");
+				$API->module(CLASSES_PATH."class.templates.php");
 				$API->module(TEMPLATES_PATH.$input["type_id"].".php");
 				
-				//ставим куки
+				//ставим куки и хост
 				$RCU = new RCU;
 				$RCU->host = $input["host"];
 				$RCU->cookie = $input["cookie"];
 				
 				
-				$Device = new Device($input["action"], $input["id"],$input["purposes"]); // результат запуска функции по `action` пути
+				
+				//создаем экземпляр класса
+				//сразу с действием и доп параметрами
+				$Device = new Device($input["action"], array("device"=>$input["device"])); // результат запуска функции по `action` пути
+				//в результате работы конструктора будет вызван action()
+
+				
+
+				//делаем несколько запросов
+				foreach($Device->POST_url as $i => $path)
+				{
+					$URL = $RCU->protocol."://".$RCU->host.$path;
+					
+					#для отладки
+					#$POST = $RCU->post($URL);
+					$POST = array("array_result", $i, $path);//debug
+					
+					$Device->POST_result[$i] = $POST;//полученную страницы записываем
+				}
+				
+				//после получения всей информации можно запускать callback для обработки этих страниц
+				//$this->POST_result - обходить этот массив
+				// callback должен сам знать что искать
+				$Device->POST_callback = $Device->callback["page"]($Device->POST_result); //вызвать коллбек обработки
+				$Device->POST_represent = $Device->callback["represent"]($Device->POST_callback); // интерпретировать ответ в удобный вид
+			#	$Device->info(); //преобразовать массив в строку
+				
+				
+				
+				$API($Device);
+				break;
+				
+				
+				
+				
+				
+
+//$Device->post_result[$i] = $Device->Info["callback"]($POST, $Device->Info["find"]);
+				
+				//вызов action() возвращает данные для отправки post запроса
+				
+				//отправляем данные методом post на переданный url (url передать как массив c 1 или несколькими адресами)
+				
+				//результаты post запросов так же сохранить в экземпляр объекта device
+				
+				//вызвать после этого callback функции, если он есть (а он должен быть! иначе кому обрабатывать ответ?)
+				
+				//callback возвращает ответ, но так же необходимо его представить в читаемом виде для пользователя
+				
+				/*
+				
+				result = {
+					full:{'ASI1', }
+					represent:{'40°'}
+					?waited:{'ASI1'} 
+					
+				}
+				
+				*/
+				
+				//вернуть ответ 
+				$API($Device->result);
+				break;
+				
 				
 				//получили данные, теперь их отправляем
 
 				//формируем url для запроса 
 				//$Device->Info["url"] = str_replace("{id}", $input["id"], $Device->Info["url"]);
-				
+			
+			
+			//старый код удалить!!!
 				if(is_array($Device->Info["url"]))
 				{
 					//делаем несколько запросов
@@ -247,29 +313,8 @@ switch($Route[0])
 				
 				//отдаем в результат
 				$API($result);			
+			// УДАЛИТЬ СТАРЫЙ КОД
 				
-				//$API($result); //__invoke чтобы получить всю инфу
-				
-				/*
-				
-				API принимает данные на вход
-				соответственно подключает необходимые файлы
-				rcu
-				template
-				выдать возможные функции от устройства !
-				как необязательные параметры передать коды запросов - на получение информации или отправку формы
-				
-				по полученным кодам запроса - из template получить необходимые данные
-				отправить их посредством rcu->post
-				результат запроса интерпретировать снова в template
-				результат интерпретации получить в API и отправить пользователю
-				
-
-			
-				*/
-				
-				
-				break;
 			}
 			default: // если не указан 1 маршрут
 			{
@@ -294,11 +339,11 @@ switch($Route[0])
 		
 		switch($Route[1])
 		{
-			case "select":
+			case "select": // db/select
 			{
 				switch($Route[2])//для предустановленного выбора
 				{
-					case "rcu":
+					case "rcu": // db/select/rcu
 					{			
 						$get_rcu = $db->query("SELECT * FROM `rcu`");
 						$get_rcu = $db->fetch_assoc($get_rcu);
@@ -338,7 +383,7 @@ switch($Route[0])
 						
 						break;
 					}
-					case "connection":
+					case "connection": // db/select/connection
 					{
 						//1440 sec = 24 минуты
 						
@@ -377,7 +422,7 @@ switch($Route[0])
 						
 					}
 					
-					case "device": //поиск ОДНОГО УСТРОЙСТВА с host, mux
+					case "device": // db/select/device поиск определенного УСТРОЙСТВА с host, mux
 					{
 						$API->module(CLASSES_PATH."class.rcu.php");
 						try	{
@@ -413,11 +458,12 @@ switch($Route[0])
 							$API(new Exception("Устройств по заданным критериям не найдено", 411));
 							break;
 						}
-						
+						/*
 						foreach($devices as $i => $device)
 						{
 							$devices[$i]["purposes"] = RCU::purposes($device);
 						}
+						*/
 						
 						$API($devices);	
 						
@@ -425,12 +471,12 @@ switch($Route[0])
 						
 					}
 					
-					case "devices":
+					case "devices": // db/select/devices/*
 					{
 						$API->module(CLASSES_PATH."class.rcu.php");
 						switch($Route[3])
 						{
-							case "host":{
+							case "host":{ //db/select/devices/host
 								
 								try	{
 								API::checkArgs("host");
@@ -455,7 +501,7 @@ switch($Route[0])
 								break;
 								
 							}
-							case "mux":{
+							case "mux":{ //db/select/devices/mux
 								
 								
 								
@@ -481,7 +527,7 @@ switch($Route[0])
 								
 								break;
 							}
-							case "purpose":{
+							case "purpose":{ //db/select/devices/host
 								
 								try	{
 									API::checkArgs("host");
@@ -542,11 +588,11 @@ switch($Route[0])
 				
 				break;
 			}
-			case "update":
+			case "update": // db/update 
 			{
 				switch($Route[2])//для предустановленного выбора
 				{
-					case "rcu.devices": # db/update/rcu.devices
+					case "rcu.devices": // db/update/rcu.devices
 					{
 						//обновить информацию об устройствах в БД
 						
@@ -580,12 +626,12 @@ switch($Route[0])
 				}
 				break;
 			}
-			case "insert":{
+			case "insert":{ // db/insert
 				
 				switch($Route[2])//для предустановленного выбора
 				{
 					
-					case "connection":{
+					case "connection":{ // db/insert/connection
 						
 						try	{
 							API::checkArgs("host,cookie,username,userpass,timestamp,remote");
@@ -608,7 +654,7 @@ switch($Route[0])
 	
 						break;
 					}
-					case "log":{
+					case "log":{ // db/insert/log
 						
 						try	{
 							API::checkArgs("message, host");

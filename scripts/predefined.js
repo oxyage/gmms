@@ -292,18 +292,18 @@ $( function() {
 					}
 				},
 			monitoring:{
-				inputSecondary: function(host){
+				
+				inputPrimary: function(host, mux){
+					
+				},
+				inputSecondary: function(host, mux){
 					
 					let data = {
 							name: GMMS.rcu.host[host].name, 
 							host: host
 						};
-					let mux = route[2].split("-")[1];
-										
-					//надо найти мощность передатчика и его ИД по переменной mux
-					//после отправлять запрос
-					
-				//находим устройство
+
+					//находим устройство
 					$.post("api.php?route=db/select/device",{
 						host: data.host,
 						func: "Передатчик",
@@ -314,31 +314,24 @@ $( function() {
 						{
 							if(data.response.length > 1){
 								
-							//	GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию",true,"warn");
+								GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию","warn", data.host, data);
 							}
+							
 							data.response = data.response[0];
 							//теперь можно отправлять запрос на само устройство
-							
-							//console.log("Вот: ",data);
-							//return false;
-							
-							//отправляем запрос
+
 							$.post("api.php?route=rcu/device",{
 								host: data.host,
-								cookie: GMMS.rcu.auth[data.host].cookie,
+								cookie: GMMS.rcu.auth[data.host].cookie || false,
+								device: data.response,
 								type_id: 10000,
-								action: "monitoring/modulator/input_secondary",
-								id: data.response.id, //передать сюда ИД передатчика
-								purposes:{
-									"mux": mux,
-									"power": data.response.power //передать сюда его мощность
-								}
+								action: "monitoring/modulator/input_secondary"							
 							})
 							.done(function(d){
 								if(!d.error)
 								{
-									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response,"info", d.host, d);
-									GMMS.func.status(d.response, d.host);
+									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response.represent,"info", d.host, d);
+									GMMS.func.status(d.response.represent, d.host);
 									GMMS.func.icon("ready",d.host);
 								}
 								else

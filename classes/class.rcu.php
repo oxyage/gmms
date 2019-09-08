@@ -255,7 +255,7 @@ class RCU
 		return $purpose;	
 	}
 	
-	public function parse($html)
+	public function parse($html) //парсинг таблицы устройств
 	{
 		if(empty($html))	return new Exception("Пустой обязательный параметр 'html'", 20);
 				
@@ -363,6 +363,11 @@ class RCU
 		"devices_table"=>json_encode($DEVICES), 
 		"devices_hash"=>md5($Table->text())		
 		);
+		
+	}
+	
+	public function parseDevice()
+	{
 		
 	}
 	

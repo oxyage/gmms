@@ -159,7 +159,7 @@ $("li.action").click(function(li){
 				GMMS.func.log("Нет данных об авторизации "+data.name,"error", data.host);
 				GMMS.func.status(false,data.host);
 				GMMS.func.icon("error",data.host);
-				break;
+				//break;
 			}
 			
 			/*
@@ -168,11 +168,12 @@ $("li.action").click(function(li){
 			
 			*/
 			
-			switch(route[1])
+			switch(route[1]) //  monitoring/*
 			{
 				/*
 				добавлять новые режимы мониторинга
 				*/
+				
 				case "sfn":{
 					
 					let mux = route[2].split("-")[1];
@@ -180,10 +181,17 @@ $("li.action").click(function(li){
 					
 					break;
 				}
-				
+				case "inputPrimary":{
+					
+					let mux = route[2].split("-")[1];
+					GMMS.func.rcu.monitoring.inputPrimary(data.host, mux);
+					
+					break;
+				}
 				case "inputSecondary":{
 					
-					GMMS.func.rcu.monitoring.inputSecondary(data.host);
+					let mux = route[2].split("-")[1];
+					GMMS.func.rcu.monitoring.inputSecondary(data.host, mux);
 					
 					break;
 				}

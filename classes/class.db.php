@@ -21,7 +21,7 @@ class db
 				if(isset($this->$key))	$this->$key = $value;
 				else
 				{
-					return new Exception("Ошибка создания объекта db: неверный параметр");
+					return new Exception("Ошибка создания объекта db: неверный параметр", mysql_errno());
 				}
 			}
 		}
@@ -30,12 +30,12 @@ class db
 	public function connect()
 	{
 		$connect = mysql_connect($this->host, $this->user, $this->pass);
-		if(!$connect)		return new Exception("Ошибка подключения к БД. ".mysql_error());
+		if(!$connect)		return new Exception("Ошибка подключения к БД. ".mysql_error(), mysql_errno());
 		else
 		{
 			$select_db = mysql_select_db($this->name, $connect);
 			if($select_db !== FALSE) return $this->link = $connect;
-			else return new Exception("Ошибка выбора базы данных. ".mysql_error());
+			else return new Exception("Ошибка выбора базы данных. ".mysql_error(), mysql_errno());
 		}		
 	}
 	
@@ -46,7 +46,7 @@ class db
 	public function query($sql)
 	{
 		$result = mysql_query($sql);
-		if($result == FALSE) return new Exception("Запрос SQL завершился ошибкой. ".mysql_error());
+		if($result == FALSE) return new Exception("Запрос SQL завершился ошибкой. ".mysql_error(), mysql_errno());
 		else return $result;
 	}
 	
