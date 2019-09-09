@@ -222,7 +222,9 @@ switch($Route[0])
 				$Device = new Device($input["action"], array("device"=>$input["device"])); // результат запуска функции по `action` пути
 				//в результате работы конструктора будет вызван action()
 
-				
+				#$API($Device);
+				#break;
+			
 
 				//делаем несколько запросов
 				foreach($Device->POST_url as $i => $path)
@@ -230,8 +232,8 @@ switch($Route[0])
 					$URL = $RCU->protocol."://".$RCU->host.$path;
 					
 					#для отладки
-					#$POST = $RCU->post($URL);
-					$POST = array("array_result", $i, $path);//debug
+					$POST = $RCU->post($URL);
+					//$POST = array("array_result", $i, $path);//debug
 					
 					$Device->POST_result[$i] = $POST;//полученную страницы записываем
 				}
@@ -239,20 +241,11 @@ switch($Route[0])
 				//после получения всей информации можно запускать callback для обработки этих страниц
 				//$this->POST_result - обходить этот массив
 				// callback должен сам знать что искать
-				$Device->POST_callback = $Device->callback["page"]($Device->POST_result); //вызвать коллбек обработки
-				$Device->POST_represent = $Device->callback["represent"]($Device->POST_callback); // интерпретировать ответ в удобный вид
-			#	$Device->info(); //преобразовать массив в строку
+				$Device->POST_callback = $Device->callback["page"]($Device->device_info, $Device->POST_result); //вызвать коллбек обработки
+				$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback); // интерпретировать ответ в удобный вид
+				$Device->info(); //преобразовать массив в строку
 				
 				
-				
-				$API($Device);
-				break;
-				
-				
-				
-				
-				
-
 //$Device->post_result[$i] = $Device->Info["callback"]($POST, $Device->Info["find"]);
 				
 				//вызов action() возвращает данные для отправки post запроса

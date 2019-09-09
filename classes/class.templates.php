@@ -39,12 +39,14 @@ abstract class Template
 	
 	public function info()// представить массив в виде строки
 	{
-		foreach($this->POST_callback as $i => $value)
+		foreach($this->POST_callback as $i => $value) // AS1; ASI2
 			$this->Info["full"] .= $value."; ";
 			
-		foreach($this->POST_represent as $i => $value)
+		foreach($this->POST_callback as $i => $value) // должен быть  40°; 53°
 			$this->Info["represent"] .= $value."; ";
 	}
+	
+	
 	
 	//abstract public function callback();
 	

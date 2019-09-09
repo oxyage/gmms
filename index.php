@@ -244,7 +244,7 @@
 Выберите объекты связи и авторизуйтесь в них:
 <button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
 
-<button class="panel-button" data-route="rcu/click" >Клик по ней</button>
+<button class="panel-button" data-route="rcu/function/monitoring.inputSecondary/1" >Дополнительный вход 1 MUX</button>
 <hr>
 
 <label for="show-rts-names">Имена объектов связи</label>

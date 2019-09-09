@@ -112,52 +112,55 @@ class _10000 extends Template
 			"2000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}"),
 			"5000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}")
 		);
+
+
+		if(is_array($array_url[$this->Power]))
+			$this->POST_url = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
+		else
+			$this->POST_url[] = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
 		
-		$array_param = array(
+		$this->callback["page"] = function($device_info, $POST_result = array()){
+			
+			$result = array();
+			
+	
+			$array_param = array(
 			"100" => "inpu2TsSource",
 			"250" => "inpu2TsSource",
 			"500" => "inpu2TsSource",
 			"1000" => "inpu2TsSource",
 			"2000" => "secondarySource",
 			"5000" => "secondarySource");
-
-		$this->POST_url = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
-		
-		
-		$this->callback["page"] = function($POST_result = array()){
 			
-			$result = array();
-			
-			//убрать
-			return $result;#debug
+			$power = $device_info["power"];
 			
 			
 			foreach($POST_result as $i => $html)
 			{
 				$html = phpQuery::newDocument($html);	
-				$secondary = $html->find("select[name=".$find."] option:selected")->text(); 
+				$secondary = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
 				$result[] = $secondary;
 			}
 
 			return $result;			
 		};
 		
-		$this->callback["represent"] = function($POST_callback){
-				
-		//нужен MUX
-			return $POST_callback;					
-		};
+		$this->callback["represent"] = function($device_info, $POST_callback = array()){
+			/*	
 		
-		/*
-		$data["callback"] = function($html, $find){
+			$text = $device_info["mux"]." MUX: ";
 			
-			$html = phpQuery::newDocument($html);	
-			$secondary = $html->find("select[name=".$find."] option:selected")->text(); 
+			foreach($POST_callback as $i => $a)
+			{			
+				$text .= $a."; ";	 //АНИКАК
+			}
 			
-			return $secondary;	
+			return $text;
+			*/	
+			
+			return $POST_callback;
 		};
-		
-		
+		/*		
 		$data["represent"] = function($array){
 			
 			//как представить результат
