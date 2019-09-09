@@ -231,7 +231,28 @@
   <div id="panel-tabs-monitoring">
  
  
+<div class="accordion" ><!-- start panel select-->
+	<h3>Мониторинг параметров передатчиков</h3>
+	<div style="">
+		<label for="1mux">1 мультиплекс</label>
+		<input class="panel-radio" name="mux" type="radio" id="1mux" checked value="1" data-route=""> 
+	  
+		<label for="2mux">2 мультиплекс</label>
+		<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
 	
+	</div>
+	<h3>Мониторинг реплейсеров</h3>
+	<div style="">
+		Действия с реплейсерами
+	
+	</div>
+</div>
+ 
+ 
+ 
+ 
+ 
+	<!--
 	<div class="tabs">
 	  <ul>
 		<li><a href="#tabs-monitoring-tx">Передатчики</a></li>
@@ -248,13 +269,9 @@
 	  </div>
 	  <div id="tabs-monitoring-nevion">nevion</div>
 	</div>
-	
+	-->
 	<hr>
-	<button class="ui-button ui-widget ui-corner-all">Button with only text</button>
-  
-  
-    Мониторинг сигналов ASI<br>
-	Активный вход спутниковый
+
   </div>
   <div id="panel-tabs-sunoutage">
     Переход на 53 и 40 градус раздельно по мультиплексам

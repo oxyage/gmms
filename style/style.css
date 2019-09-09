@@ -26,6 +26,11 @@
 	padding: 0.3em 0.3em;
 }
 
+#panel #panel-tabs-monitoring div.accordion div{
+	text-align:center;
+	padding: .7em 1.3em;
+}
+
 #panel #panel-select .ui-helper-reset
 {
 	padding: 0.9em 0.3em;
