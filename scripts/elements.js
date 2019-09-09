@@ -3,6 +3,12 @@
 */
 $( function(){ 
 
+
+	/* активируем все вкладки */
+	$( "#panel .tabs" ).tabs({});
+	
+
+
 	/* панель выбора объектов связи */
 	$( "#panel-select" ).accordion({
 	  collapsible: true,
@@ -13,6 +19,8 @@ $( function(){
 		activeHeader: "ui-icon-radio-off"
 		}
 	});
+	
+	
 		
 	
 	/* вкладки на странице */

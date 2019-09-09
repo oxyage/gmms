@@ -9,6 +9,7 @@ class Device extends _35810{} //класс инициализации для з�
 
 class _35810 extends Template
 {
+	public $method = "snmp";
 	
 	public function action() //запустить функцию в зависимости от action 
 	{

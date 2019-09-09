@@ -26,6 +26,23 @@
 	padding: 0.3em 0.3em;
 }
 
+#panel #panel-select .ui-helper-reset
+{
+	padding: 0.9em 0.3em;
+}
+
+#panel #panel-select .ui-button
+{
+	padding: .2em .5em;
+	margin-right: .2em;
+    
+}
+
+#panel #panel-select #container-select-all .ui-button
+{
+	margin-bottom: .3em;
+}
+
 
 
 /* journal */
@@ -131,8 +148,14 @@ cursor: default;
 .rts .error		{ background-color: #ff6060; 	} /* красный */
 .rts .black		{ background-color: #000; 		} /* черный */
 .rts .orange	{ background-color: #e2c928; 	} /* оранжевый */
-.rts .select	{ background-color: #c5c5c5; 	} /* цвет башни */
 .rts .default	{ background-color: #EEE; 		} /* серый */
+.rts .select	{ /* цвет башни */
+background-color: #e2c928b3; 	
+border-left: 3px solid #999;
+border-top: 2px solid #999;
+border-right: 1px solid #999;
+border-bottom: 1px solid #999;
+} 
 
  
  

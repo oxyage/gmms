@@ -562,7 +562,7 @@ $( function() {
 				route: "db/insert/log",
 				message: message,
 				host: host,
-				object: JSON.stringify(object)
+				object: null//JSON.stringify(object)
 			})
 			.fail(function(e){
 				console.error("GMMS.func.log",e)

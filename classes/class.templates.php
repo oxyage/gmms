@@ -6,6 +6,8 @@ abstract class Template
 	public $action; //массив действия
 	public $data; // переданные данные при создании экземпляра
 	
+	public $method = "http";
+	
 	public $POST_url = array(); //массив адресов на которые посылать запрос
 	public $POST_result = array(); //массив ответов от страниц
 	public $POST_callback = array(); //массив результатов после обработки коллбеком

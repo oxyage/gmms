@@ -222,6 +222,12 @@ switch($Route[0])
 				$Device = new Device($input["action"], array("device"=>$input["device"])); // результат запуска функции по `action` пути
 				//в результате работы конструктора будет вызван action()
 
+
+				/*
+				в зависимости от Device->method (snmp or http)
+				*/
+
+
 				#$API($Device);
 				#break;
 			

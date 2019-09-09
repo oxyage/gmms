@@ -59,6 +59,11 @@
 	}, 300000);
 
 
+	$( ".accordion" ).accordion({
+      collapsible: true
+    });
+
+	
 	console.log("index.html");
 		
 	});
@@ -142,6 +147,7 @@
     <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>	
     <ul style="width:350px">
 	
+
 	<!-- Параметры -> -->
 	<li class="ui-widget-header"><div>Параметры</div></li>
       <li>
@@ -204,7 +210,8 @@
 
 </td>
 
-<!--панель управления-->
+<!-- ################################################################################################################### -->
+<!--Панель управления-->
 <td id="panel" style="vertical-align:top; border-left:1px solid #000; background-color: #cecece;">
 
 <div>
@@ -215,7 +222,7 @@
 <hr>
 
 
-<div id="panel-tabs">
+<div class="tabs" id="panel-tabs">
   <ul>
     <li><a href="#panel-tabs-monitoring"><span class="ui-icon ui-icon-search"></span> Мониторинг</a></li>
     <li><a href="#panel-tabs-sunoutage"><span class="ui-icon ui-icon-calendar"></span> Интерференция</a></li>
@@ -223,12 +230,26 @@
   </ul>
   <div id="panel-tabs-monitoring">
  
-	<label for="1mux">1 MUX</label>
-	<input class="panel-radio" name="mux" type="radio" id="1mux" value="1" data-route=""> 
-  
-	<label for="2mux">2 MUX</label>
-	<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
+ 
 	
+	<div class="tabs">
+	  <ul>
+		<li><a href="#tabs-monitoring-tx">Передатчики</a></li>
+		<li><a href="#tabs-monitoring-nevion">Реплейсеры Nevion</a></li>
+	  </ul>
+	  <div id="tabs-monitoring-tx">
+	  
+		<label for="1mux">1 мультиплекс</label>
+		<input class="panel-radio" name="mux" type="radio" id="1mux" value="1" data-route=""> 
+	  
+		<label for="2mux">2 мультиплекс</label>
+		<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
+		
+	  </div>
+	  <div id="tabs-monitoring-nevion">nevion</div>
+	</div>
+	
+	<hr>
 	<button class="ui-button ui-widget ui-corner-all">Button with only text</button>
   
   
@@ -267,13 +288,15 @@
 
 
 <!-- Выбор объектов связи -->
-<div id="panel-select"><!-- start panel select-->
+<div class="accordion" id="panel-select"><!-- start panel select-->
 	<h3> Список объектов связи</h3>
 	<div style="text-align:center"> <!-- start container panel select-->
 		<label for="checkbox-select-all" style="width:70%; font-weight: bold;">Выбрать все</label>
 		<input type="checkbox" name="select-all" id="checkbox-select-all">
+		
+		<div id="container-select-all" style="text-align:right">
 		<hr>
-		<div id="container-select-all" style="text-align:left"></div>
+		</div>
 	</div>  <!--end container panel-select-->
 </div><!-- end panel-select-->
 
