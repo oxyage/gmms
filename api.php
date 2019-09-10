@@ -215,32 +215,22 @@ switch($Route[0])
 				$RCU->host = $input["host"];
 				$RCU->cookie = $input["cookie"];
 				
-				
-				
 				//создаем экземпляр класса
 				//сразу с действием и доп параметрами
 				$Device = new Device($input["action"], array("device"=>$input["device"])); // результат запуска функции по `action` пути
 				//в результате работы конструктора будет вызван action()
 
-
 				/*
 				в зависимости от Device->method (snmp or http)
 				*/
-
-
-				#$API($Device);
-				#break;
-			
+				
+		
 
 				//делаем несколько запросов
 				foreach($Device->POST_url as $i => $path)
 				{
 					$URL = $RCU->protocol."://".$RCU->host.$path;
-					
-					#для отладки
-					$POST = $RCU->post($URL);
-					//$POST = array("array_result", $i, $path);//debug
-					
+					$POST = $RCU->post($URL);	
 					$Device->POST_result[$i] = $POST;//полученную страницы записываем
 				}
 				
@@ -250,19 +240,6 @@ switch($Route[0])
 				$Device->POST_callback = $Device->callback["page"]($Device->device_info, $Device->POST_result); //вызвать коллбек обработки
 				$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback); // интерпретировать ответ в удобный вид
 				$Device->info(); //преобразовать массив в строку
-				
-				
-//$Device->post_result[$i] = $Device->Info["callback"]($POST, $Device->Info["find"]);
-				
-				//вызов action() возвращает данные для отправки post запроса
-				
-				//отправляем данные методом post на переданный url (url передать как массив c 1 или несколькими адресами)
-				
-				//результаты post запросов так же сохранить в экземпляр объекта device
-				
-				//вызвать после этого callback функции, если он есть (а он должен быть! иначе кому обрабатывать ответ?)
-				
-				//callback возвращает ответ, но так же необходимо его представить в читаемом виде для пользователя
 				
 				/*
 				
@@ -276,7 +253,8 @@ switch($Route[0])
 				*/
 				
 				//вернуть ответ 
-				$API($Device->result);
+				#$API($Device);break; //debug
+				$API($Device->Info);
 				break;
 				
 				
@@ -285,34 +263,6 @@ switch($Route[0])
 				//формируем url для запроса 
 				//$Device->Info["url"] = str_replace("{id}", $input["id"], $Device->Info["url"]);
 			
-			
-			//старый код удалить!!!
-				if(is_array($Device->Info["url"]))
-				{
-					//делаем несколько запросов
-					foreach($Device->Info["url"] as $i => $url)
-					{
-						$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"][$i];
-						$POST = $RCU->post($URL);
-						//полученную страницу интерпретируем
-						$result[$i] = $Device->Info["callback"]($POST, $Device->Info["find"]);
-					}
-				}
-				else
-				{
-					$URL = $RCU->protocol."://".$RCU->host.$Device->Info["url"];
-					$POST = $RCU->post($URL);	
-					//полученную страницу интерпретируем
-					$result = $Device->Info["callback"]($POST, $Device->Info["find"]);
-				}
-
-
-				//отобразить представление в читаемом результате
-				$result = $Device->Info["represent"]($result);
-				
-				//отдаем в результат
-				$API($result);			
-			// УДАЛИТЬ СТАРЫЙ КОД
 				
 			}
 			default: // если не указан 1 маршрут

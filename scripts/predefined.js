@@ -145,6 +145,13 @@ $( function() {
 			}
 		},
 		selected:function(callback){
+			
+			if(GMMS.rcu.select.length === 0) 
+			{
+				GMMS.func.log("Объекты связи не выбраны", "error");
+				return false;
+			}
+			
 			for(host of GMMS.rcu.select)
 			{
 				callback(host);
@@ -301,12 +308,10 @@ $( function() {
 						
 					}
 				},
-			monitoring:{
+			monitoring:{ //GMMS.func.rcu.monitoring
+				
 				
 				inputPrimary: function(host, mux){
-					
-				},
-				inputSecondary: function(host, mux){
 					
 					let data = {
 							name: GMMS.rcu.host[host].name, 
@@ -335,7 +340,7 @@ $( function() {
 								cookie: GMMS.rcu.auth[data.host].cookie || false,
 								device: data.response,
 								type_id: 10000,
-								action: "monitoring/modulator/input_secondary"							
+								action: "monitoring/modulator/input_primary"							
 							})
 							.done(function(d){
 								if(!d.error)
@@ -356,11 +361,6 @@ $( function() {
 								GMMS.func.log("Ошибка обращения к API","error", e.host, e);
 								console.error(e);
 							});
-							
-							
-							
-							
-							
 							
 						}
 						else
@@ -440,48 +440,48 @@ $( function() {
 							break;
 						}
 						
-						case "function":{
+						
+						case "monitoring":{
+							
+							
 							
 							switch(route[2])
 							{
-								case "monitoring.inputSecondary":{
+								case "inputPrimary":{
 									
-									let mux = route[3];
 									
-									GMMS.func.selected(function(host){
-										
-										GMMS.func.log("inputSecondary ["+mux+" mux]: "+GMMS.rcu.host[host].name, "log", host);
-										GMMS.func.status("wait",host);
-										GMMS.func.icon("wait",host);		
-										GMMS.func.rcu.monitoring.inputSecondary(host, mux);										
-									});
-									
-									break;
-								}
-								
-								
-								case "replacer.ewsInband":{
-									
-									let state = route[3];
+									//let mux = route[3];
+									let mux = $("input[name=mux]:checked").val();
 									
 									GMMS.func.selected(function(host){
 										
-										GMMS.func.log("Nevion ["+mux+" mux]: "+GMMS.rcu.host[host].name, "log", host);
+										console.log(host);
+										
+										GMMS.func.log("inputPrimary ["+mux+" mux]: "+GMMS.rcu.host[host].name, "log", host);
 										GMMS.func.status("wait",host);
 										GMMS.func.icon("wait",host);		
-										GMMS.func.rcu.monitoring.inputSecondary(host, mux);										
+										GMMS.func.rcu.monitoring.inputPrimary(host, mux);										
 									});
-									
+
 									break;
 								}
-								
+								/*case "":{break;}
+								case "":{break;}
+								case "":{break;}
+								case "":{break;}
+								case "":{break;}
+								case "":{break;}*/
 								default:{
-									
+									console.error("route[2] undefined");
 								}
+								
 							}
-						
+							
 							break;
 						}
+						
+						
+						
 						default:{
 							console.error("route[1] undefined");
 						}

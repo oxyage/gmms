@@ -44,8 +44,9 @@ abstract class Template
 		foreach($this->POST_callback as $i => $value) // AS1; ASI2
 			$this->Info["full"] .= $value."; ";
 			
-		foreach($this->POST_callback as $i => $value) // должен быть  40°; 53°
-			$this->Info["represent"] .= $value."; ";
+		#foreach($this->POST_callback as $i => $value) // должен быть  40°; 53°
+		#	$this->Info["represent"] .= $value."; ";
+		$this->Info["represent"] = $this->POST_represent;
 	}
 	
 	

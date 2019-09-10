@@ -160,7 +160,7 @@
 			<li class="action" data-route="monitoring/inputPrimary/mux-2"><div>2 MUX</div></li>
 		</ul>	
       </li>
-	  <li>
+	  <li class=" ui-state-disabled">
         <div>Входной сигнал передатчика (дополнительный)</div>
 		<ul style="width:130px">
 		
@@ -233,12 +233,20 @@
  
 <div class="accordion" ><!-- start panel select-->
 	<h3>Мониторинг параметров передатчиков</h3>
-	<div style="">
-		<label for="1mux">1 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="1mux" checked value="1" data-route=""> 
-	  
-		<label for="2mux">2 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
+	<div style="padding-bottom:3.5em;">
+		<div style="text-align:center; padding: 0; "> 
+			<label for="1mux">1 мультиплекс</label>
+			<input class="panel-radio" name="mux" type="radio" id="1mux" checked value="1" data-route=""> 
+		  
+			<label for="2mux">2 мультиплекс</label>
+			<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
+		</div>
+		<hr>
+		<button class="panel-button" data-route="rcu/monitoring/inputPrimary" >Основной спутниковый вход </button>
+		
+	
+	
+	
 	
 	</div>
 	<h3>Мониторинг реплейсеров</h3>
@@ -282,7 +290,7 @@
 Выберите объекты связи и авторизуйтесь в них:
 <button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
 
-<button class="panel-button" data-route="rcu/function/monitoring.inputSecondary/1" >Дополнительный вход 1 MUX</button>
+
 <hr>
 
 <label for="show-rts-names">Имена объектов связи</label>

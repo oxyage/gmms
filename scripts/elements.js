@@ -46,7 +46,7 @@ $( function(){
 	$( ".panel-button" ).click( function() {
 		
 		let data = $(this).data();
-		
+	
 		GMMS.func.panelClick(data);
 		
 		
