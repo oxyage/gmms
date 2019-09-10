@@ -201,7 +201,8 @@ switch($Route[0])
 						"cookie"=>@$_REQUEST["cookie"], //для post запроса
 						"type_id"=>$_REQUEST["type_id"], //для подключения шаблона
 						"device"=>@$_REQUEST["device"], //полная запись из таблицы устройства
-						"action"=>$_REQUEST["action"]//действия с устройством напр monitoring/input/1
+						"action"=>$_REQUEST["action"],//действия с устройством напр monitoring/input/1
+						"post_data"=>@$_REQUEST["post_data"]
 						//мультиплекс нужен для ответа
 					);
 				
@@ -214,6 +215,7 @@ switch($Route[0])
 				$RCU = new RCU;
 				$RCU->host = $input["host"];
 				$RCU->cookie = $input["cookie"];
+				$RCU->post_data = $input["post_data"];
 				
 				//создаем экземпляр класса
 				//сразу с действием и доп параметрами
@@ -224,16 +226,26 @@ switch($Route[0])
 				в зависимости от Device->method (snmp or http)
 				*/
 				
+				$sizeof_url = sizeof($Device->POST_url);
+				
+				for($i = 0; $i < $sizeof_url; $i++)
+				{
+					$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
+					$POST = $RCU->post($URL);	
+					$Device->POST_result[$i] = $POST;//полученную страницы записываем
+					if($sizeof_url > 1 and !empty($RCU->post_data)) sleep(10);
+				}
 		
-
+/*
 				//делаем несколько запросов
 				foreach($Device->POST_url as $i => $path)
 				{
 					$URL = $RCU->protocol."://".$RCU->host.$path;
 					$POST = $RCU->post($URL);	
 					$Device->POST_result[$i] = $POST;//полученную страницы записываем
+					sleep(10); //задержка выполнения скрипта на время принятия решения модулятору
 				}
-				
+*/				
 				//после получения всей информации можно запускать callback для обработки этих страниц
 				//$this->POST_result - обходить этот массив
 				// callback должен сам знать что искать
@@ -253,8 +265,8 @@ switch($Route[0])
 				*/
 				
 				//вернуть ответ 
-				#$API($Device);break; //debug
-				$API($Device->Info);
+				$API($Device);break; //debug
+				#$API($Device->Info);
 				break;
 				
 				

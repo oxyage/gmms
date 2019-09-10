@@ -330,11 +330,19 @@ $( function() {
 							if(data.response.length > 1){
 								
 								GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию","warn", data.host, data);
+								return false;
 							}
 							
 							data.response = data.response[0];
 							//теперь можно отправлять запрос на само устройство
 
+							if(typeof GMMS.rcu.auth[data.host] === "undefined" || GMMS.rcu.auth[data.host].cookie === "undefined"){
+								GMMS.func.log(GMMS.rcu.host[data.host].name+": объект не авторизован","error", data.host, data);
+								GMMS.func.status(false,data.host);
+								GMMS.func.icon("error",data.host);
+								return false;
+							}
+							
 							$.post("api.php?route=rcu/device",{
 								host: data.host,
 								cookie: GMMS.rcu.auth[data.host].cookie || false,

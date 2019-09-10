@@ -16,7 +16,7 @@ class RCU
 	
 	public $username;//для текущей авторизации
 	public $userpass;
-	public $cookie;
+	public $cookie = "";
 
 	//информация о последнем curl запросе $request[curl], $request[server]
 	public $request; 
@@ -186,11 +186,12 @@ class RCU
 	}
 	
 	public $url;
-	public $data;
-	public function post($url, $cookie = null, $data = null)
+	public $post_data;
+	public function post($url, $cookie = null, $post_data = null)
 	{
 		if(empty($url))	return new Exception("Отсутствует обязательный параметр 'url'", 20);
 		if(empty($cookie)) $cookie = $this->cookie;
+		if(empty($post_data)) $post_data = $this->post_data;
 		//url - полный адрес страницы с протоколом
 		
 		$curl = curl_init(); // инициализируем CURL
@@ -198,7 +199,7 @@ class RCU
 		curl_setopt($curl, CURLOPT_HEADER, 0); //не включаем заголовок в ответ
 		curl_setopt($curl, CURLOPT_NOBODY, 0); // содержимое страницы нам нужно
 		curl_setopt($curl, CURLOPT_POST, 1); //передаем методом POST
-		curl_setopt($curl, CURLOPT_POSTFIELDS, $data); //передаваемые данные
+		curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data); //передаваемые данные
 		curl_setopt($curl, CURLOPT_COOKIE, $cookie); //куки	
 		curl_setopt($curl, CURLOPT_URL, $url); //адрес
 		$response = curl_exec($curl); //запрос

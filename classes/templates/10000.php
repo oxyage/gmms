@@ -92,6 +92,36 @@ class _10000 extends Template
 				
 				break;
 			}
+			case "get_form":{
+				
+				switch($this->action[1])
+				{
+					case "modulator":{
+				
+							switch($this->action[2])
+							{
+								case "input":{
+									
+									//$this->get_form_modulator_input();
+									
+									break;
+								}
+								default:{
+									$this->Info = "action[2] undefined";
+								}
+							}
+				
+						break;
+					}
+					default:{
+					
+						$this->Info = "action[1] undefined";
+					}
+				}
+				
+				
+				break;
+			}
 			
 			default:{
 				$this->Info = "первое действие не определено";
@@ -122,7 +152,6 @@ class _10000 extends Template
 			
 			$result = array();
 			
-	
 			$array_param = array(
 			"100" => "inpu1TsSource",
 			"250" => "inpu1TsSource",
@@ -132,13 +161,12 @@ class _10000 extends Template
 			"5000" => "primarySource");
 			
 			$power = $device_info["power"];
-			
-			
+
 			foreach($POST_result as $i => $html)
 			{
 				$html = phpQuery::newDocument($html);	
-				$secondary = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
-				$result[] = $secondary;
+				$primary = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
+				$result[] = $primary;
 			}
 
 			return $result;			
@@ -148,9 +176,11 @@ class _10000 extends Template
 
 			$text = $device_info["mux"]." MUX: ";
 			
+			$ASItoSAT = array("ASI1"=>"40°", "ASI 1"=>"40°","ASI2"=>"53°", "ASI 2"=>"53°");
+			
 			foreach($POST_callback as $i => $a)
-			{			
-				$text .= $a."; ";
+			{	
+				$text .= $ASItoSAT[$a]."; ";
 			}
 			
 			return $text;
