@@ -558,7 +558,7 @@ switch($Route[0])
 			{
 				switch($Route[2])//для предустановленного выбора
 				{
-					case "rcu.devices": // db/update/rcu.devices
+					case "rcu": // db/update/devices
 					{
 						//обновить информацию об устройствах в БД
 						

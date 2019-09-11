@@ -17,43 +17,27 @@ $("li.action").click(function(li){
 	{
 		case "auth":
 		{
-
-			let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
-			let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
-			
 			switch(route[1])
 			{
 				case "operator":{
-					window.open("http://"+data.host+"/config/devices/?username=operator&userpass="+operator.userpass,"_blank");				
+					let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
+					GMMS.func.menu.auth.operator(data.host, operator.userpass);			
 					break;
 				}
 				case "admin":{
-					window.open("http://"+data.host+"/config/devices/?username=admin&userpass="+admin.userpass,"_blank");
+					let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
+					GMMS.func.menu.auth.admin(data.host, operator.userpass);		
 					break;
 				}
 				case "check":{
 					
 					GMMS.func.log("Проверка авторизации на "+GMMS.rcu.host[data.host].name,"log",data.host);
 					
-					GMMS.func.checkAuth(data.host)
-					.done(function(d){
-					
-						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" авторизован","info",d.host,d);
-						console.log("-rcu.auth",GMMS.rcu.auth);
-					})
-					.fail(function(e){
-						
-						//если ошибка обращения к API - выходим
-						//если просто не найдены сведения - авторизовываемся
-						if(e.error === 0)
-						{
-							GMMS.func.log("Запись об авторизации не найдена - "+GMMS.rcu.host[e.host].name, "warn", e.host, e);
-						}
-						else {
-							GMMS.func.log("Ошибка обращения к API","error",e.host,e);
-						}
-					});
-					
+					if(!GMMS.func.menu.auth.check(data.host))	{
+						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" не авторизован","warn",data.host);
+					} else {
+						GMMS.func.log("Хост "+GMMS.rcu.host[data.host].name+" авторизован","info",data.host);
+					}
 					
 					break;
 				}
@@ -64,171 +48,218 @@ $("li.action").click(function(li){
 					GMMS.func.icon("wait",data.host);					
 					
 					GMMS.func.auth(data.host)
-					.done(function(d){
+					.done(function(done_auth){
 						
-						if(!d.error)
+						if(!done_auth.error)
 						{
-							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, "info", d.host, d);
-							GMMS.rcu.auth[d.host] = d.response;
-							//сохраняем в БД
-							GMMS.func.connection.set(d.host);
-							GMMS.func.status(false,d.host);
-							GMMS.func.icon("ready",d.host);
-							console.log(GMMS.rcu.auth);
+							GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[done_auth.host].name, "info", done_auth.host, done_auth);
+						
+							GMMS.rcu.auth[done_auth.host] = done_auth.response;
+							GMMS.func.connection.set(done_auth.host);//сохраняем в БД
+							
+							GMMS.func.status(false,done_auth.host);
+							GMMS.func.icon("ready",done_auth.host);
+							console.log("GMMS.rcu.auth: ",GMMS.rcu.auth);
 						}
 						else
 						{
-							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn",d.host,d);
-							GMMS.func.status(false,d.host);
-							GMMS.func.icon("error",d.host);
-							console.warn(d);
+							GMMS.func.log("Ошибка скрытой авторизации "+GMMS.rcu.host[done_auth.host]["name"]+" (#"+done_auth.error+")",
+																							"warn",	done_auth.host,done_auth);
+							GMMS.func.status(false,done_auth.host);
+							GMMS.func.icon("error",done_auth.host);
 						}
 						
 					})
-					.fail(function(e){
-						GMMS.func.log("Ошибка обращения к API","error",e.host,e);
-						console.error(e);
+					.fail(function(fail_auth){
+						GMMS.func.log("Ошибка обращения к API при авторизации", "error", fail_auth.host, fail_auth);
 					});
 					break;
 				}
 				default:{
-					window.open("http://"+data.host+"/config/devices/","_blank");
+					GMMS.func.menu.blank(data.host);
 				}
-				
-			}
-			break;
-		}
-		case "function":
-		{
-			
-			GMMS.func.status("wait",data.host);
-			GMMS.func.icon("wait",data.host);
-			
-			if(!GMMS.func.checkAuth(data.host))
-			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,"error",data.host);
-				GMMS.func.status(false,data.host);
-				GMMS.func.icon("error",data.host);
-				break;
-			}
-			/*
-			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
-			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,true,"error");
-				GMMS.func.status(false,data.host);
-				GMMS.func.icon("error",data.host);
-				break;
-			}
-			*/
-			
-			switch(route[1])
-			{
-				case "rcu":
-				{
-					switch(route[2])
-					{
-						case "devices.update":
-						{
-							GMMS.func.rcu.function.devices.update(data.host);				
-
-							break;
-						}
-						
-						
-					}
-					
-					break;
-				}
-				default:{
-					
-				}
-			}
-				
-				
-	
-			
-			break;
-		}
-		case "monitoring":
-		{
-			GMMS.func.status("wait",data.host);
-			GMMS.func.icon("wait",data.host);
-			
-			if(typeof GMMS.rcu.auth[data.host] === "undefined" || typeof GMMS.rcu.auth[data.host].cookie === "undefined")
-			{
-				GMMS.func.log("Нет данных об авторизации "+data.name,"error", data.host);
-				GMMS.func.status(false,data.host);
-				GMMS.func.icon("error",data.host);
-				//break;
-			}
-			
-			/*
-			
-			тут же добавить проверку авторизации
-			
-			*/
-			
-			switch(route[1]) //  monitoring/*
-			{
-				/*
-				добавлять новые режимы мониторинга
-				*/
-				
-				case "sfn":{
-					
-					let mux = route[2].split("-")[1];
-					
-					
-					break;
-				}
-				case "inputPrimary":{
-					
-					let mux = route[2].split("-")[1];
-					GMMS.func.rcu.monitoring.inputPrimary(data.host, mux);
-					
-					break;
-				}
-				case "inputSecondary":{
-					
-					let mux = route[2].split("-")[1];
-					GMMS.func.rcu.monitoring.inputSecondary(data.host, mux);
-					
-					break;
-				}
-			
-				case "complex":{
-					
-					console.log("Комплексный мониторинг");
-					
-					break;
-				}
-			
-			
-				default:{
-					console.warn("route[1] is undefined");
-					console.log(route);
-				}
-				
 				
 			}
 			break;
 		}
 		
+		case "rcu":
+		{
+			
+			GMMS.func.status("wait", data.host);
+			GMMS.func.icon("wait", data.host);
+			
+			switch(route[1]) // rcu/*
+			{
+				case "devices": //  rcu/devices
+				{
+					switch(route[2])  //  rcu/devices/*
+					{
+						case "update": //  rcu/devices/update
+						{
+							GMMS.func.log("Обновляем устройства СДК "+data.name);
+							
+							GMMS.func.rcu.devices.parse(data.host)//парсим устройства
+							.done(function(done_parse){
+								
+								if(!done_parse.error)
+								{
+									GMMS.func.log("Успешно обновлены "+done_parse.response.count+" устройств(а) "+GMMS.rcu.host[done_parse.host]["name"],"info", done_parse.host, done_parse);
+									
+									GMMS.func.status(false,done_parse.host);
+									GMMS.func.icon("ready",done_parse.host);
+
+									/*обновить в БД*/			
+									GMMS.func.db.update.rcu.devices(done_parse.host, {
+										rcu_name: done_parse.response.rcu_name,
+										devices_hash: done_parse.response.devices_hash,
+										devices_table: done_parse.response.devices_table	
+									})
+									.done(function(done_update){
+										if(done_update.error !== 0)	{
+										
+										GMMS.func.log("Ошибка обновления устройств(а) в БД "+GMMS.rcu.host[done_update.host]["name"],"warn", done_update.host, done_update);
+										
+										}
+									});
+									.fail(function(fail_update){
+										GMMS.func.log("Ошибка обращения к API при обновлении устройств","error", fail_update.host, fail_update);
+									});
+									
+								}
+								else
+								{
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[done_parse.host]["name"]+" (#"+done_parse.error+")","info", done_parse.host, done_parse);
+									GMMS.func.status(false,done_parse.host);
+									GMMS.func.icon("error",done_parse.host);
+								}				
+							})
+							.fail(function(fail_parse){
+								GMMS.func.log("Ошибка обращения к API при парсинге устройств", "error", fail_parse.host, fail_parse);
+								GMMS.func.status(false, fail_parse.host);
+								GMMS.func.icon("error", fail_parse.host);
+								
+							});					
+
+							break;
+						}
+						default:{
+							
+							GMMS.func.log("Route[2] rcu/devices/[*] is undefined", "warn", false, route);
+						}
+					}
+					
+					break;
+				}
+				case "monitoring":{ //rcu/monitoring
+					
+					
+					switch(route[2]) //  rcu/monitoring/*
+					{
+						case "inputPrimary":
+						{
+						
+							let mux = route[2].split("-")[1];
+
+							//находим устройство
+							GMMS.func.db.select.device(data.host, {func:"Передатчик", mux: mux})
+							.done(function(done_select){
+								
+								if(!done_select.error)
+								{
+									if(done_select.response.length > 1){
+										
+										GMMS.func.log(done_select.host+" Загружено более двух устройств по одному критерию", 
+																							"warn", done_select.host, done_select);
+										return false;
+									}
+									
+									done_select.response = done_select.response[0];
+									
+									//отправляем действие на шаблон
+									GMMS.func.rcu.device(done_select.host, {
+										cookie: GMMS.rcu.auth[done_select.host].cookie,
+										device: done_select.response,
+										type_id: done_select.response.type_id,
+										action: "monitoring/modulator/input_primary"
+										
+									})
+									.done(function(done_action){
+										if(!done_action.error)
+										{
+											GMMS.func.log(GMMS.rcu.host[done_action.host].name+": "+done_action.response.Info.represent,
+																"info", done_action.host, done_action);
+											GMMS.func.status(done_action.response.Info.represent, done_action.host);
+											GMMS.func.icon("ready",done_action.host);
+										}
+										else
+										{
+											GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[done_action.host]["name"]+" (#"+done_action.error+")",
+																"warn", done_action.host, done_action);
+											GMMS.func.status(false,done_action.host);
+											GMMS.func.icon("error",done_action.host);
+										}				
+									})
+									.fail(function(fail_action){
+										GMMS.func.log("Ошибка обращения к API при работе устройством", "error", fail_action.host, fail_action);
+									});
+								}
+								else
+								{
+									GMMS.func.log("Ошибка получения устройства из БД "+GMMS.rcu.host[done_select.host]["name"]+" (#"+done_select.error+")",
+																							"warn", done_select.host, done_select);
+									GMMS.func.status(false,done_select.host);
+									GMMS.func.icon("error",done_select.host);
+								}
+							})
+							.fail(function(fail_select){ //не нашли устройство в БД
+								
+								GMMS.func.log("Ошибка обращения к API при выборе устройств из БД", "error", fail_select.host, fail_select);
+								GMMS.func.status(false,fail_select.host);
+								GMMS.func.icon("error",fail_select.host);
+							});
+								
+
+						
+						break;
+						} // end InputPrimary
+					
+				
+						case "complex":{
+							
+							console.log("Комплексный мониторинг");
+							
+							break;
+						}
+						default:{
+							
+							GMMS.func.log("Route[2] rcu/monitoring/[*] is undefined", "warn", false, route);
+						}
+						
+					}
+					break;
+				}
+				
+				
+				
+				
+				default:{
+					GMMS.func.log("Route[1] rcu/[*] is undefined", "warn", false, route);	
+				}
+			}
+				
+				
+	
+			
+			break;
+		}		
 		default:{
-			console.warn("route[0] is undefined");
-			console.log(route);
+			GMMS.func.log("Route[0] is undefined", "warn", false, route);	
 		}
 	}
-	
-	//console.log(		$(this).data()		);
 });
 
 /* end действия на кликах меню*/
-
-
-
-/* обновить устройства в таблице rcu */
-
 
 
 

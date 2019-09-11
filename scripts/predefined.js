@@ -1,171 +1,105 @@
 /* 
-предустановленные переменные
+route 
 */
 $( function() {
 	
-	GMMS.config = { //конфигурационные параметры
-		
-		autoAuth: true
-		
-	},
-	GMMS.journal = [], //журнал
+	
 	GMMS.func = {
-		
-		
-		
-		devices:{
-			load: function(){ //загрузить все из БД
-				return $.post("api.php?route=db/select/devices");
-			}
-		},
-		//GMMS.func.rcu 
-		rcu:{
-			function:{
+		menu:{
+			auth:{
+				operator: function(host, userpass){
+					window.open("http://"+host+"/config/devices/?username=operator&userpass="+userpass,"_blank");	
+					return true;
+				},
+				admin: function(host, userpass){
+					window.open("http://"+host+"/config/devices/?username=admin&userpass="+userpass,"_blank");
+					return true;
+				},
+				check: function(host){
+				
+					if(typeof GMMS.rcu.auth[host] === "object" && typeof GMMS.rcu.auth[host].cookie === "string")
+					{
+						return true;
+					}	
+					return false;
+				},
+				blank: function(host){
+					window.open("http://"+host+"/config/devices/","_blank");
+					return true;
+				}
+			},
+			rcu:{
 				devices:{
-					update: function(host){
-						
-						let data = {
-							name: GMMS.rcu.host[host].name, 
-							host: host
-						};
-						
-						//console.log("Будем обновлять устройства в таблицах");
-						//console.log("Первым делом таблица RCU");
-						
-						GMMS.func.log("Обновляем устройства СДК "+data.name);
-						
-						$.post("api.php?route=rcu/parse",{
-							host: data.host,
-							cookie: GMMS.rcu.auth[data.host].cookie
-							
-						})
-						.done(function(d){
-							if(!d.error)
-							{
-								GMMS.func.log("Успешно обновлены "+d.response.count+" устройств(а) "+GMMS.rcu.host[d.host]["name"],"info", d.host, d);
-								
-								
-								
-								/*обновить в БД*/
-								GMMS.func.status(false,d.host);
-								GMMS.func.icon("ready",d.host);
-								
-								$.post("api.php?route=db/update/rcu.devices",{
-									host: d.host,
-									rcu_name: d.response.rcu_name,
-									devices_hash: d.response.devices_hash,
-									devices_table: d.response.devices_table})
-								.done(function(){})
-								.fail(function(e){
-									console.log(d.host+": не удалось обновить устройства в БД");
-								});
-								
-							}
-							else
-							{
-								GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","info", d.host, d);
-								GMMS.func.status(false,d.host);
-								GMMS.func.icon("error",d.host);
-								console.warn(d);
-							}				
-						})
-						.fail(function(e){
-							GMMS.func.log("Ошибка обращения к API","error",e.host,e);
-							console.error(e);
-						});
-						
-						}
-						
+
+					parse: function(host){
+						return $.post("api.php?route=rcu/parse",{
+								host: host,
+								cookie: GMMS.rcu.auth[host].cookie});
 					}
 				},
-			monitoring:{ //GMMS.func.rcu.monitoring
-				
-				
-				inputPrimary: function(host, mux){
-					
-					let data = {
-							name: GMMS.rcu.host[host].name, 
-							host: host
-						};
-
-					//находим устройство
-					$.post("api.php?route=db/select/device",{
-						host: data.host,
-						func: "Передатчик",
-						mux: mux
-					})
-					.done(function(data){
-						if(!data.error)
-						{
-							if(data.response.length > 1){
-								
-								GMMS.func.log(data.host+" Загружено более двух устройств по одному критерию","warn", data.host, data);
-								return false;
-							}
-							
-							data.response = data.response[0];
-							//теперь можно отправлять запрос на само устройство
-
-							if(typeof GMMS.rcu.auth[data.host] === "undefined" || GMMS.rcu.auth[data.host].cookie === "undefined"){
-								GMMS.func.log(GMMS.rcu.host[data.host].name+": объект не авторизован","error", data.host, data);
-								GMMS.func.status(false,data.host);
-								GMMS.func.icon("error",data.host);
-								return false;
-							}
-							
-							$.post("api.php?route=rcu/device",{
-								host: data.host,
-								cookie: GMMS.rcu.auth[data.host].cookie || false,
-								device: data.response,
-								type_id: 10000,
-								action: "monitoring/modulator/input_primary"							
-							})
-							.done(function(d){
-								if(!d.error)
-								{
-									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response.Info.represent,"info", d.host, d);
-									GMMS.func.status(d.response.Info.represent, d.host);
-									GMMS.func.icon("ready",d.host);
-								}
-								else
-								{
-									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn", d.host, d);
-									GMMS.func.status(false,d.host);
-									GMMS.func.icon("error",d.host);
-									console.warn(d);
-								}				
-							})
-							.fail(function(e){
-								GMMS.func.log("Ошибка обращения к API","error", e.host, e);
-								console.error(e);
-							});
-							
-						}
-						else
-						{
-							GMMS.func.log("Не могу получить устройства из БД "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn", d.host, d);
-							GMMS.func.status(false,d.host);
-							GMMS.func.icon("error",d.host);
-							console.warn(d);
-						}
-					})
-					.fail(function(e){
-						
-						GMMS.func.log("Ошибка обращения к API","error", e.host,e);
-						console.error(e);
-						
-					});
-					
-					/*
+				monitoring:{
 					
 					
-					*/
+					
 					
 				}
-			}
-
 		
+			}
+			
+			
+			
 		},
+		
+		db:{
+			update:{
+				rcu: {
+					devices:function(host, device_info){
+					
+						return $.post("api.php?route=db/update/rcu",{
+								host: host,
+								rcu_name: device_info.rcu_name,
+								devices_hash: device_info.devices_hash,
+								devices_table: device_info.devices_table});
+
+						}	
+				}
+			},
+			select:{
+				device: function(host, device_info){
+					
+					return $.post("api.php?route=db/select/device",{
+									host: host,
+									func: device_info.func,
+									mux: device_info.mux
+								});
+				}
+			}
+		},
+		
+		rcu:{
+			device: function(host, device_info)
+			{
+				return $.post("api.php?route=rcu/device",{
+					host: host,
+					cookie: device_info.cookie,
+					device: device_info.device,
+					type_id: device_info.type_id,
+					action: device_info.action							
+				});
+			}
+			
+		}
+		
+/*
+
+route[0]:
+menu
+db
+rcu
+
+*/
+		
+
 		panelClick:function(data){
 			
 			let route = data.route.split("/");
@@ -281,19 +215,8 @@ $( function() {
 			
 			
 		}
-	},
-	/* предустановленные rcu */
-	GMMS.rcu = {
-		host: {}, //список по хостам
-		list: {}, //список
-		sfn: {
-			host:{}, //список по зонам по хостам
-			list:{}
-		},
-		select: [], //выбранные объекты
-		deferred:{}, //deferred объекты для запросов
-		auth:{}, //авторизованные хосты
-		devices:{} //устройства
 	}
+	/* предустановленные rcu */
+	
 	
 })
