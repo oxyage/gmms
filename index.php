@@ -41,6 +41,9 @@
 	<!-- События на странице -->
 	<script type="text/javascript" src="scripts/events.js?<?=time()?>"></script>
 	
+	<!-- Кнопки на панели управления -->
+	<script type="text/javascript" src="scripts/panel.js?<?=time()?>"></script>
+	
 	<!-- Меню объекта связи и действия с ним -->
 	<script type="text/javascript" src="scripts/menu.js?<?=time()?>"></script>
 	
@@ -138,8 +141,8 @@
 	
 	<!-- Параметры -> -->
 	<li class="ui-widget-header"><div>Функции</div></li>
-		<li class="action ui-state-disabled" data-route="function/devices/update"> <div><span class="ui-icon ui-icon-arrowreturn-1-s"></span>Обновить устройства</div></li>
-		<li class="action" data-route="function/rcu/devices.update"> <div><span class="ui-icon ui-icon-refresh"></span>Обновить таблицу СДК</div></li>
+		<li class="action ui-state-disabled" data-route="rcu/devices/update"> <div><span class="ui-icon ui-icon-arrowreturn-1-s"></span>Обновить устройства</div></li>
+		<li class="action" data-route="rcu/table/update"> <div><span class="ui-icon ui-icon-refresh"></span>Обновить таблицу СДК</div></li>
 		<li class="action ui-state-disabled" data-route="function/connection/clear"><div>Сбросить соединение</div></li>
 		<li class="action ui-state-disabled" data-route="auth/check"><div><span class=""></span>Проверка авторизации</div></li>
 		<li class="action" data-route="auth/quiet"><div><span class="ui-icon ui-icon-key"></span>Скрытая авторизация</div></li>
@@ -160,8 +163,8 @@
 		
 			<!-- Выбор мультиплекса -->
 			<li class="ui-widget-header"><div>Мультиплекс</div></li>
-			<li class="action" data-route="monitoring/inputPrimary/mux-1"><div>1 MUX</div></li>
-			<li class="action" data-route="monitoring/inputPrimary/mux-2"><div>2 MUX</div></li>
+			<li class="action" data-route="rcu/monitoring/inputPrimary/1"><div>1 MUX</div></li>
+			<li class="action" data-route="rcu/monitoring/inputPrimary/2"><div>2 MUX</div></li>
 		</ul>	
       </li>
 	  <li class=" ui-state-disabled">
@@ -286,6 +289,10 @@
 
   </div>
   <div id="panel-tabs-sunoutage">
+  
+	<button class="panel-button" data-route="rcu/monitoring/qoo" >Основной спутниковый вход </button>
+  
+  
     Переход на 53 и 40 градус раздельно по мультиплексам
   </div>
   <div id="panel-tabs-additional">

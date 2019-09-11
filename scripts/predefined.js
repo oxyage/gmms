@@ -28,8 +28,8 @@ $( function() {
 					return true;
 				}
 			},
-			rcu:{
-				devices:{
+			rcu:{ // GMMS.func.menu.rcu
+				table:{ // GMMS.func.menu.rcu.table
 
 					parse: function(host){
 						return $.post("api.php?route=rcu/parse",{
@@ -37,8 +37,21 @@ $( function() {
 								cookie: GMMS.rcu.auth[host].cookie});
 					}
 				},
-				monitoring:{
+				monitoring:{// GMMS.func.menu.rcu.monitoring
 					
+					inputPrimary:function(host, device_info){// GMMS.func.menu.rcu.monitoring.inputPrimary
+					
+						return $.post("api.php?route=rcu/monitoring/inputPrimary",{
+							
+							
+							cookie: device_info.cookie,
+							mux: device_info.mux
+							
+						});
+					
+						
+						
+					}
 					
 					
 					
@@ -88,7 +101,7 @@ $( function() {
 				});
 			}
 			
-		}
+		},
 		
 /*
 

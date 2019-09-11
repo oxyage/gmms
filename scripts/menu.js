@@ -91,15 +91,15 @@ $("li.action").click(function(li){
 			
 			switch(route[1]) // rcu/*
 			{
-				case "devices": //  rcu/devices
+				case "table": //  rcu/table
 				{
-					switch(route[2])  //  rcu/devices/*
+					switch(route[2])  //  rcu/table/*
 					{
-						case "update": //  rcu/devices/update
+						case "update": //  rcu/table/update
 						{
-							GMMS.func.log("Обновляем устройства СДК "+data.name);
+							GMMS.func.log("Обновляем таблицу устройства СДК "+data.name);
 							
-							GMMS.func.rcu.devices.parse(data.host)//парсим устройства
+							GMMS.func.menu.rcu.table.parse(data.host)//парсим устройства
 							.done(function(done_parse){
 								
 								if(!done_parse.error)
@@ -121,7 +121,7 @@ $("li.action").click(function(li){
 										GMMS.func.log("Ошибка обновления устройств(а) в БД "+GMMS.rcu.host[done_update.host]["name"],"warn", done_update.host, done_update);
 										
 										}
-									});
+									})
 									.fail(function(fail_update){
 										GMMS.func.log("Ошибка обращения к API при обновлении устройств","error", fail_update.host, fail_update);
 									});
@@ -159,11 +159,19 @@ $("li.action").click(function(li){
 						case "inputPrimary":
 						{
 						
-							let mux = route[2].split("-")[1];
+							let mux = parseInt(route[3]);
+
+							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {mux: mux});
+
+
+							break;
+
 
 							//находим устройство
 							GMMS.func.db.select.device(data.host, {func:"Передатчик", mux: mux})
 							.done(function(done_select){
+								
+	
 								
 								if(!done_select.error)
 								{

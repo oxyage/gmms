@@ -43,15 +43,7 @@ $( function(){
 	});
 	
 	$( ".panel-button" ).button();
-	$( ".panel-button" ).click( function() {
-		
-		let data = $(this).data();
-	
-		GMMS.func.panelClick(data);
-		
-		
-		
-    });
+
 	
 	/* кнопки показать имена РТС */
 	$( "#show-rts-names" ).checkboxradio({
