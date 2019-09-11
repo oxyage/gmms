@@ -148,9 +148,20 @@ $( function() {
 			
 			if(GMMS.rcu.select.length === 0) 
 			{
-				GMMS.func.log("Объекты связи не выбраны", "error");
-				return false;
+				if(Object.keys(GMMS.rcu.auth).length < 1){
+					GMMS.func.log("Объекты связи не выбраны", "error");
+					return false;
+				}
+				else{
+					GMMS.func.log("Запускаем команду на авторизованных объектах связи", "warn");
+					for(host of Object.keys(GMMS.rcu.auth))
+					{
+						callback(host);
+					}
+					return true;
+				}
 			}
+			
 			
 			for(host of GMMS.rcu.select)
 			{
@@ -353,8 +364,8 @@ $( function() {
 							.done(function(d){
 								if(!d.error)
 								{
-									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response.represent,"info", d.host, d);
-									GMMS.func.status(d.response.represent, d.host);
+									GMMS.func.log(GMMS.rcu.host[d.host].name+": "+d.response.Info.represent,"info", d.host, d);
+									GMMS.func.status(d.response.Info.represent, d.host);
 									GMMS.func.icon("ready",d.host);
 								}
 								else
@@ -488,6 +499,11 @@ $( function() {
 							break;
 						}
 						
+						case "updateStatus":{
+						
+							GMMS.func.status();						
+							break;
+						}
 						
 						
 						default:{

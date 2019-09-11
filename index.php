@@ -291,11 +291,12 @@
 Выберите объекты связи и авторизуйтесь в них:
 <button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
 
+<button class="panel-button" data-route="rcu/updateStatus" >Показать имена РТС</button>
 
 <hr>
-
+<!--
 <label for="show-rts-names">Имена объектов связи</label>
-<input type="checkbox" name="" id="show-rts-names"> 
+<input type="checkbox" name="" id="show-rts-names"> -->
 
 <br>
 <br>

@@ -238,6 +238,7 @@ $( function() { /* события на странице*/
 	/* нажатие на кнопку Показать имена РТС */
 	$('#show-rts-names').click(function(){
 		
+		
 		if ($(this).is(':checked')){
 			$.cookie("rts-names", 0);
 			$("div.rts .name").hide();
