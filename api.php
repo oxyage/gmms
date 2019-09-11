@@ -103,15 +103,20 @@ switch($Route[0])
 				//запросили авторизацию получили заголовки
 				$RCU->headers = $RCU->auth(); //
 				//обработали заголовки
-				$RCU->headers = $RCU->get_headers($RCU->headers);
-				//выделяем куки
+				$RCU->headers = $RCU->get_headers($RCU->headers);	
+					
+				if($RCU->headers instanceof Exception)	{	
+					$API($RCU->headers);	break;
+				}
+			
+			//выделяем куки
 				$RCU->cookie = $RCU->get_cookie($RCU->headers);
 				//сохраняем соединение
 				$RCU->set_connection();
 				//выдали ответ пользователю
 				$API($RCU->connection);
 				#$API($RCU->headers);
-			
+
 				
 				break;
 			}
@@ -706,7 +711,7 @@ class API
 	{
 		if($a instanceof Exception)
 		{
-			$this->error = $a->getCode();
+			$this->error = ($a->getCode() == 0) ? -999 : $a->getCode();
 			$this->response = array(
 				"message" => $a->getMessage(), 
 				"file" => $a->getFile(), 

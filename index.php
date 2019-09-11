@@ -32,6 +32,9 @@
 	<!-- Предустановленные переменные и функции -->
 	<script type="text/javascript" src="scripts/predefined.js?<?=time()?>"></script>
 	
+	<!-- Элементарные функции -->
+	<script type="text/javascript" src="scripts/functions.js?<?=time()?>"></script>
+	
 	<!-- Активация элементов на странице -->
 	<script type="text/javascript" src="scripts/elements.js?<?=time()?>"></script>
 	

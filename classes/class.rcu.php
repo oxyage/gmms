@@ -106,7 +106,7 @@ class RCU
 	}
 	
 	//функция обработки заголовков API::get_headers($httpheader)
-	public static function get_headers($responseHeaders)
+	/*public static function get_headers($responseHeaders)
 	{
 		if(empty($responseHeaders) or !is_string($responseHeaders)) //проверка входных данных
 		{
@@ -117,6 +117,69 @@ class RCU
 		
 		//первым делом делим несколько ответных заголовков
 		$responseHeaders = explode("\n\r\n", trim($responseHeaders));//разделяем несколько ответов
+		
+		
+		//sizeof(responseHeaders) равен количеству ответов от сервера (групп заголовков)
+		// проходим по массиву ответа где group - это номер группы заголовков
+		// textHeaders - неразделенный текст заголовков
+		foreach($responseHeaders as $group => $textHeaders) 
+		{
+			$arrayHeaders = explode("\n", trim($textHeaders));//разделяем заголовки из группы на строки
+			
+			$headers[$group] = array();
+			foreach($arrayHeaders as $s => $string) //проходим по массиву где s это строка с заголовком 
+			{
+				if(strstr($string, "HTTP/1.1") !== FALSE)
+				{
+					$headers[$group]['http'] = $string;//статус ответа	
+					continue;
+				}
+								
+				$string = explode(":",$string, 2); //разделяем строку заголовка по первому двоеточию
+			
+				$name = strtolower(trim($string[0])); //переводим в нижний регистр имя заголовка
+				$header = trim($string[1]); // сам заголовок
+								
+				if(!array_key_exists($name, $headers[$group]))	//если заголовка нет в массиве - добавляем
+				{
+					$headers[$group][$name] = $header; //убираем пробелы из значения и кладем в массив
+				}
+				else								//если заголовок уже есть в массиве
+				{
+					if(!is_array($headers[$group][$name]))	    //если еще не массив 
+						$headers[$group][$name] = array($headers[$group][$name]);    //делаем массив
+					array_push($headers[$group][$name], $header); //кладем в массив
+				}
+			}
+		}
+
+
+		return $headers; //возвращаем массив с заголовками вида [header]=>value
+	}
+	*/
+	
+	
+	public static function get_headers($responseHeaders)
+	{
+		if(empty($responseHeaders) or !is_string($responseHeaders)) //проверка входных данных
+		{
+			return new Exception("Входные данные функции не являются строкой или строка пустая");
+		}
+		
+		$headers = array();//массив с заголовками которые вернем в результате функции
+		
+		if(strstr($responseHeaders, "HTTP/1.1 302 Found") === FALSE)
+		{
+			return new Exception("При авторизации не получен ожидаемый заголовок 302 Found");
+		}
+				
+		
+		$responseHeaders = preg_split('/(\r?\n){2}/', $responseHeaders, 2);
+		foreach($responseHeaders as $group => $textHeaders) 
+		{
+			$headers[$group] = preg_split("/\r?\n/", trim($textHeaders));
+	
+		}
 		
 		//sizeof(responseHeaders) равен количеству ответов от сервера (групп заголовков)
 		// проходим по массиву ответа где group - это номер группы заголовков
@@ -157,6 +220,7 @@ class RCU
 	}
 	
 	
+	
 	//метод для авторизации
 	public function auth()
 	{
@@ -166,7 +230,7 @@ class RCU
 		$curl = curl_init(); // инициализируем CURL
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); //возврат результата передачи в качестве строки
 		curl_setopt($curl, CURLOPT_HEADER, 1); //включаем заголовок в ответ
-		curl_setopt($curl, CURLOPT_NOBODY, 1); // содержимое страницы нам не нужно
+		curl_setopt($curl, CURLOPT_NOBODY, 0); // содержимое страницы нам не нужно
 		curl_setopt($curl, CURLOPT_POST, 1); //передаем методом POST
 		curl_setopt($curl, CURLOPT_POSTFIELDS, array("username"=>$this->username, "userpass"=>$this->userpass));
 		curl_setopt($curl, CURLOPT_COOKIEJAR, __DIR__."tmp/cookie_".$this->host.".cookie");
