@@ -1,3 +1,26 @@
+-- phpMyAdmin SQL Dump
+-- version 4.1.8
+-- http://www.phpmyadmin.net
+--
+-- Хост: localhost
+-- Время создания: Сен 11 2019 г., 15:40
+-- Версия сервера: 5.6.12-log
+-- Версия PHP: 5.4.20
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- База данных: `gmms`
+--
+
+-- --------------------------------------------------------
 
 --
 -- Структура таблицы `devices`
@@ -468,4 +491,6 @@ INSERT INTO `devices` (`uid`, `host`, `id`, `name`, `type`, `type_id`, `type_nam
 (438, '10.32.31.2', 13, 'Тюнер TRK-575 1 МП 53 град. резерв', 'Спутниковый приемник "RTM"', 35250, 'Спутниковый приемник RTM', 0, NULL, 3118, 5013, '/config/trk/?id=13', '51', '2019-03-11 07:35:41'),
 (439, '10.32.31.2', 14, 'VSAT Модем', 'Универсальное SNMP-устройство', 30005, 'Null Device (100620)', 0, NULL, 0, 5014, '/config/snmp_device/?id=14', '52', '2019-02-25 11:11:47');
 
--- --------------------------------------------------------
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -161,7 +161,15 @@ $("li.action").click(function(li){
 						
 							let mux = parseInt(route[3]);
 
-							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {mux: mux});
+							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {mux: mux})
+							.done(function(done_monitoring){
+								
+								
+							})
+							.fail(function(fail_monitoring){
+								
+								
+							});
 
 
 							break;
