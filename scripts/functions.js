@@ -214,7 +214,7 @@ $( function() { /* только предустановленные функци�
 
 		
 		return GMMS.rcu.deferred[host].autoAuth;
-	}
+	},
 	
 	
 	
@@ -248,7 +248,12 @@ $( function() { /* только предустановленные функци�
 	
 	GMMS.func.api = function(data){
 		return $.post("api.php?route="+data.route, data);
+	},
+	
+	GMMS.func.checkCookie = function(host){
+		return typeof GMMS.rcu.auth[host] === "object" && typeof GMMS.rcu.auth[host].cookie === "string" && GMMS.rcu.auth[data.host].cookie;
 	}
+
 
 	
 		

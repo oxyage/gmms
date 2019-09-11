@@ -52,6 +52,8 @@ class db
 	
 	public function fetch_assoc($result_sql)
 	{
+		if(mysql_num_rows($result_sql) == 1)	return mysql_fetch_assoc($result_sql);
+			
 		$result = array();
 		while($row = mysql_fetch_assoc($result_sql))
 		{
@@ -60,6 +62,15 @@ class db
 		return $result;
 	}
 	
+	public function num_rows($result_sql) // SELECT
+	{
+		return mysql_num_rows($result_sql);
+	}
+	
+	public function affected_rows($result_sql) // INSERT, UPDATE
+	{
+		return mysql_affected_rows($result_sql);
+	}
 	
 	
 	/* обработка запросов БД для rcu */

@@ -158,15 +158,22 @@ $("li.action").click(function(li){
 					{
 						case "inputPrimary":
 						{
-						
-							let mux = parseInt(route[3]);
-
-							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {mux: mux})
-							.done(function(done_monitoring){
+							
+							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {
+								cookie: GMMS.func.checkCookie(data.host),
+								mux: typeof route[3] === "string" && parseInt(route[3]) || 1
+							})
+							.done(function(done_inputPrimary){
 								
+								GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+done_inputPrimary.response.Info.represent,
+													"info", done_inputPrimary.host, done_inputPrimary);
+													
+								GMMS.func.status(done_inputPrimary.response.Info.represent, done_inputPrimary.host);
+								
+								GMMS.func.icon("ready",done_inputPrimary.host);
 								
 							})
-							.fail(function(fail_monitoring){
+							.fail(function(fail_inputPrimary){
 								
 								
 							});
@@ -175,65 +182,7 @@ $("li.action").click(function(li){
 							break;
 
 
-							//находим устройство
-							GMMS.func.db.select.device(data.host, {func:"Передатчик", mux: mux})
-							.done(function(done_select){
-								
-	
-								
-								if(!done_select.error)
-								{
-									if(done_select.response.length > 1){
-										
-										GMMS.func.log(done_select.host+" Загружено более двух устройств по одному критерию", 
-																							"warn", done_select.host, done_select);
-										return false;
-									}
-									
-									done_select.response = done_select.response[0];
-									
-									//отправляем действие на шаблон
-									GMMS.func.rcu.device(done_select.host, {
-										cookie: GMMS.rcu.auth[done_select.host].cookie,
-										device: done_select.response,
-										type_id: done_select.response.type_id,
-										action: "monitoring/modulator/input_primary"
-										
-									})
-									.done(function(done_action){
-										if(!done_action.error)
-										{
-											GMMS.func.log(GMMS.rcu.host[done_action.host].name+": "+done_action.response.Info.represent,
-																"info", done_action.host, done_action);
-											GMMS.func.status(done_action.response.Info.represent, done_action.host);
-											GMMS.func.icon("ready",done_action.host);
-										}
-										else
-										{
-											GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[done_action.host]["name"]+" (#"+done_action.error+")",
-																"warn", done_action.host, done_action);
-											GMMS.func.status(false,done_action.host);
-											GMMS.func.icon("error",done_action.host);
-										}				
-									})
-									.fail(function(fail_action){
-										GMMS.func.log("Ошибка обращения к API при работе устройством", "error", fail_action.host, fail_action);
-									});
-								}
-								else
-								{
-									GMMS.func.log("Ошибка получения устройства из БД "+GMMS.rcu.host[done_select.host]["name"]+" (#"+done_select.error+")",
-																							"warn", done_select.host, done_select);
-									GMMS.func.status(false,done_select.host);
-									GMMS.func.icon("error",done_select.host);
-								}
-							})
-							.fail(function(fail_select){ //не нашли устройство в БД
-								
-								GMMS.func.log("Ошибка обращения к API при выборе устройств из БД", "error", fail_select.host, fail_select);
-								GMMS.func.status(false,fail_select.host);
-								GMMS.func.icon("error",fail_select.host);
-							});
+							
 								
 
 						

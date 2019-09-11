@@ -34,35 +34,26 @@ $( function() {
 					parse: function(host){
 						return $.post("api.php?route=rcu/parse",{
 								host: host,
-								cookie: GMMS.rcu.auth[host].cookie});
+								cookie: GMMS.func.checkCookie(host)});
 					}
 				},
 				monitoring:{// GMMS.func.menu.rcu.monitoring
 					
-					inputPrimary:function(host, device_info){// GMMS.func.menu.rcu.monitoring.inputPrimary
-					
-						return $.post("api.php?route=rcu/monitoring/inputPrimary",{
-							
-							
-							cookie: device_info.cookie,
-							mux: device_info.mux
-							
-						});
+					inputPrimary: 	function(host, device_info){	return GMMS.func.rcu.monitoring.inputPrimary(host,device_info); },
+					inputSecondary: function(host, device_info){	return GMMS.func.rcu.monitoring.inputSecondary(host,device_info); }
 					
 						
 						
 					}
+				
 					
 					
-					
-				}
-		
 			}
-			
-			
-			
-		},
 		
+		},
+			
+			
+	
 		db:{
 			update:{
 				rcu: {
@@ -99,7 +90,27 @@ $( function() {
 					type_id: device_info.type_id,
 					action: device_info.action							
 				});
+			},
+			monitoring:{
+				inputPrimary:function(host, device_info){
+					
+					return $.post("api.php?route=rcu/monitoring/inputPrimary",{
+							host: host,
+							cookie: device_info.cookie,
+							mux: device_info.mux});
+				},
+				inputSecondary:function(host, device_info){
+					
+					return $.post("api.php?route=rcu/monitoring/inputSecondary",{
+							host: host,
+							cookie: device_info.cookie,
+							mux: device_info.mux});
+				}
+				
+				
+				
 			}
+			
 			
 		},
 		

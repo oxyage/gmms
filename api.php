@@ -64,6 +64,13 @@ if($Debug) $API->debug = true;
 
 $API->host = !empty($_REQUEST["host"]) ?  $_REQUEST["host"] : false;
 
+$db_ini = parse_ini_file(CONFIG_PATH."db.ini");
+//подключаем класс бд
+$API->module(CLASSES_PATH."class.db.php");
+//создаем экземпляр класса db
+$db = new db($db_ini);
+$db->connect(); //соединеняемся с БД и выбираем базу данных
+
 switch($Route[0])
 {
 	case "system":
@@ -282,6 +289,77 @@ switch($Route[0])
 			
 				
 			}
+			case "monitoring":{
+				
+				switch($Route[2])
+				{
+					case "inputPrimary":{ //основной вход
+						
+						try	{
+							API::checkArgs("host, cookie, mux");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+						
+						$input = array("host"=>$_REQUEST["host"],
+						"mux"=>$_REQUEST["mux"],
+						"cookie"=>$_REQUEST["cookie"]);
+						
+						
+						/*	ПОИСК УСТРОЙСТВА В БД */
+						
+						$select_device = $db->query("SELECT * FROM `devices` WHERE `host`='".$input["host"]
+						."' AND `name` LIKE '%".$input["mux"]."%' AND `type_id`='10000' ORDER BY `id` ASC");
+						
+						if($db->num_rows($select_device) < 1)
+						{
+							$API(new Exception("Устройств по заданным критериям не найдено"));
+							break;
+						}
+						else if($db->num_rows($select_device) > 1)
+						{
+							$API(new Exception("По заданным критериям найдено больше одного устройства"));
+							break;
+						}
+						
+						$select_device = $db->fetch_assoc($select_device);
+						
+						#$API($device);break; //debug
+						
+						
+						/*	ОТПРАВЛЯЕМ ДАННЫЕ НА ШАБЛОН	*/
+
+						$API->module(CLASSES_PATH."class.phpQuery.php");
+						$API->module(CLASSES_PATH."class.rcu.php");
+						$API->module(CLASSES_PATH."class.templates.php");
+						$API->module(TEMPLATES_PATH."10000.php");
+						
+						$RCU = new RCU;
+						$RCU->host = $input["host"];
+						$RCU->cookie = $input["cookie"];
+						
+						//
+						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device)); // результат запуска функции по `action` пути
+						
+						$API($Device);
+						
+						
+						break;
+					}
+					
+					
+					
+					default:{
+						
+						
+						$API(new Exception("undefined route #2 by route 'rcu/monitoring'", 3));
+					}
+				}
+	
+				break;
+			}
 			default: // если не указан 1 маршрут
 			{
 				$API(new Exception("undefined route #1 by route 'rcu'", 2));
@@ -294,15 +372,6 @@ switch($Route[0])
 	
 	case "db":
 	{
-		//если 0 маршрут db
-		//парсим настройки для бд
-		$db_ini = parse_ini_file(CONFIG_PATH."db.ini");
-		//подключаем класс бд
-		$API->module(CLASSES_PATH."class.db.php");
-		//создаем экземпляр класса db
-		$db = new db($db_ini);
-		$db->connect(); //соединеняемся с БД и выбираем базу данных
-		
 		switch($Route[1])
 		{
 			case "select": // db/select

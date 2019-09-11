@@ -25,15 +25,9 @@ abstract class Template
 	
 	public function __construct($action, $data)//для вызова определенного метода
 	{
-		$action = explode("/",$action);
-		$this->action = $action;
+		$this->action = explode("/",$action);
 		$this->data = $data;
-		
-		//$this->purposes = isset($data["purposes"]) ? $data["purposes"] : NULL;
-		
 		$this->device_info = $data["device"];
-		
-
 		$this->action(); //запускаем action
 	}
 	
