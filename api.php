@@ -307,11 +307,16 @@ switch($Route[0])
 						"mux"=>$_REQUEST["mux"],
 						"cookie"=>$_REQUEST["cookie"]);
 						
-						
+						if(!strcmp($input["cookie"],"false") or strlen($input["cookie"]) != 50) {
+							
+							$API(new Exception("Объект связи не авторизован")); break;
+						}
+							
+						//$API($input["cookie"]); break;
 						/*	ПОИСК УСТРОЙСТВА В БД */
 						
 						$select_device = $db->query("SELECT * FROM `devices` WHERE `host`='".$input["host"]
-						."' AND `name` LIKE '%".$input["mux"]."%' AND `type_id`='10000' ORDER BY `id` ASC");
+						."' AND `name` LIKE '%".$input["mux"]." MUX%' AND `type_id`='10000' ORDER BY `id` ASC");
 						
 						if($db->num_rows($select_device) < 1)
 						{
@@ -320,13 +325,16 @@ switch($Route[0])
 						}
 						else if($db->num_rows($select_device) > 1)
 						{
+							$API->debug_param["num_rows"] = $db->num_rows($select_device);
+							$API->debug_param["fetch_assoc"] = $db->fetch_assoc($select_device);
 							$API(new Exception("По заданным критериям найдено больше одного устройства"));
 							break;
 						}
 						
 						$select_device = $db->fetch_assoc($select_device);
 						
-						#$API($device);break; //debug
+						
+						#$API($select_device);break; //debug
 						
 						
 						/*	ОТПРАВЛЯЕМ ДАННЫЕ НА ШАБЛОН	*/
@@ -341,7 +349,22 @@ switch($Route[0])
 						$RCU->cookie = $input["cookie"];
 						
 						//
-						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device)); // результат запуска функции по `action` пути
+						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
+						
+						$sizeof_url = sizeof($Device->POST_url);
+				
+						for($i = 0; $i < $sizeof_url; $i++)
+						{
+							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
+							$POST = $RCU->post($URL);	
+							$Device->POST_result[$i] = $POST;//полученную страницы записываем
+						}
+						
+						
+						$Device->POST_callback = $Device->callback["page"]($Device->device_info, $Device->POST_result); //вызвать коллбек обработки
+						$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback); // интерпретировать ответ в удобный вид
+						$Device->info(); //преобразовать массив в строку
+						
 						
 						$API($Device);
 						
@@ -449,8 +472,15 @@ switch($Route[0])
 						$connections = $db->query("SELECT `cookie`,`host`,`remote`,`timestamp`,`username`,`userpass` FROM `connections` INNER JOIN (
 							SELECT max(`uid`) AS `maxUid` FROM `connections` WHERE TIME_TO_SEC(TIMEDIFF(NOW(),`timestamp`)) < 1440 GROUP BY `host`
 							) AS `MAX` ON `connections`.`uid` = `MAX`.`maxUid` ORDER BY `uid` DESC");
+							
 						$connections = $db->fetch_assoc($connections);
-						
+/*						
+						if($db->num_rows($connections) > 1)
+						{
+							$connections = $db->fetch_assoc($connections);
+						}
+						else $connections = array($db->fetch_assoc($connections));
+	*/					
 						$API($connections);	
 						break;
 						//SELECT * FROM `connections` WHERE DATE(`timestamp`) = CURDATE() AND TIME(`timestamp`) - CURTIME() < 1440 ORDER BY `uid` DESC
@@ -775,6 +805,7 @@ class API
 	public $response;
 	public $debug = false;
 	public $host = false;
+	public $debug_param;
 	
 	public function __invoke($a = null)
 	{
@@ -786,7 +817,8 @@ class API
 				"file" => $a->getFile(), 
 				"line" => $a->getLine(), 
 				"trace"=>$a->getTrace(),
-				"request"=>$_REQUEST
+				"request"=>$_REQUEST,
+				"debug_param"=>$this->debug_param
 				);
 		}
 		else

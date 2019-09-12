@@ -149,7 +149,7 @@ class _10000 extends Template
 		else
 			$this->POST_url[] = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
 		
-		return $this; //debug
+		#return $this; //debug
 		
 		$this->callback["page"] = function($device_info, $POST_result = array()){
 			

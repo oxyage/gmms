@@ -12,6 +12,7 @@ $( function() {
 					return true;
 				},
 				admin: function(host, userpass){
+					console.log("admin?");
 					window.open("http://"+host+"/config/devices/?username=admin&userpass="+userpass,"_blank");
 					return true;
 				},
@@ -54,7 +55,7 @@ $( function() {
 			
 			
 	
-		db:{
+		db:{//gmms.func.db.select.rcu
 			update:{
 				rcu: {
 					devices:function(host, device_info){
@@ -76,6 +77,9 @@ $( function() {
 									func: device_info.func,
 									mux: device_info.mux
 								});
+				},
+				rcu: function(){
+					return $.get("api.php?route=db/select/rcu");
 				}
 			}
 		},

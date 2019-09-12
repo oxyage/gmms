@@ -26,7 +26,7 @@ $("li.action").click(function(li){
 				}
 				case "admin":{
 					let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
-					GMMS.func.menu.auth.admin(data.host, operator.userpass);		
+					GMMS.func.menu.auth.admin(data.host, admin.userpass);		
 					break;
 				}
 				case "check":{
@@ -159,23 +159,43 @@ $("li.action").click(function(li){
 						case "inputPrimary":
 						{
 							
+							
+							
 							GMMS.func.menu.rcu.monitoring.inputPrimary(data.host, {
 								cookie: GMMS.func.checkCookie(data.host),
 								mux: typeof route[3] === "string" && parseInt(route[3]) || 1
 							})
 							.done(function(done_inputPrimary){
 								
-								GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+done_inputPrimary.response.Info.represent,
-													"info", done_inputPrimary.host, done_inputPrimary);
-													
-								GMMS.func.status(done_inputPrimary.response.Info.represent, done_inputPrimary.host);
-								
-								GMMS.func.icon("ready",done_inputPrimary.host);
+								if(!done_inputPrimary.error)
+								{
+									GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+done_inputPrimary.response.Info.represent,
+														"info", done_inputPrimary.host, done_inputPrimary);
+														
+									GMMS.func.status(done_inputPrimary.response.Info.represent, done_inputPrimary.host);
+									
+									GMMS.func.icon("ready",done_inputPrimary.host);
+								} else {
+									
+									GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": Ошибка при обращении к устройству",
+													"warn", done_inputPrimary.host, done_inputPrimary);
+														
+									GMMS.func.status(false, done_inputPrimary.host);
+									
+									GMMS.func.icon("error",done_inputPrimary.host);
+									
+								}
 								
 							})
 							.fail(function(fail_inputPrimary){
 								
 								
+									
+									GMMS.func.log(GMMS.rcu.host[fail_inputPrimary.host].name+": Ошибка обращения к API",
+													"error", fail_inputPrimary.host, fail_inputPrimary);
+									
+									GMMS.func.status(false, fail_inputPrimary.host);
+									GMMS.func.icon("error",fail_inputPrimary.host);
 							});
 
 

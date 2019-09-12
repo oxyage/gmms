@@ -200,6 +200,8 @@ $( function() { /* только предустановленные функци�
 			GMMS.func.auth(host)
 			.done(function(data){
 				if(!data.error){ // error = 0
+					GMMS.rcu.auth[data.host] = data.response;
+					GMMS.func.connection.set(data.host);
 					GMMS.rcu.deferred[host].autoAuth.resolveWith(false, [data.response]);
 				}
 				else{ //error > 0
@@ -251,7 +253,7 @@ $( function() { /* только предустановленные функци�
 	},
 	
 	GMMS.func.checkCookie = function(host){
-		return typeof GMMS.rcu.auth[host] === "object" && typeof GMMS.rcu.auth[host].cookie === "string" && GMMS.rcu.auth[data.host].cookie;
+		return typeof GMMS.rcu.auth[host] === "object" && typeof GMMS.rcu.auth[host].cookie === "string" && GMMS.rcu.auth[host].cookie;
 	}
 
 

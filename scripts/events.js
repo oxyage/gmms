@@ -7,28 +7,28 @@ $( function() { /* события на странице*/
 	DevicesFindState = new $.Deferred(); // ждем разрешения на запрос в БД за устройствами
 	
 	$( "#dialog-wait" ).dialog();//открываем окно
-	$.get("api.php?route=db/select/rcu")
-	.done(function(d){
+	
+	GMMS.func.db.select.rcu()
+	.done(function(done_select){
 		//код ошибки = 0
-		if(!d.error)
+		if(!done_select.error)
 		{
-			$( "#dialog-wait p" ).html("Загружено объектов связи: "+d.response.length); //в диалоговое окно
+			$( "#dialog-wait p" ).html("Загружено объектов связи: "+done_select.response.length); //в диалоговое окно
 			$( "#dialog-wait" ).dialog("close");//закрываем диалог окно
-			GMMS.func.log("Объекты связи загружены из базы данных ("+d.response.list.length+")", "log", 0, d); //логгируем	
-			LoadingState.resolveWith(d.response);//разрешаем вывести на страницу
+			GMMS.func.log("Объекты связи загружены из базы данных ("+done_select.response.list.length+")", "log", 0, done_select); //логгируем	
+			LoadingState.resolveWith(done_select.response);//разрешаем вывести на страницу
 			DevicesFindState.resolve(); //разрешаем загрузить устройства
-		//	console.log("Объекты связи загружены из БД",d);
 		}
 		else//если есть ошибка в ответе
 		{
-			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+d.error+")<br><i>"+d.response.message+"</i>");
-			GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "warn", 0, d); //логгируем	
+			$( "#dialog-wait p" ).html("Запрос объектов связи завершился с ошибкой (код "+done_select.error+")<br><i>"+done_select.response.message+"</i>");
+			GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "warn", 0, done_select); //логгируем	
 			LoadingState.reject();
 		}
 	})
-	.fail(function(e){//если не удался запрос к файлу
+	.fail(function(fail_select){//если не удался запрос к файлу
 		$( "#dialog-wait p" ).html("Загрузка объектов связи не удалась<br>Смотри лог");
-		GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "error", 0, e); //логгируем	
+		GMMS.func.log("Ошибка загрузки объектов связи. Смотри лог", "error", 0, fail_select); //логгируем	
 		LoadingState.reject();
 	});
 	
@@ -177,11 +177,11 @@ $( function() { /* события на странице*/
 		
 		//ищем авторизованные соединения 
 		let find_connections = GMMS.func.connection.find();
-		find_connections.done(function(d){
+		find_connections.done(function(done_find){
 			
-			if(!d.error)
+			if(!done_find.error)
 			{
-				for(let i of d.response)
+				for(let i of done_find.response)
 				{
 					GMMS.rcu.auth[i.host] = i;
 					GMMS.func.status(false,i.host);
@@ -192,21 +192,19 @@ $( function() { /* события на странице*/
 			}
 			else
 			{
-				GMMS.func.log("Ошибка поиска соединений (#"+d.error+")","warn",0,d);
-				console.warn(d);
+				GMMS.func.log("Ошибка поиска соединений (#"+done_find.error+")", "warn", 0, done_find);
 			}
 			
 			
-		}).fail(function(e){
-			GMMS.func.log("Ошибка обращения к API при загрузке соединений","error",0,e);
-			console.error(e);
+		}).fail(function(fail_find){
+			GMMS.func.log("Ошибка обращения к API при загрузке соединений", "error", 0, fail_find);
 		});
 		
 			
 		
 	})
 	.fail(function(){
-		console.warn("Вывода не будет");
+		GMMS.func.log("Критическая ошибка. ConnectionFindState rejected");
 		ConnectionFindState.reject();
 	});
 	
