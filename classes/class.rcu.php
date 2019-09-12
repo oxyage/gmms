@@ -2,6 +2,12 @@
 
 
 /*
+
+КОДЫ ОШИБОК
+
+2**
+
+
 Класс для СДК, методы работы с ним и свойства
 Объект класса RCU - сам СДК
 */
@@ -163,14 +169,14 @@ class RCU
 	{
 		if(empty($responseHeaders) or !is_string($responseHeaders)) //проверка входных данных
 		{
-			return new Exception("Ответ от СДК не получен (нет связи)");
+			return new Exception("Ответ от СДК не получен (нет связи)", 201);
 		}
 		
 		$headers = array();//массив с заголовками которые вернем в результате функции
 		
 		if(strstr($responseHeaders, "HTTP/1.1 302 Found") === FALSE) //неверные логин или пароль
 		{
-			return new Exception("При авторизации не получен ожидаемый заголовок 302 Found");
+			return new Exception("При авторизации не получен ожидаемый заголовок 302 Found", 202);
 		}
 				
 		
@@ -243,7 +249,7 @@ class RCU
 		if($headers === FALSE)//если запрос не удался выбрасываем исключение
 		{
 			return new Exception("CURL запрос для авторизации завершился с ошибкой:\n\r".
-			curl_errno($curl).": ".curl_error($curl), 11);			
+			curl_errno($curl).": ".curl_error($curl), 203);			
 		}
 
 		return $headers;					
@@ -273,7 +279,7 @@ class RCU
 		{
 			//$get_info = curl_getinfo($curl); //нужна инфа
 			
-			return new Exception("CURL запрос для POST завершился с ошибкой:\n".curl_errno($curl).": ".curl_error($curl), 21);			
+			return new Exception("CURL запрос для POST завершился с ошибкой:\n".curl_errno($curl).": ".curl_error($curl), 204);			
 		}
 	
 		if($this->request["curl"]["http_code"] == 200) //только если удачный запрос, завершаем нормально
@@ -283,7 +289,7 @@ class RCU
 		}
 		else //иначе выбрасываем исключение
 		{
-			return new Exception("HTTP code ответа от сервера не равен 200 (".$url.")", 22);		
+			return new Exception("HTTP code ответа от сервера не равен 200 (".$url.")", 205);		
 		}
 	}
 	
@@ -337,7 +343,7 @@ class RCU
 			
 		//если ошибка в поиске	
 		if(!strlen($RCU_NAME) or !strlen($Table->text()))	
-			return new Exception("Не найдена таблица устройств и имя РТС на странице. Возможно авторизация не удалась", 22);
+			return new Exception("Не найдена таблица устройств и имя РТС на странице. Возможно авторизация не удалась", 206);
 		
 		//содержание таблицы
 		$Table_content = $html->find("table.pandora tr:gt(0)");
