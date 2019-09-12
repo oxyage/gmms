@@ -420,6 +420,7 @@ switch($Route[0])
 						{
 							$row["coord"] = json_decode($row["coord"],true);
 							$row["auth"] = json_decode($row["auth"],true);
+							$row["devices_table"] = json_decode($row["devices_table"],true);
 							
 							$list[] = $row;
 							$host[$row["host"]] = $row;
