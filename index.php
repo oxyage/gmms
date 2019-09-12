@@ -192,8 +192,8 @@
   </li>
   
   <!-- Комплексная проверка всех показателей-->
-  <li class="action" data-route="monitoring/complex">
-    <div><span class="ui-icon ui-icon-signal-diag action"></span>Комплексная проверка</div>
+  <li class="" data-route="monitoring/complex">
+    <div><span class="ui-icon ui-icon-signal-diag"></span>Комплексная проверка</div>
 	<ul style="width:130px">
 			<!-- Выбор мультиплекса -->
 			<li class="ui-widget-header"><div>Результаты проверки</div></li>
