@@ -163,12 +163,12 @@ class RCU
 	{
 		if(empty($responseHeaders) or !is_string($responseHeaders)) //проверка входных данных
 		{
-			return new Exception("Входные данные функции не являются строкой или строка пустая");
+			return new Exception("Ответ от СДК не получен (нет связи)");
 		}
 		
 		$headers = array();//массив с заголовками которые вернем в результате функции
 		
-		if(strstr($responseHeaders, "HTTP/1.1 302 Found") === FALSE)
+		if(strstr($responseHeaders, "HTTP/1.1 302 Found") === FALSE) //неверные логин или пароль
 		{
 			return new Exception("При авторизации не получен ожидаемый заголовок 302 Found");
 		}
