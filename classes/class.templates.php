@@ -12,6 +12,7 @@ abstract class Template
 	public $POST_result = array(); //массив ответов от страниц
 	public $POST_callback = array(); //массив результатов после обработки коллбеком
 	public $POST_represent = array(); //массив результатов в читаемом представлении
+	public $POST_values = array(); //массив результатов только значения элементов 0,1,2
 	
 	public $callback = array("page"=>false, "represent"=>false); //установить колбеки
 	
@@ -35,7 +36,7 @@ abstract class Template
 	
 	public function info()// представить массив в виде строки
 	{
-		foreach($this->POST_callback as $i => $value) // AS1; ASI2
+		foreach($this->POST_callback["text"] as $i => $value) // AS1; ASI2
 			$this->Info["full"] .= $value."; ";
 			
 		#foreach($this->POST_callback as $i => $value) // должен быть  40°; 53°

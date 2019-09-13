@@ -140,6 +140,7 @@ $( function() { /* только предустановленные функци�
 				return false;
 			}
 			else{ //если есть авторизованные - запускаем в них
+			
 				GMMS.func.log("Запускаем команду на авторизованных объектах связи", "warn");
 				for(host of Object.keys(GMMS.rcu.auth))
 				{
@@ -155,7 +156,40 @@ $( function() { /* только предустановленные функци�
 			callback(host);
 		}
 	},
-	
+	GMMS.func.ajax = {},
+	GMMS.func.ajax.start = function(){
+		
+		if(GMMS.rcu.select.length === 0) //нет выбранных
+		{
+			if(Object.keys(GMMS.rcu.auth).length < 1){ //и нет авторизованных - выводим ошибку
+				GMMS.rcu.ajax = 0;
+				return false;
+			}
+			
+			GMMS.rcu.ajax = Object.keys(GMMS.rcu.auth).length; //итерируемое значение для контроля ?
+			
+		} else {
+			
+			GMMS.rcu.ajax = GMMS.rcu.select.length; //итерируемое значение для контроля ?
+			
+		}
+		
+		console.log("ajax start", GMMS.rcu.ajax);
+	},
+	GMMS.func.ajax.finish = function(callback = function(a = false){console.log("Завершены все ajax запросы",a);}){
+		if(GMMS.rcu.ajax > 1) 
+		{
+			GMMS.rcu.ajax -= 1;
+			console.log("ajax continue", GMMS.rcu.ajax);
+			return GMMS.rcu.ajax;
+		}
+		else //все закончились
+		{
+			console.log("ajax finish", GMMS.rcu.ajax);
+			callback();
+			return GMMS.rcu.ajax;
+		}
+	},
 	GMMS.func.connection = {
 		set: function(host){
 			return $.post("api.php?route=db/insert/connection", GMMS.rcu.auth[host]);

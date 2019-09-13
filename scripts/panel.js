@@ -9,6 +9,9 @@ $( function(){
 		let data = $(this).data();
 		route = data.route.split("/");
 
+		let unix = new Date().getTime();
+		GMMS.temp[unix] = {};
+	
 		switch(route[0]){
 			
 			case "rcu":{
@@ -33,13 +36,13 @@ $( function(){
 								GMMS.func.log(GMMS.rcu.host[host].name+": inputPrimary ["+mux+" mux] ", "log", host);
 								GMMS.func.status("wait", host);
 								GMMS.func.icon("wait", host);		
-								
+								GMMS.func.ajax.start();
 								
 									GMMS.func.autoAuth(host)
 									.done(function(done_autoAuth){
 										
-										console.log("autoAuth: ",done_autoAuth);
-										console.log("checkCookie: ",GMMS.func.checkCookie(done_autoAuth.host));
+										//console.log("autoAuth: ",done_autoAuth);
+										//console.log("checkCookie: ",GMMS.func.checkCookie(done_autoAuth.host));
 										
 										GMMS.func.menu.rcu.monitoring.inputPrimary(done_autoAuth.host, {
 											cookie: GMMS.func.checkCookie(done_autoAuth.host),
@@ -49,12 +52,21 @@ $( function(){
 											
 											if(!done_inputPrimary.error)
 											{
+												Object.values(done_inputPrimary.response.POST_callback.text_values).forEach(function(a){
+													if(typeof GMMS.temp[unix][a] === "undefined")
+														GMMS.temp[unix][a] = [];
+													else	
+														GMMS.temp[unix][a].push(done_inputPrimary.host);
+												});
+												
 												GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+done_inputPrimary.response.Info.represent,
-																	"info", done_inputPrimary.host, done_inputPrimary);
+																	"info", done_inputPrimary.host);
 																	
 												GMMS.func.status(done_inputPrimary.response.Info.represent, done_inputPrimary.host);
 												
 												GMMS.func.icon("ready",done_inputPrimary.host);
+												
+												GMMS.func.ajax.finish();
 											} else {
 												
 												GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+
@@ -65,7 +77,7 @@ $( function(){
 												GMMS.func.status(false, done_inputPrimary.host);
 												
 												GMMS.func.icon("error",done_inputPrimary.host);
-												
+												GMMS.func.ajax.finish();
 											}
 											
 											

@@ -153,27 +153,27 @@ rcu
 									
 									if(!d.error)
 									{
-										GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, "info", d.host, d);
+										GMMS.func.log("Успешная авторизация на хост "+GMMS.rcu.host[d.host].name, "info", d.host);
 										GMMS.rcu.auth[d.host] = d.response;
 										//сохраняем в БД
 										GMMS.func.connection.set(d.host);
 										GMMS.func.status(false,d.host);
 										GMMS.func.icon("ready",d.host);
-										console.log(GMMS.rcu.auth);
+									//	console.log(GMMS.rcu.auth);
 									}
 									else
 									{
 										GMMS.func.log("Ошибка авторизации "+GMMS.rcu.host[d.host]["name"]+" (#"+d.error+")","warn",d.host,d);
 										GMMS.func.status(false,d.host);
 										GMMS.func.icon("error",d.host);
-										console.warn(d);
+									//	console.warn(d);
 									}
 								
 									
 								})
 								.fail(function(e){
 									GMMS.func.log("Ошибка обращения к API","error",e.host,e);
-									console.error(e);
+								//	console.error(e);
 								});
 							}); // gmms.rcu.selected end
 

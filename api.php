@@ -362,7 +362,8 @@ switch($Route[0])
 						
 						
 						$Device->POST_callback = $Device->callback["page"]($Device->device_info, $Device->POST_result); //вызвать коллбек обработки
-						$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback); // интерпретировать ответ в удобный вид
+						$Device->POST_values = $Device->POST_callback["values"];
+						$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback["text"]); // интерпретировать ответ в удобный вид
 						$Device->info(); //преобразовать массив в строку
 						
 						

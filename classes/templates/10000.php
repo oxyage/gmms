@@ -155,13 +155,15 @@ class _10000 extends Template
 			
 			$result = array();
 			
+			
+			// DEBUG! inpu1TsSource primarySource 
 			$array_param = array(
-			"100" => "inpu1TsSource",
-			"250" => "inpu1TsSource",
-			"500" => "inpu1TsSource",
-			"1000" => "inpu1TsSource",
-			"2000" => "primarySource",
-			"5000" => "primarySource");
+			"100" => "inpu2TsSource",
+			"250" => "inpu2TsSource",
+			"500" => "inpu2TsSource",
+			"1000" => "inpu2TsSource",
+			"2000" => "secondarySource",
+			"5000" => "secondarySource");
 			
 			$power = $device_info["power"];
 
@@ -169,14 +171,21 @@ class _10000 extends Template
 			{
 				$html = phpQuery::newDocument($html);	
 				$primary = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
-				$result[] = $primary;
+				$primary_value = $html->find("select[name=".$array_param[$power]."]")->val(); 
+				$primary_text_value = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
+				$result["text"][] = $primary;
+				$result["values"][] = $primary_value;
+				$result["text_values"][] = str_replace(" ","",$primary_text_value);
 			}
 
 			return $result;			
 		}; //callback[page]
 
 		$this->callback["represent"] = function($device_info, $POST_callback = array()){
-
+			
+			#debug
+			#return $POST_callback;
+			
 			$text = $device_info["mux"]." MUX: ";
 			
 			$ASItoSAT = array("ASI1"=>"40°", "ASI 1"=>"40°","ASI2"=>"53°", "ASI 2"=>"53°");
