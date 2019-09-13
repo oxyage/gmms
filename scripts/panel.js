@@ -66,7 +66,11 @@ $( function(){
 												
 												GMMS.func.icon("ready",done_inputPrimary.host);
 												
-												GMMS.func.ajax.finish();
+												GMMS.func.ajax.finish(function(){
+													
+													GMMS.func.log("Завершены все запросы", "info");
+													
+												});
 											} else {
 												
 												GMMS.func.log(GMMS.rcu.host[done_inputPrimary.host].name+": "+

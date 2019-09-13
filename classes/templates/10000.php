@@ -124,12 +124,57 @@ class _10000 extends Template
 				
 				break;
 			}
+			case "management":{
+				switch($this->action[1])
+				{
+					case "modulator":{
+						
+						switch($this->action[2])
+						{
+							case "toASI1":{
+								
+								//$this->get_form_modulator_input();
+								
+								$this->management_modulator_toASI1();
+								
+								break;
+							}
+							case "toASI2":{
+								
+								//$this->get_form_modulator_input();
+								
+								$this->management_modulator_toASI2();
+								
+								break;
+							}
+							default:{
+								$this->Info = "action[2] undefined";
+							}
+						}
+						
+						
+						
+						break;
+					}
+					
+					default:{
+					
+						$this->Info = "action[1] undefined";
+					}
+				}
+				break;
+			}
 			
 			default:{
-				$this->Info = "первое действие не определено";
+				$this->Info = "action[0] undefined";
 			}
 		}
 	}
+
+	public function management_modulator_toASI1(){
+		
+	}
+	public function management_modulator_toASI2(){}
 
 	public function monitoring_modulator_sfn(){	}
 	public function monitoring_modulator_inputPrimary()	{
@@ -155,8 +200,11 @@ class _10000 extends Template
 			
 			$result = array();
 			
-			
-			// DEBUG! inpu1TsSource primarySource 
+			#########################################################
+			// DEBUG! 
+			// inpu1TsSource 
+			// primarySource 
+			#########################################################
 			$array_param = array(
 			"100" => "inpu2TsSource",
 			"250" => "inpu2TsSource",
