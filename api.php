@@ -384,6 +384,66 @@ switch($Route[0])
 	
 				break;
 			}
+			case "management":{
+				
+				switch($Route[2])
+				{
+					case "goto40":{ //основной вход
+					
+						try	{
+							API::checkArgs("host, cookie, mux");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+						
+						$input = array("host"=>$_REQUEST["host"],
+						"mux"=>$_REQUEST["mux"],
+						"cookie"=>$_REQUEST["cookie"]);
+						
+						if(!strcmp($input["cookie"],"false") or strlen($input["cookie"]) != 50) {
+							
+							$API(new Exception("Объект связи не авторизован")); break;
+						}
+					
+						$API("Будет произведен переход на 40 градус");
+					
+					
+						break;
+					}
+					case "goto53":{
+						
+						try	{
+							API::checkArgs("host, cookie, mux");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+						
+						$input = array("host"=>$_REQUEST["host"],
+						"mux"=>$_REQUEST["mux"],
+						"cookie"=>$_REQUEST["cookie"]);
+						
+						if(!strcmp($input["cookie"],"false") or strlen($input["cookie"]) != 50) {
+							
+							$API(new Exception("Объект связи не авторизован")); break;
+						}
+						
+						
+						
+						$API("Будет произведен переход на 53 градус");
+						
+						
+						break;
+					}
+					default:{
+						$API(new Exception("undefined route #3 by route 'rcu/management'", 3));
+					}
+				}
+				break;
+			}
 			default: // если не указан 1 маршрут
 			{
 				$API(new Exception("undefined route #1 by route 'rcu'", 2));

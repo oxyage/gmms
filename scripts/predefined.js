@@ -84,7 +84,7 @@ $( function() {
 			}
 		},
 		
-		rcu:{
+		rcu:{//gmms.func.rcu
 			device: function(host, device_info)
 			{
 				return $.post("api.php?route=rcu/device",{
@@ -110,9 +110,20 @@ $( function() {
 							cookie: device_info.cookie,
 							mux: device_info.mux});
 				}
-				
-				
-				
+			},
+			management:{//gmms.func.rcu.management
+				goto40: function(host, device_info){
+					return $.post("api.php?route=rcu/management/goto40",{
+							host: host,
+							cookie: device_info.cookie,
+							mux: device_info.mux});
+				},
+				goto53: function(host, device_info){
+					return $.post("api.php?route=rcu/management/goto53",{
+							host: host,
+							cookie: device_info.cookie,
+							mux: device_info.mux});
+				}
 			}
 			
 			

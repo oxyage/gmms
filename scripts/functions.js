@@ -252,10 +252,16 @@ $( function() { /* только предустановленные функци�
 		return GMMS.rcu.deferred[host].autoAuth;
 	},
 	
+	GMMS.func.confirm = function(question, callback_done = false, callback_fail = false){
 	
+		if(confirm(question))			
+			return (callback_done == false) ? true : callback_done();
+		else		
+			return (callback_fail == false) ? false : callback_fail();
+		
 	
-	
-			//GMMS.func.log(message, status = "log", host = 0, object = {})
+	},
+	//GMMS.func.log(message, status = "log", host = 0, object = {})
 	GMMS.func.log = function(message, status = "log", host = 0, object = {}){
 	
 		function addZero(i){

@@ -299,9 +299,9 @@
   
 </div>
 <hr>  
-<button class="panel-button" data-route="rcu/management/goto40" >Перейти на 40° </button>
+<button class="panel-button" data-route="rcu/management/goto40" >Перейти на 40° основной спутник</button>
 
-<button class="panel-button" data-route="rcu/management/goto53" >Перейти на 53°</button>
+<button class="panel-button" data-route="rcu/management/goto53" >Перейти на 53° резервный спутник</button>
  
   </div>
   <div id="panel-tabs-additional">
