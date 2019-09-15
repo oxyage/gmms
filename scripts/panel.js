@@ -169,6 +169,7 @@ $( function(){
 											
 											if(!done_goto40.error)
 											{
+											
 												Object.values(done_goto40.response.POST_callback.text_values).forEach(function(a){
 													if(typeof GMMS.temp[unix][a] === "undefined")
 														GMMS.temp[unix][a] = [];

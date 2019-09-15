@@ -173,6 +173,72 @@ class _10000 extends Template
 
 	public function management_modulator_toASI1(){
 		
+		$array_url = array(
+			"100" => "/config/mt2/input/?id={id}",
+			"250" => "/config/mt2/input/?id={id}",
+			"500" => "/config/mt2/input/?id={id}",
+			"1000" => array("/config/mt2/0/input/?id={id}", "/config/mt2/1/input/?id={id}"),
+			"2000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}"),
+			"5000" => array("/config/exc_tvt_p/0/control/?id={id}", "/config/exc_tvt_p/1/control/?id={id}")
+		);
+
+
+		if(is_array($array_url[$this->Power]))
+			$this->POST_url = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
+		else
+			$this->POST_url[] = str_replace("{id}", $this->device_info["id"], $array_url[$this->Power]); // вернуть массив адресов для запросов
+
+		
+		$this->callback["page"] = function($device_info, $POST_result = array()){
+			
+			$result = array();
+			
+			#########################################################
+			// DEBUG! 
+			// inpu1TsSource 
+			// primarySource 
+			#########################################################
+			$array_param = array(
+			"100" => "inpu1TsSource",
+			"250" => "inpu1TsSource",
+			"500" => "inpu1TsSource",
+			"1000" => "inpu1TsSource",
+			"2000" => "primarySource",
+			"5000" => "primarySource");
+			
+			$power = $device_info["power"];
+
+			foreach($POST_result as $i => $html)
+			{
+				$html = phpQuery::newDocument($html);	
+				$primary = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
+				$primary_value = $html->find("select[name=".$array_param[$power]."]")->val(); 
+				$primary_text_value = $html->find("select[name=".$array_param[$power]."] option:selected")->text(); 
+				$result["text"][] = $primary;
+				$result["values"][] = $primary_value;
+				$result["text_values"][] = str_replace(" ","",$primary_text_value);
+			}
+
+			return $result;			
+		}; //callback[page]
+
+		$this->callback["represent"] = function($device_info, $POST_callback = array()){
+			
+			#debug
+			#return $POST_callback;
+			
+			$text = $device_info["mux"]." MUX: ";
+			
+			$ASItoSAT = array("ASI1"=>"40°", "ASI 1"=>"40°","ASI2"=>"53°", "ASI 2"=>"53°");
+			
+			foreach($POST_callback as $i => $a)
+			{	
+				$text .= $ASItoSAT[$a]."; ";
+			}
+			
+			return $text;
+		};
+		
 	}
 	public function management_modulator_toASI2(){}
 
