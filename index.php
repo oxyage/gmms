@@ -289,11 +289,20 @@
 
   </div>
   <div id="panel-tabs-sunoutage">
+ 
+<div style="text-align:center; padding: 0; "> 
+<label for="1mux_management">1 мультиплекс</label>
+<input class="panel-radio" name="mux_management" type="radio" id="1mux_management" checked value="1" data-route=""> 
+		  
+<label for="2mux_management">2 мультиплекс</label>
+<input class="panel-radio" name="mux_management" type="radio" id="2mux_management" value="2" data-route=""> 
   
-	<button class="panel-button" data-route="rcu/monitoring/qoo" >Основной спутниковый вход </button>
-  
-  
-    Переход на 53 и 40 градус раздельно по мультиплексам
+</div>
+<hr>  
+<button class="panel-button" data-route="rcu/management/goto40" >Перейти на 40° </button>
+
+<button class="panel-button" data-route="rcu/management/goto53" >Перейти на 53°</button>
+ 
   </div>
   <div id="panel-tabs-additional">
    
