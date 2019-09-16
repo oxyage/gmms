@@ -455,10 +455,16 @@ switch($Route[0])
 						}
 				
 					
-						$API($Device);
+						#$API($Device);
 					
-						/*
 						
+						unset($Device);
+						unset($RCU);
+						
+						$RCU = new RCU;
+						$RCU->host = $input["host"];
+						$RCU->cookie = $input["cookie"];
+						$RCU->post_data = "";
 						
 						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
 						
@@ -484,7 +490,7 @@ switch($Route[0])
 						
 						
 						
-						
+						/*
 						*/
 					
 					
@@ -557,6 +563,35 @@ switch($Route[0])
 						}
 				
 					
+						//$API($Device);
+						
+						
+						unset($Device);
+						unset($RCU);
+						
+						$RCU = new RCU;
+						$RCU->host = $input["host"];
+						$RCU->cookie = $input["cookie"];
+						$RCU->post_data = "";
+						
+						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
+						
+						$sizeof_url = sizeof($Device->POST_url);
+				
+						for($i = 0; $i < $sizeof_url; $i++)
+						{
+							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
+							$POST = $RCU->post($URL);	
+							$Device->POST_result[$i] = $POST;//полученную страницы записываем
+						}
+						
+						
+						$Device->POST_callback = $Device->callback["page"]($Device->device_info, $Device->POST_result); //вызвать коллбек обработки
+						$Device->POST_values = $Device->POST_callback["values"];
+						$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback["text"]); // интерпретировать ответ в удобный вид
+						$Device->info(); //преобразовать массив в строку
+						
+						
 						$API($Device);
 					
 						

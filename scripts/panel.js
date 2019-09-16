@@ -172,10 +172,10 @@ $( function(){
 											
 												console.log(done_goto40.response);
 												
-												GMMS.func.log(GMMS.rcu.host[done_goto40.host].name+": "+done_goto40.response,
+												GMMS.func.log(GMMS.rcu.host[done_goto40.host].name+": "+done_goto40.response.Info.represent,
 																	"info", done_goto40.host);
 																	
-												GMMS.func.status(false, done_goto40.host);
+												GMMS.func.status(done_goto40.response.Info.represent, done_goto40.host);
 												
 												GMMS.func.icon("ready",done_goto40.host);
 												
@@ -260,10 +260,10 @@ $( function(){
 											{
 												console.log(done_goto53.response);
 												
-												GMMS.func.log(GMMS.rcu.host[done_goto53.host].name+": "+done_goto53.response,
+												GMMS.func.log(GMMS.rcu.host[done_goto53.host].name+": "+done_goto53.response.Info.represent,
 																	"info", done_goto53.host);
 																	
-												GMMS.func.status(false, done_goto53.host);
+												GMMS.func.status(done_goto53.response.Info.represent, done_goto53.host);
 												
 												GMMS.func.icon("ready",done_goto53.host);
 												
@@ -311,21 +311,7 @@ $( function(){
 
 								
 								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
+	
 								
 							
 							break;
