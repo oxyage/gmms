@@ -461,6 +461,8 @@ switch($Route[0])
 						unset($Device);
 						unset($RCU);
 						
+						sleep(10);
+						
 						$RCU = new RCU;
 						$RCU->host = $input["host"];
 						$RCU->cookie = $input["cookie"];
@@ -568,6 +570,8 @@ switch($Route[0])
 						
 						unset($Device);
 						unset($RCU);
+						
+						sleep(10);
 						
 						$RCU = new RCU;
 						$RCU->host = $input["host"];
