@@ -170,17 +170,12 @@ $( function(){
 											if(!done_goto40.error)
 											{
 											
-												Object.values(done_goto40.response.POST_callback.text_values).forEach(function(a){
-													if(typeof GMMS.temp[unix][a] === "undefined")
-														GMMS.temp[unix][a] = [];
-													else	
-														GMMS.temp[unix][a].push(done_goto40.host);
-												});
+												console.log(done_goto40.response);
 												
-												GMMS.func.log(GMMS.rcu.host[done_goto40.host].name+": "+done_goto40.response.Info.represent,
+												GMMS.func.log(GMMS.rcu.host[done_goto40.host].name+": "+done_goto40.response,
 																	"info", done_goto40.host);
 																	
-												GMMS.func.status(done_goto40.response.Info.represent, done_goto40.host);
+												GMMS.func.status(false, done_goto40.host);
 												
 												GMMS.func.icon("ready",done_goto40.host);
 												
@@ -263,17 +258,12 @@ $( function(){
 											
 											if(!done_goto53.error)
 											{
-												Object.values(done_goto53.response.POST_callback.text_values).forEach(function(a){
-													if(typeof GMMS.temp[unix][a] === "undefined")
-														GMMS.temp[unix][a] = [];
-													else	
-														GMMS.temp[unix][a].push(done_goto53.host);
-												});
+												console.log(done_goto53.response);
 												
-												GMMS.func.log(GMMS.rcu.host[done_goto53.host].name+": "+done_goto53.response.Info.represent,
+												GMMS.func.log(GMMS.rcu.host[done_goto53.host].name+": "+done_goto53.response,
 																	"info", done_goto53.host);
 																	
-												GMMS.func.status(done_goto53.response.Info.represent, done_goto53.host);
+												GMMS.func.status(false, done_goto53.host);
 												
 												GMMS.func.icon("ready",done_goto53.host);
 												

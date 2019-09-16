@@ -436,9 +436,31 @@ switch($Route[0])
 						$RCU = new RCU;
 						$RCU->host = $input["host"];
 						$RCU->cookie = $input["cookie"];
-						
-						//
+
 						$Device = new Device("management/modulator/toASI1", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
+
+						$RCU->post_data = $Device->post_data;
+						
+						#$API(array("device"=>$Device, "rcu"=>$RCU));	break;	#debug
+						
+						$sizeof_url = sizeof($Device->POST_url);
+				
+						for($i = 0; $i < $sizeof_url; $i++)
+						{
+							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
+							//$POST = $RCU->post($URL);	######## WARNING
+							
+							$Device->POST_result[$i] = array($URL, $RCU->post_data);//полученную страницы записываем
+							if($sizeof_url > 1 and !empty($RCU->post_data)) sleep(10);
+						}
+				
+					
+						$API($Device);
+					
+						/*
+						
+						
+						$Device = new Device("monitoring/modulator/inputPrimary", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
 						
 						$sizeof_url = sizeof($Device->POST_url);
 				
@@ -455,10 +477,17 @@ switch($Route[0])
 						$Device->POST_represent = $Device->callback["represent"]($Device->device_info, $Device->POST_callback["text"]); // интерпретировать ответ в удобный вид
 						$Device->info(); //преобразовать массив в строку
 						
-					
-					
-					
+						
 						$API($Device);
+						
+						
+						
+						
+						
+						
+						*/
+					
+					
 					
 					
 						break;
@@ -481,11 +510,55 @@ switch($Route[0])
 							
 							$API(new Exception("Объект связи не авторизован")); break;
 						}
+					
+					
+						$select_device = $db->query("SELECT * FROM `devices` WHERE `host`='".$input["host"]
+						."' AND `name` LIKE '%".$input["mux"]." MUX%' AND `type_id`='10000' ORDER BY `id` ASC");
 						
+						if($db->num_rows($select_device) < 1)
+						{
+							$API(new Exception("Устройств по заданным критериям не найдено"));
+							break;
+						}
+						else if($db->num_rows($select_device) > 1)
+						{
+							$API->debug_param["num_rows"] = $db->num_rows($select_device);
+							$API->debug_param["fetch_assoc"] = $db->fetch_assoc($select_device);
+							$API(new Exception("По заданным критериям найдено больше одного устройства"));
+							break;
+						}
 						
+						$select_device = $db->fetch_assoc($select_device);
 						
-						$API("Будет произведен переход на 53 градус");
+						/*	ОТПРАВЛЯЕМ ДАННЫЕ НА ШАБЛОН	*/
+
+						$API->module(CLASSES_PATH."class.phpQuery.php");
+						$API->module(CLASSES_PATH."class.rcu.php");
+						$API->module(CLASSES_PATH."class.templates.php");
+						$API->module(TEMPLATES_PATH."10000.php");
 						
+						$RCU = new RCU;
+						$RCU->host = $input["host"];
+						$RCU->cookie = $input["cookie"];
+
+						$Device = new Device("management/modulator/toASI2", array("device"=>$select_device[0])); // результат запуска функции по `action` пути
+
+						$RCU->post_data = $Device->post_data;
+						
+						$sizeof_url = sizeof($Device->POST_url);
+				
+						for($i = 0; $i < $sizeof_url; $i++)
+						{
+							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
+							//$POST = $RCU->post($URL);	######## WARNING
+							
+							$Device->POST_result[$i] = array($URL, $RCU->post_data);//полученную страницы записываем
+							if($sizeof_url > 1 and !empty($RCU->post_data)) sleep(10);
+						}
+				
+					
+						$API($Device);
+					
 						
 						break;
 					}
