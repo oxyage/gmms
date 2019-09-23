@@ -761,6 +761,28 @@ switch($Route[0])
 						
 					}
 					
+					case "log":
+					{
+						try	{
+							API::checkArgs("start_date,finish_date");
+						}
+						catch(Exception $e)
+						{
+							$API($e); break;
+						}
+						$input = array("start_date"=>$_REQUEST["start_date"],
+						"finish_date"=>$_REQUEST["finish_date"]);		
+						
+						$get_log = $db->query("SELECT * FROM `log` WHERE `timestamp` BETWEEN '".$input["start_date"]."' AND '".$input["finish_date"]."' ORDER BY `uid` DESC");
+						$get_log = $db->fetch_assoc($get_log);
+						
+						
+						
+						$API($get_log);	
+						break;
+					}
+					
+					
 					case "devices": // db/select/devices/*
 					{
 						$API->module(CLASSES_PATH."class.rcu.php");
