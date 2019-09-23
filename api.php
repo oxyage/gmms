@@ -441,21 +441,21 @@ switch($Route[0])
 
 						$RCU->post_data = $Device->post_data;
 						
-						#$API(array("device"=>$Device, "rcu"=>$RCU));	break;	#debug
+						//$API(array("device"=>$Device, "rcu"=>$RCU));	break;	#debug
 						
 						$sizeof_url = sizeof($Device->POST_url);
 				
 						for($i = 0; $i < $sizeof_url; $i++)
 						{
 							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
-							//$POST = $RCU->post($URL);	######## WARNING
+							$POST = $RCU->post($URL);	######## WARNING
 							
 							$Device->POST_result[$i] = array($URL, $RCU->post_data);//полученную страницы записываем
 							if($sizeof_url > 1 and !empty($RCU->post_data)) sleep(10);
 						}
 				
 					
-						#$API($Device);
+						#$API($Device); break;	#debug
 					
 						
 						unset($Device);
@@ -558,7 +558,7 @@ switch($Route[0])
 						for($i = 0; $i < $sizeof_url; $i++)
 						{
 							$URL = $RCU->protocol."://".$RCU->host.$Device->POST_url[$i];
-							//$POST = $RCU->post($URL);	######## WARNING
+							$POST = $RCU->post($URL);	######## WARNING
 							
 							$Device->POST_result[$i] = array($URL, $RCU->post_data);//полученную страницы записываем
 							if($sizeof_url > 1 and !empty($RCU->post_data)) sleep(10);
