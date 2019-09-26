@@ -75,12 +75,33 @@ switch($Route[0])
 {
 	case "system":
 	{
-		//$return = "Result: ";
-	    $sys[] = exec("snmpget -m 0  -L n -c private -v 2c -t 8 10.32.1.2:8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
-		$sys[] = exec("snmpget -m 0  -L n -c private -v 2c -t 8 10.32.1.2:8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
+		try	{
+			API::checkArgs("host");
+		}
+		catch(Exception $e)
+		{
+			$API($e); break;
+		}
 		
+		$input = array("host"=>$_REQUEST["host"]);
 		
-		$API($sys);
+		//Network ID replacer
+	    $getNetworkID_1 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
+		#getNetworkID_2 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
+		
+		#echo "IP адрес СДК: 10.32.%%i.2 | Параметр Main delay (Задержка)"
+		#snmpget -m 0  -L n -c private -v 2c -t 8 10.32.%%i.2:8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.11.9
+		
+		#echo "IP адрес СДК: 10.32.%%i.2 | Параметр Leading Source (Основной поток, 2. IN)"
+		#snmpget -m 0  -L n -c private -v 2c -t 8 10.32.%%i.2:8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.12.9
+		
+		#echo "IP адрес СДК: 10.32.%%i.2 | Параметр Leading Source Delay (Задержка основного потока, ~120 мс)"
+		#snmpget -m 0  -L n -c private -v 2c -t 8 10.32.%%i.2:8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9
+		
+		$getNetworkID_1 = explode(" = ", $getNetworkID_1);
+		$getNetworkID_1 = $getNetworkID_1[1];
+		
+		$API($getNetworkID_1);
 		
 		break;
 	}

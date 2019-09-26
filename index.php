@@ -258,7 +258,12 @@
 	</div>
 	<h3>Мониторинг реплейсеров</h3>
 	<div style="">
-		Действия с реплейсерами
+	
+		<button class="panel-button" data-route="system/networkID1" >NetworkID [1]</button><br>
+		<button class="panel-button" data-route="system/networkID2" >NetworkID [2]</button><br>
+		<button class="panel-button" data-route="system/mainDelay" >Main Delay</button><br>
+		<button class="panel-button" data-route="system/leadingSource" >Leading Source</button><br>
+		<button class="panel-button" data-route="system/leadingSourceDelay" >Leading Source Delay</button><br>
 	
 	</div>
 </div>

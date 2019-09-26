@@ -13,7 +13,55 @@ $( function(){
 		GMMS.temp[unix] = {};
 	
 		switch(route[0]){
-			
+			case "system":{
+				
+				switch(route[1]) {
+					
+					case "networkID1":{
+						
+						GMMS.func.selected(function(host){
+							
+							GMMS.func.log(GMMS.rcu.host[host].name+": network ID [1] ", "log", host);
+							GMMS.func.status("wait", host);
+							GMMS.func.icon("wait", host);		
+							GMMS.func.ajax.start();
+							
+							GMMS.func.api({
+								route: "system",
+								host: host
+							})
+							.done(function(done_networkID1){
+								
+								
+								GMMS.func.log(GMMS.rcu.host[done_networkID1.host].name+": "+done_networkID1.response,
+													"info", done_networkID1.host);
+													
+								GMMS.func.status(done_networkID1.response, done_networkID1.host);
+								
+								GMMS.func.icon("ready",done_networkID1.host);
+								
+							})
+							.fail(function(fail_networkID1){
+								
+							});
+								
+							
+							
+							
+						});
+						
+						break;
+					}
+
+
+				
+					default:{
+						GMMS.func.log("undefined route[1] in panel", "warn",false,route);
+					}
+				}
+				
+				break;
+			}
 			case "rcu":{
 				
 				switch(route[1]) {
