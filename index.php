@@ -67,7 +67,7 @@
 
 	$( ".accordion" ).accordion({
       collapsible: true,
-	  heighStyle:"content"
+	  heighStyle: "content"
     });
 
 	

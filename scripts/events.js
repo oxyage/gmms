@@ -55,10 +55,12 @@ $( function() { /* события на странице*/
 				"data-sfn": RTS.sfn
 			})
 			.css({
-				"top": (100-RTS.coord.y)+"%",
-				"left": RTS.coord.x+"%"
+				"top": (100-RTS.coord_y)+"%",
+				"left": RTS.coord_x+"%"
 			})
-			.click(function(rts){
+			.click(
+			//вынести в GMMS.func
+			function(rts){
 				let name = $(this).data("name");
 				let host = $(this).data("host");
 			
@@ -73,9 +75,10 @@ $( function() { /* события на странице*/
 				})
 				.show();
 				
-				$("#menu .ui-widget-header div:first").text(name);
+				$("#menu .ui-widget-header div:first").html("<small>"+GMMS.rcu.host[host].uid+".</small> "+name+" <small>"+GMMS.rcu.host[host].power+" Вт</small>");
 			
-			})
+			}
+			)
 			.appendTo("#container-map");			
 		}				
 

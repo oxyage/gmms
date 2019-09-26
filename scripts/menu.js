@@ -129,7 +129,7 @@ $("li.action").click(function(li){
 								}
 								else
 								{
-									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[done_parse.host]["name"]+" (#"+done_parse.error+")","warn", done_parse.host, done_parse);
+									GMMS.func.log("Ошибка обновления устрйоств "+GMMS.rcu.host[done_parse.host]["name"]+" (#"+done_parse.error+")","info", done_parse.host, done_parse);
 									GMMS.func.status(false,done_parse.host);
 									GMMS.func.icon("error",done_parse.host);
 								}				
