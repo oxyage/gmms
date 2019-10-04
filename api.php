@@ -85,8 +85,51 @@ switch($Route[0])
 		
 		$input = array("host"=>$_REQUEST["host"]);
 		
+		switch($Route[1])
+		{
+			case "networkid1":{
+				
+				$getNetworkID_1 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
+				$getNetworkID_1 = explode(" = ", $getNetworkID_1);
+				$getNetworkID_1 = $getNetworkID_1[1];
+				$API($getNetworkID_1);
+				break;
+			}
+			case "networkid2":{
+				
+				$getNetworkID_2 = 		exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
+				$getNetworkID_2 = explode(" = ", $getNetworkID_2);
+				$getNetworkID_2 = $getNetworkID_2[1];
+				$API($getNetworkID_2);
+				break;
+			}
+			case "main_delay":{
+				$getMainDelay = 		exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.11.9");
+				$getMainDelay = explode(" = ", $getMainDelay);
+				$getMainDelay = $getMainDelay[1];
+				$API($getMainDelay);
+				break;
+			}
+			case "leading_source":{
+				$getLeadingSource = 	exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.12.9");
+				$getLeadingSource = explode(" = ", $getLeadingSource);
+				$getLeadingSource = $getLeadingSource[1];
+				$API($getLeadingSource);
+				break;
+			}
+			case "leading_source_delay":{
+				$getLeadingSourceDelay = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9");
+				$getLeadingSourceDelay = explode(" = ", $getLeadingSourceDelay);
+				$getLeadingSourceDelay = $getLeadingSourceDelay[1];
+				$API($getLeadingSourceDelay);
+				break;
+			}
+			default:{
+				$API("Undefined system/Route[1]");			
+			}
+		}
 		//Network ID replacer
-	    $getNetworkID_1 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
+	    
 		#getNetworkID_2 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
 		
 		#echo "IP адрес СДК: 10.32.%%i.2 | Параметр Main delay (Задержка)"
@@ -97,11 +140,7 @@ switch($Route[0])
 		
 		#echo "IP адрес СДК: 10.32.%%i.2 | Параметр Leading Source Delay (Задержка основного потока, ~120 мс)"
 		#snmpget -m 0  -L n -c private -v 2c -t 8 10.32.%%i.2:8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9
-		
-		$getNetworkID_1 = explode(" = ", $getNetworkID_1);
-		$getNetworkID_1 = $getNetworkID_1[1];
-		
-		$API($getNetworkID_1);
+
 		
 		break;
 	}

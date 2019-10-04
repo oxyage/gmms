@@ -8,6 +8,11 @@ $( function(){
 	$( "#panel .tabs" ).tabs({});
 	
 
+	$( "#panel-monitoring" ).accordion({
+	  collapsible: true,
+	  active: false, //скрыть при загрузке
+	  heightStyle: "content"
+	});
 
 	/* панель выбора объектов связи */
 	$( "#panel-select" ).accordion({

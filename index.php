@@ -66,7 +66,7 @@
 
 
 	$( ".accordion" ).accordion({
-      collapsible: true,
+    /*  collapsible: true,*/
 	  heighStyle: "content"
     });
 
@@ -238,7 +238,7 @@
   <div id="panel-tabs-monitoring">
  
  
-<div class="accordion" ><!-- start panel select-->
+<div class="accordion" id="panel-monitoring" ><!-- start panel select-->
 	<h3>Мониторинг параметров передатчиков</h3>
 	<div style="padding-bottom:3.5em;">
 		<div style="text-align:center; padding: 0; "> 
@@ -259,11 +259,11 @@
 	<h3>Мониторинг реплейсеров</h3>
 	<div style="">
 	
-		<button class="panel-button" data-route="system/networkID1" >NetworkID [1]</button><br>
-		<button class="panel-button" data-route="system/networkID2" >NetworkID [2]</button><br>
-		<button class="panel-button" data-route="system/mainDelay" >Main Delay</button><br>
-		<button class="panel-button" data-route="system/leadingSource" >Leading Source</button><br>
-		<button class="panel-button" data-route="system/leadingSourceDelay" >Leading Source Delay</button><br>
+		<button class="panel-button" data-route="system/networkID1" >NetworkID федеральный</button>
+		<button class="panel-button" data-route="system/networkID2" >NetworkID региональный</button> <br><br>
+		<button class="panel-button" data-route="system/mainDelay" >Общая задержка</button><br><br>
+		<button class="panel-button" data-route="system/leadingSource" >Приоритетный вход</button>
+		<button class="panel-button" data-route="system/leadingSourceDelay" >Задержка приоритетного входа</button>
 	
 	</div>
 </div>
