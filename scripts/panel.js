@@ -179,35 +179,75 @@ $( function(){
 						
 						break;
 					}
-					case "leadingSourceDelay":{
+					case "offsetStream":{
 						
 						GMMS.func.selected(function(host){
 							
-							GMMS.func.log(GMMS.rcu.host[host].name+": main delay ", "log", host);
+							GMMS.func.log(GMMS.rcu.host[host].name+": offset stream ", "log", host);
 							GMMS.func.status("wait", host);
 							GMMS.func.icon("wait", host);		
 							GMMS.func.ajax.start();
 							
 							GMMS.func.api({
-								route: "system/leading_source_delay",
+								route: "system/offset_stream",
 								host: host
 							})
-							.done(function(done_leadingSourceDelay){					
-								GMMS.func.log(GMMS.rcu.host[done_leadingSourceDelay.host].name+": "+done_leadingSourceDelay.response,
-													"info", done_leadingSourceDelay.host);				
-								GMMS.func.status(done_leadingSourceDelay.response, done_leadingSourceDelay.host);
-								GMMS.func.icon("ready",done_leadingSourceDelay.host);
+							.done(function(done_offsetStream){					
+								GMMS.func.log(GMMS.rcu.host[done_offsetStream.host].name+": "+done_offsetStream.response,
+													"info", done_offsetStream.host);				
+								GMMS.func.status(done_offsetStream.response, done_offsetStream.host);
+								GMMS.func.icon("ready",done_offsetStream.host);
 								GMMS.func.ajax.finish(function(){
 													
 													GMMS.func.log("Завершены все запросы", "info");
 													
 												});
 							})
-							.fail(function(fail_leadingSourceDelay){
-								GMMS.func.log(GMMS.rcu.host[fail_leadingSourceDelay.host].name+": "+fail_leadingSourceDelay.response,
-													"error", fail_leadingSourceDelay.host);				
-								GMMS.func.status(fail_leadingSourceDelay.response, fail_leadingSourceDelay.host);
-								GMMS.func.icon("error",fail_leadingSourceDelay.host);
+							.fail(function(fail_offsetStream){
+								GMMS.func.log(GMMS.rcu.host[fail_offsetStream.host].name+": "+fail_offsetStream.response,
+													"error", fail_offsetStream.host);				
+								GMMS.func.status(fail_offsetStream.response, fail_offsetStream.host);
+								GMMS.func.icon("error",fail_offsetStream.host);
+								GMMS.func.ajax.finish(function(){
+													
+													GMMS.func.log("Завершены все запросы", "info");
+													
+												});
+							});
+
+						});
+						
+						break;
+					}
+					case "statusReplacement":{
+						
+						GMMS.func.selected(function(host){
+							
+							GMMS.func.log(GMMS.rcu.host[host].name+": status replacement ", "log", host);
+							GMMS.func.status("wait", host);
+							GMMS.func.icon("wait", host);		
+							GMMS.func.ajax.start();
+							
+							GMMS.func.api({
+								route: "system/status_replacement",
+								host: host
+							})
+							.done(function(done_statusReplacement){					
+								GMMS.func.log(GMMS.rcu.host[done_statusReplacement.host].name+": "+done_statusReplacement.response,
+													"info", done_statusReplacement.host);				
+								GMMS.func.status(done_statusReplacement.response, done_statusReplacement.host);
+								GMMS.func.icon("ready",done_statusReplacement.host);
+								GMMS.func.ajax.finish(function(){
+													
+													GMMS.func.log("Завершены все запросы", "info");
+													
+												});
+							})
+							.fail(function(fail_statusReplacement){
+								GMMS.func.log(GMMS.rcu.host[fail_statusReplacement.host].name+": "+fail_statusReplacement.response,
+													"error", fail_statusReplacement.host);				
+								GMMS.func.status(fail_statusReplacement.response, fail_statusReplacement.host);
+								GMMS.func.icon("error",fail_statusReplacement.host);
 								GMMS.func.ajax.finish(function(){
 													
 													GMMS.func.log("Завершены все запросы", "info");

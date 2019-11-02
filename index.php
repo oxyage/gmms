@@ -261,9 +261,10 @@
 	
 		<button class="panel-button" data-route="system/networkID1" >NetworkID федеральный</button>
 		<button class="panel-button" data-route="system/networkID2" >NetworkID региональный</button> <br><br>
-		<button class="panel-button" data-route="system/mainDelay" >Общая задержка</button><br><br>
-		<button class="panel-button" data-route="system/leadingSource" >Приоритетный вход</button>
-		<button class="panel-button" data-route="system/leadingSourceDelay" >Задержка приоритетного входа</button>
+		<button class="panel-button" data-route="system/mainDelay" >Общая задержка</button>
+		<button class="panel-button" data-route="system/leadingSource" >Leading Source</button><br><br>
+		<button class="panel-button" data-route="system/offsetStream" >Offset Streams</button><br><br>
+		<button class="panel-button" data-route="system/statusReplacement" >Статус замещения</button>
 	
 	</div>
 </div>
