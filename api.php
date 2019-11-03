@@ -90,35 +90,86 @@ switch($Route[0])
 			case "networkid1":{
 				
 				$getNetworkID_1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
-				$API("Network ID fed: ".$getNetworkID_1);
+				$API($getNetworkID_1);
 				break;
 			}
 			case "networkid2":{
 				
 				$getNetworkID_2 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
-				$API("Network ID reg: ".$getNetworkID_2);
+				$API($getNetworkID_2);
 				break;
 			}
 			case "main_delay":{
 				$getMainDelay = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.11.9");
-				$API("Main Delay: ".$getMainDelay);
+				$getMainDelay = str_replace('"','',$getMainDelay);
+				$API($getMainDelay." мс");
 				break;
 			}
 			case "leading_source":{
 				$getLeadingSource = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.12.9");
-				$API("Leading Source: ".$getLeadingSource);
+				$getLeadingSource = str_replace('"','',$getLeadingSource);
+				$API($getLeadingSource);
 				break;
 			}
 			case "offset_stream":{
-				$getLeadingSourceDelay = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9");
-				$API("Offset stream: ".$getLeadingSourceDelay);
+				$getOffsetBetweenStreams = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9");
+				$getOffsetBetweenStreams = str_replace('"','',$getOffsetBetweenStreams);
+				$API($getOffsetBetweenStreams." мс");
 				break;
 			}
 			case "status_replacement":{
 				$getReplacingStatus = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.10.9");
-				$API("Status: ".$getReplacingStatus);
+				$getReplacingStatus = str_replace('"','',$getReplacingStatus);
+				$API($getReplacingStatus);
 				break;
 			}
+			
+			//RX8330
+			
+			case "federal_rx_rf1_freq":{
+				$getFrequencyFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.3.1");
+				$API($getFrequencyFederalRX_rf1." Гц");
+				break;
+			}
+			
+			case "federal_rx_rf1_symrate":{
+				$getSymRateFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.4.1");
+				$API($getSymRateFederalRX_rf1." сим/сек");
+				break;
+			}
+			
+			case "federal_rx_rf1_status":{
+				$getStatusFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.2.0");
+				$getStatusFederalRX_rf1 = str_replace('"','',$getStatusFederalRX_rf1);
+				$API($getStatusFederalRX_rf1);
+				break;
+			}
+			
+			
+			//RTM-555
+				
+			case "regional_rx_rf1_freq":{
+				$getFrequencyRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.9.1");
+				$API($getFrequencyRegionalRX_rf1." МГц");
+				break;
+			}
+			
+			case "regional_rx_rf1_symrate":{
+				$getSymRateRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.10.1");
+				$API($getSymRateRegionalRX_rf1." кСим/сек");
+				break;
+			}
+			case "regional_rx_rf1_status":{
+				$getStatusRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.7.1");
+				$getStatusRegionalRX_rf1 = str_replace('"','',$getStatusRegionalRX_rf1);
+				$API($getStatusRegionalRX_rf1."%");
+				break;
+			}
+			
+			
+			
+			
+			
 			default:{
 				$API("Undefined system/Route[1]");			
 			}

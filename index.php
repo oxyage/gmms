@@ -259,14 +259,29 @@
 	<h3>Мониторинг реплейсеров</h3>
 	<div style="">
 	
-		<button class="panel-button" data-route="system/networkID1" >NetworkID федеральный</button>
-		<button class="panel-button" data-route="system/networkID2" >NetworkID региональный</button> <br><br>
-		<button class="panel-button" data-route="system/mainDelay" >Общая задержка</button>
-		<button class="panel-button" data-route="system/leadingSource" >Leading Source</button><br><br>
-		<button class="panel-button" data-route="system/offsetStream" >Offset Streams</button><br><br>
-		<button class="panel-button" data-route="system/statusReplacement" >Статус замещения</button>
+		<button class="panel-button" data-route="system/networkid1" >NetworkID федеральный</button>
+		<button class="panel-button" data-route="system/networkid2" >NetworkID региональный</button> <br><br>
+		<button class="panel-button" data-route="system/main_delay" >Общая задержка</button>
+		<button class="panel-button" data-route="system/leading_source" >Leading Source</button><br><br>
+		<button class="panel-button" data-route="system/offset_stream" >Offset Streams</button><br><br>
+		<button class="panel-button" data-route="system/status_replacement" >Статус замещения</button>
 	
 	</div>
+	
+	<h3>Мониторинг приемников</h3>
+	<div style="">
+	
+		<button class="panel-button" data-route="system/federal_rx_rf1_freq" >Частота Ericsson Федеральный</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_symrate" >Символьная скорость Ericsson Федеральный</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_status" >Статус захвата сигнала Ericsson Федеральный</button>
+		<br><br>
+		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота TRK-555 Региональный</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость TRK-555 Региональный</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Статус захвата сигнала TRK-555 Региональный</button>
+			
+	</div>
+	
+	
 </div>
  
  
