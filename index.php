@@ -281,6 +281,18 @@
 			
 	</div>
 	
+	<h3>Мониторинг сплайсеров</h3>
+	<div style="">
+		<button class="panel-button" data-route="system/splicer_get_bypass" >Проверка режима Bypass</button> <!-- 1.3.6.1.4.1.49675.21.0  -->
+		<button class="panel-button" data-route="system/splicer_get_count_plp">Число PLP IN_0</button><!-- 1.3.6.1.4.1.49675.49.1.5.1  -->
+		<button class="panel-button" data-route="system/splicer_get_in0_confcurrbr">ASI IN_0 Bitrate</button><!-- 1.3.6.1.4.1.49675.49.1.7.1  -  1.3.6.1.4.1.49675.49.1.8.1 -->
+		<br><br>
+		<button class="panel-button" data-route="system/splicer_get_confbr" >Configure Bitrate</button> <!-- 1.3.6.1.4.1.49675.51.1.5.1  1.3.6.1.4.1.49675.51.1.5.2  -->
+		<button class="panel-button" data-route="system/splicer_get_currbr" >Current Bitrate</button> <!--   1.3.6.1.4.1.49675.51.1.6.1  1.3.6.1.4.1.49675.51.1.6.2 -->
+		<button class="panel-button" data-route="system/splicer_get_diff_confcurr" >Разница между ConfBr/CurrBr</button>
+		<br><br>			
+	</div>
+	
 	
 </div>
  

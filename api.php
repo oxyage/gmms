@@ -128,13 +128,15 @@ switch($Route[0])
 			
 			case "federal_rx_rf1_freq":{
 				$getFrequencyFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.3.1");
-				$API($getFrequencyFederalRX_rf1." Гц");
+				$getFrequencyFederalRX_rf1 /= 1e6;
+				$API($getFrequencyFederalRX_rf1." ГГц");
 				break;
 			}
 			
 			case "federal_rx_rf1_symrate":{
 				$getSymRateFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.4.1");
-				$API($getSymRateFederalRX_rf1." сим/сек");
+				$getSymRateFederalRX_rf1 /= 1e6;
+				$API($getSymRateFederalRX_rf1." МСим/с");
 				break;
 			}
 			
@@ -150,19 +152,88 @@ switch($Route[0])
 				
 			case "regional_rx_rf1_freq":{
 				$getFrequencyRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.9.1");
-				$API($getFrequencyRegionalRX_rf1." МГц");
+				$getFrequencyRegionalRX_rf1 /= 1e3;
+				$API($getFrequencyRegionalRX_rf1." ГГц");
 				break;
 			}
 			
 			case "regional_rx_rf1_symrate":{
 				$getSymRateRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.10.1");
-				$API($getSymRateRegionalRX_rf1." кСим/сек");
+				$getSymRateRegionalRX_rf1 /= 1e3;
+				$API($getSymRateRegionalRX_rf1." МСим/с");
 				break;
 			}
 			case "regional_rx_rf1_status":{
 				$getStatusRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.7.1");
 				$getStatusRegionalRX_rf1 = str_replace('"','',$getStatusRegionalRX_rf1);
 				$API($getStatusRegionalRX_rf1."%");
+				break;
+			}
+			
+			// Qualitteq
+			
+			case "splicer_get_bypass":{
+				$getSplicerBypassMode = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.21.0");
+				
+				if($getSplicerBypassMode == 0) $getSplicerBypassMode .= " (off)";
+				elseif($getSplicerBypassMode == 1) $getSplicerBypassMode .= " (on)";
+				else $getSplicerBypassMode .= "()";
+					
+				$API($getSplicerBypassMode);
+				break;
+			}
+			case "splicer_get_count_plp":{
+				$getCountPLP_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.5.1");
+				$API($getCountPLP_IN0." PLP");
+				break;
+			}
+			case "splicer_get_confbr":{
+				
+				$get_conf_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.1");
+				$get_conf_PLP0 /= 1e6;
+				
+				$get_conf_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.2");
+				$get_conf_PLP1 /= 1e6;
+				
+				$API("PLP0: ".$get_conf_PLP0." Mbps<br>PLP1: ".$get_conf_PLP1." Mbps");				
+				break;
+			}
+			case "splicer_get_currbr":{
+				
+				$get_curr_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.1");
+				$get_curr_PLP0 /= 1e6;
+				
+				$get_curr_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.2");
+				$get_curr_PLP1 /= 1e6;
+				
+				$API("PLP0: ".$get_curr_PLP0." Mbps<br>PLP1: ".$get_curr_PLP1." Mbps");				
+				break;
+			}
+			case "splicer_get_diff_confcurr":{
+				
+				$get_conf_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.1");
+				$get_conf_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.2");
+				
+				$get_curr_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.1");
+				$get_curr_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.2");
+						
+				$get_diff_PLP0 = $get_conf_PLP0 - $get_curr_PLP0;
+				$get_diff_PLP1 = $get_conf_PLP1 - $get_curr_PLP1;
+						
+				$API("PLP0: ".$get_diff_PLP0."<br>PLP1: ".$get_diff_PLP1);
+				
+				break;
+			}		
+			case "splicer_get_in0_confcurrbr":{
+				$get_confbr_ASI_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.7.1");
+				$get_confbr_ASI_IN0 /= 1e6;
+				
+				$get_currbr_ASI_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.8.1");
+				$get_currbr_ASI_IN0 /= 1e6;
+				
+				
+				$API($get_confbr_ASI_IN0." / ".$get_currbr_ASI_IN0." [Mbps]");
+				
 				break;
 			}
 			
