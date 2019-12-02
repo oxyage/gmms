@@ -277,7 +277,9 @@
 		<br><br>
 		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота TRK-555 Региональный</button>
 		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость TRK-555 Региональный</button>
-		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Статус захвата сигнала TRK-555 Региональный</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Статус захвата сигнала TRK-555 Региональный</button> <br>
+		<button class="panel-button" data-route="system/get_margin_1" >Link Margin 1 тюнер</button>
+		<button class="panel-button" data-route="system/get_margin_2" >Link Margin 2 тюнер</button>
 			
 	</div>
 	
@@ -337,26 +339,30 @@
 <button class="panel-button" data-route="rcu/management/goto53" >Перейти на 53° резервный спутник</button>
  
   </div>
+  
+  
   <div id="panel-tabs-additional">
    
-<!--   Включение выключение замены PLP<br> -->
-Выберите объекты связи и авторизуйтесь в них:
-<button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
+   <div class="accordion" id="panel-monitoring" ><!-- start panel select-->
+   <h3>Управление реплейсерами</h3>
+	<div style="padding-bottom:3.5em;">
+	<br><br>
+		<button class="panel-button" data-route="system/replacementOFF" >Отключить замещение</button>
+		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
+	</div>
+	
+	<h3>Другое</h3>
+	<div style="padding-bottom:3.5em;">
+	<br><br>
+		<button class="panel-button" data-route="system/replacementOFF" >Отключить замещение</button>
+		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
+	</div>
+	
+	
+   </div>
+   
+   
 
-<button class="panel-button" data-route="rcu/updateStatus" >Показать имена РТС</button>
-
-<hr>
-<!--
-<label for="show-rts-names">Имена объектов связи</label>
-<input type="checkbox" name="" id="show-rts-names"> -->
-
-<br>
-<br>
-
-<label for="auto-auth">Автоматическая авторизация</label>
-<input type="checkbox" name="" id="auto-auth"> 
-  
-  
   
   </div>
 </div>

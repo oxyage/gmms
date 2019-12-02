@@ -87,6 +87,23 @@ switch($Route[0])
 		
 		switch($Route[1])
 		{
+			
+			case "replacementOFF":{
+				
+				$replacementOFF = exec("snmpset -m 0 -C q -L n -c private -v 2c -t 10 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.1.9 i 0");
+				#$replacementOFF = "off replacement";
+				$API($replacementOFF);
+				break;
+			}
+			
+			case "replacementON":{
+				
+				$replacementOFF = exec("snmpset -m 0 -C q -L n -c private -v 2c -t 10 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.1.9 i 1");
+				#$replacementON = "on replacement";
+				$API($replacementOFF);
+				break;
+			}
+			
 			case "networkid1":{
 				
 				$getNetworkID_1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
@@ -124,6 +141,7 @@ switch($Route[0])
 				break;
 			}
 			
+					
 			//RX8330
 			
 			case "federal_rx_rf1_freq":{
@@ -167,6 +185,20 @@ switch($Route[0])
 				$getStatusRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.7.1");
 				$getStatusRegionalRX_rf1 = str_replace('"','',$getStatusRegionalRX_rf1);
 				$API($getStatusRegionalRX_rf1."%");
+				break;
+			}
+			
+			case "get_margin_1":{
+				$getMargin 				= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.21.1");
+				$getMargin = $getMargin/100;
+				$API($getMargin." дБ");
+				break;
+			}
+			
+			case "get_margin_2":{
+				$getMargin 				= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.21.2");
+				$getMargin = $getMargin/100;
+				$API($getMargin." дБ");
 				break;
 			}
 			
