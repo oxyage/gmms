@@ -270,18 +270,21 @@
 	
 	<h3>Мониторинг приемников</h3>
 	<div style="">
-	
-		<button class="panel-button" data-route="system/federal_rx_rf1_freq" >Частота Ericsson Федеральный</button>
-		<button class="panel-button" data-route="system/federal_rx_rf1_symrate" >Символьная скорость Ericsson Федеральный</button>
-		<button class="panel-button" data-route="system/federal_rx_rf1_status" >Статус захвата сигнала Ericsson Федеральный</button>
-		<br><br>
-		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота TRK-555 Региональный</button>
-		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость TRK-555 Региональный</button>
-		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Статус захвата сигнала TRK-555 Региональный</button> <br>
-		<button class="panel-button" data-route="system/get_margin_1" >Link Margin 1 тюнер</button>
-		<button class="panel-button" data-route="system/get_margin_2" >Link Margin 2 тюнер</button> <br>
 		
+		<h2> Ericsson RX8330 - федеральный (1 MUX)</h2>
+		<button class="panel-button" data-route="system/federal_rx_rf1_freq" >Частота</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_symrate" >Символьная скорость</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_status" >Статус захвата сигнала</button>
+		<hr>
 		
+		<h2> RTM TRK-555 - региональный</h2>
+		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Уровень захвата сигнала</button> 
+		<br>
+		<button class="panel-button" data-route="system/get_margin_1" data-accept="Запрос LKM 1 тюнер">Link Margin 1 тюнер</button>
+		<button class="panel-button" data-route="system/get_margin_2" data-accept="Запрос LKM 2 тюнер">Link Margin 2 тюнер</button>
+		<br>	
 		<button class="panel-button" data-route="system/get_asi_out_1" >ASI Out 1</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.1 -->
 		<button class="panel-button" data-route="system/get_asi_out_2" >ASI Out 2</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 -->
 		
@@ -304,27 +307,6 @@
 </div>
  
  
- 
- 
- 
-	<!--
-	<div class="tabs">
-	  <ul>
-		<li><a href="#tabs-monitoring-tx">Передатчики</a></li>
-		<li><a href="#tabs-monitoring-nevion">Реплейсеры Nevion</a></li>
-	  </ul>
-	  <div id="tabs-monitoring-tx">
-	  
-		<label for="1mux">1 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="1mux" value="1" data-route=""> 
-	  
-		<label for="2mux">2 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
-		
-	  </div>
-	  <div id="tabs-monitoring-nevion">nevion</div>
-	</div>
-	-->
 	<hr>
 
   </div>

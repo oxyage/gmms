@@ -19,6 +19,23 @@ $( function(){
 									
 					default:{
 						
+						if(data.accept){
+							
+							if(!GMMS.func.confirm("Подтвердите действие\n"+data.accept, 
+							function(){
+								console.log("Подтверждено");
+								return true;
+							}, 
+							function(){
+								console.warn("Не подтверждено");
+								return false;
+							})) 
+								break;
+						
+							
+							
+						}
+						
 						
 						GMMS.func.selected(function(host){
 							
