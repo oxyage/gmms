@@ -279,7 +279,12 @@
 		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость TRK-555 Региональный</button>
 		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Статус захвата сигнала TRK-555 Региональный</button> <br>
 		<button class="panel-button" data-route="system/get_margin_1" >Link Margin 1 тюнер</button>
-		<button class="panel-button" data-route="system/get_margin_2" >Link Margin 2 тюнер</button>
+		<button class="panel-button" data-route="system/get_margin_2" >Link Margin 2 тюнер</button> <br>
+		
+		
+		<button class="panel-button" data-route="system/get_asi_out_1" >ASI Out 1</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.1 -->
+		<button class="panel-button" data-route="system/get_asi_out_2" >ASI Out 2</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 -->
+		
 			
 	</div>
 	

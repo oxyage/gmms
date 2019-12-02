@@ -202,6 +202,33 @@ switch($Route[0])
 				break;
 			}
 			
+			case "get_asi_out_1":{
+				$getASIOut1	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.1");
+				switch($getASIOut1)
+				{
+					case 1: $getASIOut1 = "Тюнер 1"; break;
+					case 2: $getASIOut1 = "CAM 1"; break;
+					case 7: $getASIOut1 = "Тюнер 2"; break;
+					case 8: $getASIOut1 = "CAM 2"; break;
+				}
+				$API($getASIOut1);
+				break;
+			}
+			case "get_asi_out_2":{
+				$getASIOut2	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.2");
+				switch($getASIOut2)
+				{
+					case 1: $getASIOut2 = "Тюнер 1"; break;
+					case 2: $getASIOut2 = "CAM 1"; break;
+					case 7: $getASIOut2 = "Тюнер 2"; break;
+					case 8: $getASIOut2 = "CAM 2"; break;
+				}
+				$API($getASIOut2);
+				break;
+			}
+			
+			
+			
 			// Qualitteq
 			
 			case "splicer_get_bypass":{
