@@ -16,213 +16,66 @@ $( function(){
 			case "system":{
 				
 				switch(route[1]) {
-					
-					case "networkID1":{
-						
-						GMMS.func.selected(function(host){
-							
-							GMMS.func.log(GMMS.rcu.host[host].name+": network ID [1] ", "log", host);
-							GMMS.func.status("wait", host);
-							GMMS.func.icon("wait", host);		
-							GMMS.func.ajax.start();
-							
-							GMMS.func.api({
-								route: "system/networkid1",
-								host: host
-							})
-							.done(function(done_networkID1){					
-								GMMS.func.log(GMMS.rcu.host[done_networkID1.host].name+": "+done_networkID1.response,
-													"info", done_networkID1.host);				
-								GMMS.func.status(done_networkID1.response, done_networkID1.host);
-								GMMS.func.icon("ready",done_networkID1.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							})
-							.fail(function(fail_networkID1){
-								GMMS.func.log(GMMS.rcu.host[fail_networkID1.host].name+": "+fail_networkID1.response,
-													"error", fail_networkID1.host);				
-								GMMS.func.status(fail_networkID1.response, fail_networkID1.host);
-								GMMS.func.icon("error",fail_networkID1.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							});
-
-						});
-						
-						break;
-					}
-					
-					case "networkID2":{
-						
-						GMMS.func.selected(function(host){
-							
-							GMMS.func.log(GMMS.rcu.host[host].name+": network ID [2] ", "log", host);
-							GMMS.func.status("wait", host);
-							GMMS.func.icon("wait", host);		
-							GMMS.func.ajax.start();
-							
-							GMMS.func.api({
-								route: "system/networkid2",
-								host: host
-							})
-							.done(function(done_networkID2){					
-								GMMS.func.log(GMMS.rcu.host[done_networkID2.host].name+": "+done_networkID2.response,
-													"info", done_networkID2.host);				
-								GMMS.func.status(done_networkID2.response, done_networkID2.host);
-								GMMS.func.icon("ready",done_networkID2.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							})
-							.fail(function(fail_networkID2){
-								GMMS.func.log(GMMS.rcu.host[fail_networkID2.host].name+": "+fail_networkID2.response,
-													"error", fail_networkID2.host);				
-								GMMS.func.status(fail_networkID2.response, fail_networkID2.host);
-								GMMS.func.icon("error",fail_networkID2.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							});
-
-						});
-						
-						break;
-					}
-					
-					case "mainDelay":{
-						
-						GMMS.func.selected(function(host){
-							
-							GMMS.func.log(GMMS.rcu.host[host].name+": main delay ", "log", host);
-							GMMS.func.status("wait", host);
-							GMMS.func.icon("wait", host);		
-							GMMS.func.ajax.start();
-							
-							GMMS.func.api({
-								route: "system/main_delay",
-								host: host
-							})
-							.done(function(done_mainDelay){					
-								GMMS.func.log(GMMS.rcu.host[done_mainDelay.host].name+": "+done_mainDelay.response,
-													"info", done_mainDelay.host);				
-								GMMS.func.status(done_mainDelay.response, done_mainDelay.host);
-								GMMS.func.icon("ready",done_mainDelay.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							})
-							.fail(function(fail_mainDelay){
-								GMMS.func.log(GMMS.rcu.host[fail_mainDelay.host].name+": "+fail_mainDelay.response,
-													"error", fail_mainDelay.host);				
-								GMMS.func.status(fail_mainDelay.response, fail_mainDelay.host);
-								GMMS.func.icon("error",fail_mainDelay.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							});
-
-						});
-						
-						break;
-					}
-					case "leadingSource":{
-						
-						GMMS.func.selected(function(host){
-							
-							GMMS.func.log(GMMS.rcu.host[host].name+": leading source ", "log", host);
-							GMMS.func.status("wait", host);
-							GMMS.func.icon("wait", host);		
-							GMMS.func.ajax.start();
-							
-							GMMS.func.api({
-								route: "system/leading_source",
-								host: host
-							})
-							.done(function(done_leadingSource){					
-								GMMS.func.log(GMMS.rcu.host[done_leadingSource.host].name+": "+done_leadingSource.response,
-													"info", done_leadingSource.host);				
-								GMMS.func.status(done_leadingSource.response, done_leadingSource.host);
-								GMMS.func.icon("ready",done_leadingSource.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							})
-							.fail(function(fail_leadingSource){
-								GMMS.func.log(GMMS.rcu.host[fail_leadingSource.host].name+": "+fail_leadingSource.response,
-													"error", fail_leadingSource.host);				
-								GMMS.func.status(fail_leadingSource.response, fail_leadingSource.host);
-								GMMS.func.icon("error",fail_leadingSource.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							});
-
-						});
-						
-						break;
-					}
-					case "leadingSourceDelay":{
-						
-						GMMS.func.selected(function(host){
-							
-							GMMS.func.log(GMMS.rcu.host[host].name+": main delay ", "log", host);
-							GMMS.func.status("wait", host);
-							GMMS.func.icon("wait", host);		
-							GMMS.func.ajax.start();
-							
-							GMMS.func.api({
-								route: "system/leading_source_delay",
-								host: host
-							})
-							.done(function(done_leadingSourceDelay){					
-								GMMS.func.log(GMMS.rcu.host[done_leadingSourceDelay.host].name+": "+done_leadingSourceDelay.response,
-													"info", done_leadingSourceDelay.host);				
-								GMMS.func.status(done_leadingSourceDelay.response, done_leadingSourceDelay.host);
-								GMMS.func.icon("ready",done_leadingSourceDelay.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							})
-							.fail(function(fail_leadingSourceDelay){
-								GMMS.func.log(GMMS.rcu.host[fail_leadingSourceDelay.host].name+": "+fail_leadingSourceDelay.response,
-													"error", fail_leadingSourceDelay.host);				
-								GMMS.func.status(fail_leadingSourceDelay.response, fail_leadingSourceDelay.host);
-								GMMS.func.icon("error",fail_leadingSourceDelay.host);
-								GMMS.func.ajax.finish(function(){
-													
-													GMMS.func.log("Завершены все запросы", "info");
-													
-												});
-							});
-
-						});
-						
-						break;
-					}
-
-				
+									
 					default:{
-						GMMS.func.log("undefined route[1] in panel", "warn",false,route);
+						
+						if(data.accept){
+							
+							if(!GMMS.func.confirm("Подтвердите действие\n"+data.accept, 
+							function(){
+								console.log("Подтверждено");
+								return true;
+							}, 
+							function(){
+								console.warn("Не подтверждено");
+								return false;
+							})) 
+								break;
+						
+							
+							
+						}
+						
+						
+						GMMS.func.selected(function(host){
+							
+							GMMS.func.log(GMMS.rcu.host[host].name+": "+route[1], "log", host);
+							GMMS.func.status("wait", host);
+							GMMS.func.icon("wait", host);		
+							GMMS.func.ajax.start();
+							
+							GMMS.func.api({
+								route: "system/"+route[1],
+								host: host
+							})
+							.done(function(done){					
+								GMMS.func.log(GMMS.rcu.host[done.host].name+": "+done.response,
+													"info", done.host);				
+								GMMS.func.status(done.response, done.host);
+								GMMS.func.icon("ready",done.host);
+								GMMS.func.ajax.finish(function(){
+													
+													GMMS.func.log("Завершены все запросы", "info");
+													
+												});
+							})
+							.fail(function(fail){
+								GMMS.func.log(GMMS.rcu.host[fail.host].name+": "+fail.response,
+													"error", fail.host);				
+								GMMS.func.status(fail.response, fail.host);
+								GMMS.func.icon("error",fail.host);
+								GMMS.func.ajax.finish(function(){
+													
+													GMMS.func.log("Завершены все запросы", "info");
+													
+												});
+							});
+
+						});
+						
+						
+						
+						//GMMS.func.log("undefined route[1] in panel", "warn",false,route);
 					}
 				}
 				

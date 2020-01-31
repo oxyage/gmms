@@ -87,43 +87,262 @@ switch($Route[0])
 		
 		switch($Route[1])
 		{
+			
+			case "replacementOFF":{
+				
+				$replacementOFF = exec("snmpset -m 0 -C q -L n -c private -v 2c -t 10 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.1.9 i 0");
+				#$replacementOFF = "off replacement";
+				$API($replacementOFF);
+				break;
+			}
+			
+			case "replacementON":{
+				
+				$replacementOFF = exec("snmpset -m 0 -C q -L n -c private -v 2c -t 10 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.1.9 i 1");
+				#$replacementON = "on replacement";
+				$API($replacementOFF);
+				break;
+			}
+			
 			case "networkid1":{
 				
-				$getNetworkID_1 = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
-				$getNetworkID_1 = explode(" = ", $getNetworkID_1);
-				$getNetworkID_1 = $getNetworkID_1[1];
+				$getNetworkID_1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.1");
 				$API($getNetworkID_1);
 				break;
 			}
 			case "networkid2":{
 				
-				$getNetworkID_2 = 		exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
-				$getNetworkID_2 = explode(" = ", $getNetworkID_2);
-				$getNetworkID_2 = $getNetworkID_2[1];
+				$getNetworkID_2 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.13.1.3.1.1.2");
 				$API($getNetworkID_2);
 				break;
 			}
 			case "main_delay":{
-				$getMainDelay = 		exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.11.9");
-				$getMainDelay = explode(" = ", $getMainDelay);
-				$getMainDelay = $getMainDelay[1];
-				$API($getMainDelay);
+				$getMainDelay = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.11.9");
+				$getMainDelay = str_replace('"','',$getMainDelay);
+				$API($getMainDelay." мс");
 				break;
 			}
 			case "leading_source":{
-				$getLeadingSource = 	exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.12.9");
-				$getLeadingSource = explode(" = ", $getLeadingSource);
-				$getLeadingSource = $getLeadingSource[1];
+				$getLeadingSource = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.12.9");
+				$getLeadingSource = str_replace('"','',$getLeadingSource);
 				$API($getLeadingSource);
 				break;
 			}
-			case "leading_source_delay":{
-				$getLeadingSourceDelay = exec("snmpget -m 0  -L n -c private -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9");
-				$getLeadingSourceDelay = explode(" = ", $getLeadingSourceDelay);
-				$getLeadingSourceDelay = $getLeadingSourceDelay[1];
-				$API($getLeadingSourceDelay);
+			case "offset_stream":{
+				$getOffsetBetweenStreams = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.13.9");
+				$getOffsetBetweenStreams = str_replace('"','',$getOffsetBetweenStreams);
+				$API($getOffsetBetweenStreams." мс");
 				break;
 			}
+			case "status_replacement":{
+				$getReplacingStatus = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.3.15.1.1.1.10.9");
+				$getReplacingStatus = str_replace('"','',$getReplacingStatus);
+				$API($getReplacingStatus);
+				break;
+			}
+			
+					
+			//RX8330
+			
+			case "federal_rx_rf1_freq":{
+				$getFrequencyFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.3.1");
+				$getFrequencyFederalRX_rf1 /= 1e6;
+				$API($getFrequencyFederalRX_rf1." ГГц");
+				break;
+			}
+			
+			case "federal_rx_rf1_symrate":{
+				$getSymRateFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.15.1.4.1");
+				$getSymRateFederalRX_rf1 /= 1e6;
+				$API($getSymRateFederalRX_rf1." МСим/с");
+				break;
+			}
+			
+			case "federal_rx_rf1_status":{
+				$getStatusFederalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8051 1.3.6.1.4.1.1773.1.3.208.2.2.2.0");
+				$getStatusFederalRX_rf1 = str_replace('"','',$getStatusFederalRX_rf1);
+				$API($getStatusFederalRX_rf1);
+				break;
+			}
+			
+			
+			//RTM-555
+				
+			case "regional_rx_rf1_freq":{
+				$getFrequencyRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.9.1");
+				$getFrequencyRegionalRX_rf1 /= 1e3;
+				$API($getFrequencyRegionalRX_rf1." ГГц");
+				break;
+			}
+			
+			case "regional_rx_rf1_symrate":{
+				$getSymRateRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.10.1");
+				$getSymRateRegionalRX_rf1 /= 1e3;
+				$API($getSymRateRegionalRX_rf1." МСим/с");
+				break;
+			}
+			case "regional_rx_rf1_status":{
+				$getStatusRegionalRX_rf1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.7.1");
+				$getStatusRegionalRX_rf1 = str_replace('"','',$getStatusRegionalRX_rf1);
+				$API($getStatusRegionalRX_rf1."%");
+				break;
+			}
+			
+			case "get_margin_1":{
+				$getMargin 				= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.21.1");
+				$getMargin = $getMargin/100;
+				$API($getMargin." дБ");
+				break;
+			}
+			
+			case "get_margin_2":{
+				$getMargin 				= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.1.1.21.2");
+				$getMargin = $getMargin/100;
+				$API($getMargin." дБ");
+				break;
+			}
+			
+			case "get_asi_out_1":{
+				$getASIOut1	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.1");
+				switch($getASIOut1)
+				{
+					case 1: $getASIOut1 = "Тюнер 1"; break;
+					case 2: $getASIOut1 = "CAM 1"; break;
+					case 7: $getASIOut1 = "Тюнер 2"; break;
+					case 8: $getASIOut1 = "CAM 2"; break;
+				}
+				$API($getASIOut1);
+				break;
+			}
+			case "get_asi_out_2":{
+				$getASIOut2	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.2");
+				switch($getASIOut2)
+				{
+					case 1: $getASIOut2 = "Тюнер 1"; break;
+					case 2: $getASIOut2 = "CAM 1"; break;
+					case 7: $getASIOut2 = "Тюнер 2"; break;
+					case 8: $getASIOut2 = "CAM 2"; break;
+				}
+				$API($getASIOut2);
+				break;
+			}
+			
+			case "get_asi_out_3":{
+				$getASIOut3	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.3");
+				switch($getASIOut3)
+				{
+					case 1: $getASIOut3 = "Тюнер 1"; break;
+					case 2: $getASIOut3 = "CAM 1"; break;
+					case 3: $getASIOut3 = "T2-MI 1 PLP_0"; break;
+					case 4: $getASIOut3 = "T2-MI 1 PLP_1"; break;
+					case 5: $getASIOut3 = "T2-MI 1 PLP_2"; break;
+					case 6: $getASIOut3 = "T2-MI 1 PLP_3"; break;
+					
+					case 7: $getASIOut3 = "Тюнер 2"; break;
+					case 8: $getASIOut3 = "CAM 2"; break;
+					case 9: $getASIOut3 = "T2-MI 2 PLP_0"; break;
+					case 10: $getASIOut3 = "T2-MI 2 PLP_1"; break;
+					case 11: $getASIOut3 = "T2-MI 2 PLP_2"; break;
+					case 12: $getASIOut3 = "T2-MI 2 PLP_3"; break;
+				}
+				$API($getASIOut3);
+				break;
+			}
+			
+			case "get_asi_out_4":{
+				$getASIOut4	= exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8041 1.3.6.1.4.1.55555.555.1.3.1.3.4");
+				switch($getASIOut4)
+				{
+					case 1: $getASIOut4 = "Тюнер 1"; break;
+					case 2: $getASIOut4 = "CAM 1"; break;
+					case 3: $getASIOut4 = "T2-MI 1 PLP_0"; break;
+					case 4: $getASIOut4 = "T2-MI 1 PLP_1"; break;
+					case 5: $getASIOut4 = "T2-MI 1 PLP_2"; break;
+					case 6: $getASIOut4 = "T2-MI 1 PLP_3"; break;
+					
+					case 7: $getASIOut4 = "Тюнер 2"; break;
+					case 8: $getASIOut4 = "CAM 2"; break;
+					case 9: $getASIOut4 = "T2-MI 2 PLP_0"; break;
+					case 10: $getASIOut4 = "T2-MI 2 PLP_1"; break;
+					case 11: $getASIOut4 = "T2-MI 2 PLP_2"; break;
+					case 12: $getASIOut4 = "T2-MI 2 PLP_3"; break;
+				}
+				$API($getASIOut4);
+				break;
+			}
+			
+			
+			// Qualitteq
+			
+			case "splicer_get_bypass":{
+				$getSplicerBypassMode = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.21.0");
+				
+				if($getSplicerBypassMode == 0) $getSplicerBypassMode .= " (off)";
+				elseif($getSplicerBypassMode == 1) $getSplicerBypassMode .= " (on)";
+				else $getSplicerBypassMode .= "()";
+					
+				$API($getSplicerBypassMode);
+				break;
+			}
+			case "splicer_get_count_plp":{
+				$getCountPLP_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.5.1");
+				$API($getCountPLP_IN0." PLP");
+				break;
+			}
+			case "splicer_get_confbr":{
+				
+				$get_conf_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.1");
+				$get_conf_PLP0 /= 1e6;
+				
+				$get_conf_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.2");
+				$get_conf_PLP1 /= 1e6;
+				
+				$API("PLP0: ".$get_conf_PLP0." Mbps<br>PLP1: ".$get_conf_PLP1." Mbps");				
+				break;
+			}
+			case "splicer_get_currbr":{
+				
+				$get_curr_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.1");
+				$get_curr_PLP0 /= 1e6;
+				
+				$get_curr_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.2");
+				$get_curr_PLP1 /= 1e6;
+				
+				$API("PLP0: ".$get_curr_PLP0." Mbps<br>PLP1: ".$get_curr_PLP1." Mbps");				
+				break;
+			}
+			case "splicer_get_diff_confcurr":{
+				
+				$get_conf_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.1");
+				$get_conf_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.5.2");
+				
+				$get_curr_PLP0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.1");
+				$get_curr_PLP1 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.51.1.6.2");
+						
+				$get_diff_PLP0 = $get_conf_PLP0 - $get_curr_PLP0;
+				$get_diff_PLP1 = $get_conf_PLP1 - $get_curr_PLP1;
+						
+				$API("PLP0: ".$get_diff_PLP0."<br>PLP1: ".$get_diff_PLP1);
+				
+				break;
+			}		
+			case "splicer_get_in0_confcurrbr":{
+				$get_confbr_ASI_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.7.1");
+				$get_confbr_ASI_IN0 /= 1e6;
+				
+				$get_currbr_ASI_IN0 = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8054 1.3.6.1.4.1.49675.49.1.8.1");
+				$get_currbr_ASI_IN0 /= 1e6;
+				
+				
+				$API($get_confbr_ASI_IN0." / ".$get_currbr_ASI_IN0." [Mbps]");
+				
+				break;
+			}
+			
+			
+			
+			
+			
 			default:{
 				$API("Undefined system/Route[1]");			
 			}

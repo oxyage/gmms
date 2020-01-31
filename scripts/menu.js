@@ -83,6 +83,29 @@ $("li.action").click(function(li){
 			break;
 		}
 		
+		case "auth-srp":
+		{
+			switch(route[1])
+			{
+				case "operator":{
+					let operator = GMMS.rcu.host[data.host]["auth-srp"]["operator"];
+					GMMS.func.menu.auth.operator(data.host, operator.userpass);			
+					break;
+				}
+				case "admin":{
+					let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
+					GMMS.func.menu.auth.admin(data.host, admin.userpass);		
+					break;
+				}
+				
+				default:{
+					GMMS.func.menu.blank(data.host);
+				}
+				
+			}
+			break;
+		}
+		
 		case "rcu":
 		{
 			
@@ -108,8 +131,8 @@ $("li.action").click(function(li){
 									
 									GMMS.func.status(false,done_parse.host);
 									GMMS.func.icon("ready",done_parse.host);
-
-									/*обновить в БД*/			
+/*
+									//обновить в БД/			
 									GMMS.func.db.update.rcu.devices(done_parse.host, {
 										rcu_name: done_parse.response.rcu_name,
 										devices_hash: done_parse.response.devices_hash,
@@ -125,7 +148,7 @@ $("li.action").click(function(li){
 									.fail(function(fail_update){
 										GMMS.func.log("Ошибка обращения к API при обновлении устройств","error", fail_update.host, fail_update);
 									});
-									
+*/									
 								}
 								else
 								{

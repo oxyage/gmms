@@ -133,6 +133,24 @@
       </li>
     </ul>
   </li>
+   <!-- Перейти в 2+1 СДК -> -->
+  <li style="display:none" id="srp">
+    <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СРП 2+1</div>
+	 <ul style="width:200px">
+	 
+	 <!-- Выбрать привилегии -->
+	 <li class="ui-widget-header"><div>Привилегии</div></li>
+      <li class="action" data-route="auth-srp/operator" title="Авторизоваться как оператор">
+        <div><span class="ui-icon ui-icon-person"></span>Оператор</div>
+      </li>
+	 <li class="action" data-route="auth-srp/admin" title="Войти с правами администратора">
+        <div><span class="ui-icon ui-icon-alert"></span>Администратор</div>
+      </li>
+	  <li class="action" data-route="auth-srp/" title="Перейти на страницу авторизации">
+        <div><span class="ui-icon ui-icon-extlink"></span>Страница входа</div>
+      </li>
+    </ul>
+  </li>
  
   <!-- Служебные функции -> -->
   <li class="">
@@ -259,37 +277,56 @@
 	<h3>Мониторинг реплейсеров</h3>
 	<div style="">
 	
-		<button class="panel-button" data-route="system/networkID1" >NetworkID федеральный</button>
-		<button class="panel-button" data-route="system/networkID2" >NetworkID региональный</button> <br><br>
-		<button class="panel-button" data-route="system/mainDelay" >Общая задержка</button><br><br>
-		<button class="panel-button" data-route="system/leadingSource" >Приоритетный вход</button>
-		<button class="panel-button" data-route="system/leadingSourceDelay" >Задержка приоритетного входа</button>
+		<button class="panel-button" data-route="system/networkid1" >NetworkID федеральный</button>
+		<button class="panel-button" data-route="system/networkid2" >NetworkID региональный</button> <br><br>
+		<button class="panel-button" data-route="system/main_delay" >Общая задержка</button>
+		<button class="panel-button" data-route="system/leading_source" >Leading Source</button><br><br>
+		<button class="panel-button" data-route="system/offset_stream" >Offset Streams</button><br><br>
+		<button class="panel-button" data-route="system/status_replacement" >Статус замещения</button>
 	
 	</div>
+	
+	<h3>Мониторинг приемников</h3>
+	<div style="">
+		
+		<h2> Ericsson RX8330 - федеральный (1 MUX)</h2>
+		<button class="panel-button" data-route="system/federal_rx_rf1_freq" >Частота</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_symrate" >Символьная скорость</button>
+		<button class="panel-button" data-route="system/federal_rx_rf1_status" >Статус захвата сигнала</button>
+		<hr>
+		
+		<h2> RTM TRK-555 - региональный</h2>
+		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость</button>
+		<button class="panel-button" data-route="system/regional_rx_rf1_status" >Уровень захвата сигнала</button> 
+		<br>
+		<button class="panel-button" data-route="system/get_margin_1" data-accept="Запрос LKM 1 тюнер">Link Margin 1 тюнер</button>
+		<button class="panel-button" data-route="system/get_margin_2" data-accept="Запрос LKM 2 тюнер">Link Margin 2 тюнер</button>
+		<br>	
+		<button class="panel-button" data-route="system/get_asi_out_1" >ASI Out 1 (региональный 40°)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.1 --><br>
+		<button class="panel-button" data-route="system/get_asi_out_2" >ASI Out 2 (резервный 53°)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
+		<button class="panel-button" data-route="system/get_asi_out_3" >ASI Out 3 </button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
+		<button class="panel-button" data-route="system/get_asi_out_4" >ASI Out 4 (Радио России)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
+		
+			
+	</div>
+	
+	<h3>Мониторинг сплайсеров</h3>
+	<div style="">
+		<button class="panel-button" data-route="system/splicer_get_bypass" >Проверка режима Bypass</button> <!-- 1.3.6.1.4.1.49675.21.0  -->
+		<button class="panel-button" data-route="system/splicer_get_count_plp">Число PLP IN_0</button><!-- 1.3.6.1.4.1.49675.49.1.5.1  -->
+		<button class="panel-button" data-route="system/splicer_get_in0_confcurrbr">ASI IN_0 Bitrate</button><!-- 1.3.6.1.4.1.49675.49.1.7.1  -  1.3.6.1.4.1.49675.49.1.8.1 -->
+		<br><br>
+		<button class="panel-button" data-route="system/splicer_get_confbr" >Configure Bitrate</button> <!-- 1.3.6.1.4.1.49675.51.1.5.1  1.3.6.1.4.1.49675.51.1.5.2  -->
+		<button class="panel-button" data-route="system/splicer_get_currbr" >Current Bitrate</button> <!--   1.3.6.1.4.1.49675.51.1.6.1  1.3.6.1.4.1.49675.51.1.6.2 -->
+		<button class="panel-button" data-route="system/splicer_get_diff_confcurr" >Разница между ConfBr/CurrBr</button>
+		<br><br>			
+	</div>
+	
+	
 </div>
  
  
- 
- 
- 
-	<!--
-	<div class="tabs">
-	  <ul>
-		<li><a href="#tabs-monitoring-tx">Передатчики</a></li>
-		<li><a href="#tabs-monitoring-nevion">Реплейсеры Nevion</a></li>
-	  </ul>
-	  <div id="tabs-monitoring-tx">
-	  
-		<label for="1mux">1 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="1mux" value="1" data-route=""> 
-	  
-		<label for="2mux">2 мультиплекс</label>
-		<input class="panel-radio" name="mux" type="radio" id="2mux" value="2" data-route=""> 
-		
-	  </div>
-	  <div id="tabs-monitoring-nevion">nevion</div>
-	</div>
-	-->
 	<hr>
 
   </div>
@@ -309,26 +346,30 @@
 <button class="panel-button" data-route="rcu/management/goto53" >Перейти на 53° резервный спутник</button>
  
   </div>
+  
+  
   <div id="panel-tabs-additional">
    
-<!--   Включение выключение замены PLP<br> -->
-Выберите объекты связи и авторизуйтесь в них:
-<button class="panel-button" data-route="rcu/auth">Авторизация в СДК</button>
+   <div class="accordion" id="panel-monitoring" ><!-- start panel select-->
+   <h3>Управление реплейсерами</h3>
+	<div style="padding-bottom:3.5em;">
+	<br><br>
+		<button class="panel-button" data-route="system/replacementOFF" >Отключить замещение</button>
+		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
+	</div>
+	
+	<h3>Другое</h3>
+	<div style="padding-bottom:3.5em;">
+	<br><br>
+		<button class="panel-button" data-route="system/replacementOFF" >Отключить замещение</button>
+		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
+	</div>
+	
+	
+   </div>
+   
+   
 
-<button class="panel-button" data-route="rcu/updateStatus" >Показать имена РТС</button>
-
-<hr>
-<!--
-<label for="show-rts-names">Имена объектов связи</label>
-<input type="checkbox" name="" id="show-rts-names"> -->
-
-<br>
-<br>
-
-<label for="auto-auth">Автоматическая авторизация</label>
-<input type="checkbox" name="" id="auto-auth"> 
-  
-  
   
   </div>
 </div>

@@ -29,14 +29,37 @@ $( function() {
 					return true;
 				}
 			},
+			auth_srp:{
+				operator: function(host, userpass){
+					window.open("http://"+host+"/config/devices/?username=operator&userpass="+userpass,"_blank");	
+					return true;
+				},
+				admin: function(host, userpass){
+					window.open("http://"+host+"/config/devices/?username=admin&userpass="+userpass,"_blank");
+					return true;
+				},
+				blank: function(host){
+					window.open("http://"+host+"/config/devices/","_blank");
+					return true;
+				}
+			},
+			
 			rcu:{ // GMMS.func.menu.rcu
 				table:{ // GMMS.func.menu.rcu.table
 
-					parse: function(host){
+					/*parse: function(host){
 						return $.post("api.php?route=rcu/parse",{
 								host: host,
 								cookie: GMMS.func.checkCookie(host)});
+					}*/
+					
+					
+					parse: function(host){
+						return $.post("http://10.32.1.3/gmms.api/api.main.php?route=rcu/update_devices",{
+								host: host,
+								cookie: GMMS.func.checkCookie(host)});
 					}
+					
 				},
 				monitoring:{// GMMS.func.menu.rcu.monitoring
 					
