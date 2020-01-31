@@ -25,6 +25,17 @@ $( function(){
 		}
 	});
 	
+	/* панель выбора объектов связи */
+	$( "#panel-additional" ).accordion({
+	  collapsible: true,
+	  active: false, //скрыть при загрузке
+	  heightStyle: "content",
+		icons:{
+			 header: "ui-icon-radio-on",
+		activeHeader: "ui-icon-radio-off"
+		}
+	});
+	
 	
 		
 	

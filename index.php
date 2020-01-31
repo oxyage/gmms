@@ -64,13 +64,6 @@
 	  console.log("Обновляем +300 сек");
 	}, 300000);
 
-
-	$( ".accordion" ).accordion({
-    /*  collapsible: true,*/
-	  heighStyle: "content"
-    });
-
-	
 	console.log("index.html");
 		
 	});
@@ -133,6 +126,7 @@
       </li>
     </ul>
   </li>
+  
    <!-- Перейти в 2+1 СДК -> -->
   <li style="display:none" id="srp">
     <div><span class="ui-icon ui-icon-extlink"></span>Перейти в СРП 2+1</div>
@@ -153,7 +147,7 @@
   </li>
  
   <!-- Служебные функции -> -->
-  <li class="">
+  <li class="" style="display:none">
     <div><span class="ui-icon ui-icon-tag"></span>Служебные функции</div>	
     <ul style="width:250px">
 	
@@ -168,7 +162,7 @@
   </li>
   
   <!-- Мониторинг параметров ui-state-disabled-> -->
-  <li class="">
+  <li class=""  style="display:none">
     <div><span class="ui-icon ui-icon-search"></span>Мониторинг</div>	
     <ul style="width:350px">
 	
@@ -210,7 +204,7 @@
   </li>
   
   <!-- Комплексная проверка всех показателей-->
-  <li class="" data-route="monitoring/complex">
+  <li class="" data-route="monitoring/complex"  style="display:none">
     <div><span class="ui-icon ui-icon-signal-diag"></span>Комплексная проверка</div>
 	<ul style="width:130px">
 			<!-- Выбор мультиплекса -->
@@ -253,6 +247,8 @@
     <li><a href="#panel-tabs-sunoutage"><span class="ui-icon ui-icon-calendar"></span> Интерференция</a></li>
     <li><a href="#panel-tabs-additional"><span class="ui-icon ui-icon-wrench"></span> Дополнительно</a></li>
   </ul>
+  
+  
   <div id="panel-tabs-monitoring">
  
  
@@ -294,7 +290,7 @@
 		<button class="panel-button" data-route="system/federal_rx_rf1_symrate" >Символьная скорость</button>
 		<button class="panel-button" data-route="system/federal_rx_rf1_status" >Статус захвата сигнала</button>
 		<hr>
-		
+		<!--
 		<h2> RTM TRK-555 - региональный</h2>
 		<button class="panel-button" data-route="system/regional_rx_rf1_freq" >Частота</button>
 		<button class="panel-button" data-route="system/regional_rx_rf1_symrate" >Символьная скорость</button>
@@ -303,11 +299,15 @@
 		<button class="panel-button" data-route="system/get_margin_1" data-accept="Запрос LKM 1 тюнер">Link Margin 1 тюнер</button>
 		<button class="panel-button" data-route="system/get_margin_2" data-accept="Запрос LKM 2 тюнер">Link Margin 2 тюнер</button>
 		<br>	
-		<button class="panel-button" data-route="system/get_asi_out_1" >ASI Out 1 (региональный 40°)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.1 --><br>
-		<button class="panel-button" data-route="system/get_asi_out_2" >ASI Out 2 (резервный 53°)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
-		<button class="panel-button" data-route="system/get_asi_out_3" >ASI Out 3 </button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
-		<button class="panel-button" data-route="system/get_asi_out_4" >ASI Out 4 (Радио России)</button><!-- 1.3.6.1.4.1.55555.555.1.3.1.3.2 --><br>
-		
+		<button class="panel-button" data-route="system/get_asi_out_1" >ASI Out 1 (региональный 40°)</button>
+		<br>
+		<button class="panel-button" data-route="system/get_asi_out_2" >ASI Out 2 (резервный 53°)</button>
+		<br>
+		<button class="panel-button" data-route="system/get_asi_out_3" >ASI Out 3 </button>
+		<br>
+		<button class="panel-button" data-route="system/get_asi_out_4" >ASI Out 4 (Радио России)</button>
+		<br>
+		-->
 			
 	</div>
 	
@@ -348,9 +348,9 @@
   </div>
   
   
-  <div id="panel-tabs-additional">
+  <div id="panel-tabs-additional" >
    
-   <div class="accordion" id="panel-monitoring" ><!-- start panel select-->
+   <div class="accordion" id="panel-additional" ><!-- start panel select-->
    <h3>Управление реплейсерами</h3>
 	<div style="padding-bottom:3.5em;">
 	<br><br>
@@ -358,12 +358,6 @@
 		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
 	</div>
 	
-	<h3>Другое</h3>
-	<div style="padding-bottom:3.5em;">
-	<br><br>
-		<button class="panel-button" data-route="system/replacementOFF" >Отключить замещение</button>
-		<button class="panel-button" data-route="system/replacementON" >Включить замещение</button> <br><br>
-	</div>
 	
 	
    </div>

@@ -12,7 +12,7 @@ $( function() {
 					return true;
 				},
 				admin: function(host, userpass){
-					console.log("admin?");
+					
 					window.open("http://"+host+"/config/devices/?username=admin&userpass="+userpass,"_blank");
 					return true;
 				},
@@ -29,20 +29,20 @@ $( function() {
 					return true;
 				}
 			},
-			auth_srp:{
-				operator: function(host, userpass){
-					window.open("http://"+host+"/config/devices/?username=operator&userpass="+userpass,"_blank");	
+			/*auth_srp:{
+				operator: function(host_srp, userpass){
+					window.open("http://"+host_srp+"/config/devices/?username=operator&userpass="+userpass,"_blank");	
 					return true;
 				},
-				admin: function(host, userpass){
-					window.open("http://"+host+"/config/devices/?username=admin&userpass="+userpass,"_blank");
+				admin: function(host_srp, userpass){
+					window.open("http://"+host_srp+"/config/devices/?username=admin&userpass="+userpass,"_blank");
 					return true;
 				},
-				blank: function(host){
-					window.open("http://"+host+"/config/devices/","_blank");
+				blank: function(host_srp){
+					window.open("http://"+host_srp+"/config/devices/","_blank");
 					return true;
 				}
-			},
+			},*/
 			
 			rcu:{ // GMMS.func.menu.rcu
 				table:{ // GMMS.func.menu.rcu.table

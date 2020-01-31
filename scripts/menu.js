@@ -88,18 +88,21 @@ $("li.action").click(function(li){
 			switch(route[1])
 			{
 				case "operator":{
-					let operator = GMMS.rcu.host[data.host]["auth-srp"]["operator"];
-					GMMS.func.menu.auth.operator(data.host, operator.userpass);			
+					let operator = GMMS.rcu.host[data.host]["auth"]["operator"];
+					let host_srp = GMMS.rcu.host[data.host]["host_srp"];
+					GMMS.func.menu.auth.operator(host_srp, operator.userpass);			
 					break;
 				}
 				case "admin":{
-					let admin = GMMS.rcu.host[data.host]["auth"]["admin"];						
-					GMMS.func.menu.auth.admin(data.host, admin.userpass);		
+					let admin = GMMS.rcu.host[data.host]["auth"]["admin"];	
+					let host_srp = GMMS.rcu.host[data.host]["host_srp"];					
+					GMMS.func.menu.auth.admin(host_srp, admin.userpass);		
 					break;
 				}
 				
 				default:{
-					GMMS.func.menu.blank(data.host);
+					let host_srp = GMMS.rcu.host[data.host]["host_srp"];
+					GMMS.func.menu.blank(host_srp);
 				}
 				
 			}

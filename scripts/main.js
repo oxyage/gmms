@@ -31,6 +31,7 @@ $(function(){
 		if($(event.target).parents("ul#menu").length === 0 && $(event.target).closest(".rts").length === 0) // если клик вне меню или на РТС
 		{	
 			$("ul#menu").hide();
+			//$("ul#menu #srp").hide();
 		}
 	
 	}),

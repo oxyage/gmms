@@ -64,6 +64,13 @@ $( function() { /* события на странице*/
 				let name = $(this).data("name");
 				let host = $(this).data("host");
 			
+				$("#menu li#srp").hide();	
+			
+				if(GMMS.rcu.host[host]["host_srp"] !== "")
+				{
+					$("#menu li#srp").show();
+				}
+				
 				$("#menu")
 				.css({
 					top: rts.pageY+"px",
@@ -170,13 +177,14 @@ $( function() { /* события на странице*/
 	
 		});			
 			
-		/*	после загрузки всех  объектов	*/	
+		/*	после загрузки всех  объектов	
 		//ставим выбор всех объектов
 		//#### доделать на остальные выборы
+		//не актуально
 		if($.cookie("select") === "all")  
 		{
 			GMMS.func.select("select-all", false, true);
-		}		
+		}	*/	
 		
 		//ищем авторизованные соединения 
 		let find_connections = GMMS.func.connection.find();
