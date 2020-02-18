@@ -279,6 +279,7 @@
 		<button class="panel-button" data-route="system/leading_source" >Leading Source</button><br><br>
 		<button class="panel-button" data-route="system/offset_stream" >Offset Streams</button><br><br>
 		<button class="panel-button" data-route="system/status_replacement" >Статус замещения</button>
+		<button class="panel-button" data-route="system/version_sw" >Версия прошивки</button>
 	
 	</div>
 	

@@ -141,6 +141,13 @@ switch($Route[0])
 				break;
 			}
 			
+			case "version_sw":{
+				$getSoftwareVersion = exec("snmpget -m 0 -O qv -L n -c public -v 2c -t 8 ".$input["host"].":8001 1.3.6.1.4.1.22909.1.1.1.11.0");
+				$getSoftwareVersion = str_replace('"','',$getSoftwareVersion);
+				$API($getSoftwareVersion);
+				break;
+			}
+			
 					
 			//RX8330
 			
